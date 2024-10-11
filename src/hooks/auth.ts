@@ -22,8 +22,7 @@ interface AuthProps {
 }
 
 interface RegisterProps extends AuthProps {
-  first_name: string;
-  last_name: string;
+  name: string;
   password_confirmation: string;
 }
 
@@ -62,8 +61,7 @@ export const useAuth = () => {
   }, []);
 
   const register = useCallback(async ({
-    first_name,
-    last_name,
+    name,
     email,
     password,
     password_confirmation,
@@ -76,8 +74,7 @@ export const useAuth = () => {
     });
     try {
       const response = await axios.post('/register', {
-        first_name,
-        last_name,
+        name,
         email,
         password,
         password_confirmation,
