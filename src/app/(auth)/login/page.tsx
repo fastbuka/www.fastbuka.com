@@ -9,6 +9,8 @@ import Label from '@/components/Label';
 import Notify from '@/components/Notify';
 import { useAuth } from '@/hooks/auth';
 import Image from 'next/image';
+import Section from "../../../../public/Section.png";
+import LoginImg from "../../../../public/login.png";
 import toast, {Toaster} from 'react-hot-toast';
 
 interface Errors {
@@ -46,7 +48,7 @@ const Login: React.FC = () => {
   return (
     <div>
       <div className="bg-[]"></div>
-      <Image alt="" src={'/Section.png'} width={100} height={100} className="img-fluid hidden md:block" />
+      <Image alt="section" src={Section} className="img-fluid hidden md:block" />
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center mt-5">
         <div className="md:ms-32 mx-5 order-last md:order-1">
           <h1 className="text-4xl font-bold tracking-wider">Welcome Back!</h1>
@@ -143,7 +145,7 @@ const Login: React.FC = () => {
               <p className="mt-3 tracking-wider">
                 Don&apos;t Have an Account
                 <span className="font-bold">
-                  <Link href="/register">Create Account?</Link>
+                  <Link href="/register"> Create Account?</Link>
                 </span>
               </p>
             </form>
@@ -151,10 +153,8 @@ const Login: React.FC = () => {
         </div>
         <div className="order-2 ">
           <Image
-            src={'/login.png'}
-            alt=""
-            width={100}
-            height={100}
+            src={LoginImg}
+            alt="login"
             className="img-fluid hidden md:block p-5 transition ease-in-out delay-150 hover:-translate-y-5"
           />
         </div>

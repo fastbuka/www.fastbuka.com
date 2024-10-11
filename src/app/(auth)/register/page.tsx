@@ -6,6 +6,8 @@ import Input from '@/components/Input';
 import InputError from '@/components/InputError';
 import Label from '@/components/Label';
 import Link from 'next/link';
+import login from "../../../../public/login.png";
+import Section from "../../../../public/Section.png";
 import { useAuth } from '@/hooks/auth';
 import Notify from '@/components/Notify';
 import Image from 'next/image';
@@ -32,8 +34,14 @@ const Page: React.FC = () => {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState({});
   
-  const toggleConfirmPasswordVisibility = () => {
+  const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
+  };
+
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
   const submitForm = (event: FormEvent) => {
@@ -53,18 +61,17 @@ const Page: React.FC = () => {
   return (
     <div>
       <div>
-        <Image alt="" src={'/Section.png'} width={100} height={100} className="img-fluid hidden md:block" />
+        <Image alt="" src={Section} className="img-fluid hidden md:block" />
         <Image
           alt=""
-          src={'/login.png'}
-          width={100} height={100}
+          src={login}
           className="img-fluid p-5 transition ease-in-out delay-150 hover:-translate-y-5 block md:hidden"
         />
         <h1 className="text-4xl font-bold md:tracking-wider md:text-center ms-3 mt-5">
-          Let&apos;s Get to know you!
+          Let's Get to know you!
         </h1>
         <p className="text-lg md:tracking-wide md:text-center ms-3">
-          We&apos;ll help you set up an account in less than a minute
+          We'll help you set up an account in less than a minute
         </p>
         <form
           onSubmit={submitForm}
@@ -156,7 +163,7 @@ const Page: React.FC = () => {
                 className="block mb-2 text-lg font-medium text-gray-900 flex justify-between"
               >
                 Password
-                <button type="button" onClick={toggleConfirmPasswordVisibility}>
+                <button type="button" onClick={togglePasswordVisibility}>
                   {passwordVisible ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +220,7 @@ const Page: React.FC = () => {
               >
                 Confirm Password
                 <button type="button" onClick={toggleConfirmPasswordVisibility}>
-                  {passwordVisible ? (
+                  {confirmPasswordVisible ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -252,7 +259,7 @@ const Page: React.FC = () => {
                 </button>
               </label>
               <input
-                type={passwordVisible ? "text" : "password"}
+                type={confirmPasswordVisible ? "text" : "password"}
                 id="confirmpassword"
                 name="confirmpassword"
                 value={passwordConfirmation}
