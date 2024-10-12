@@ -8,7 +8,7 @@ import Button from '@/components/Button';
 import Notify from '@/components/Notify';
 
 interface NavigationProps {
-  user: any; // Replace 'any' with actual user type if possible
+  user: any; 
 }
 
 const Navigation: React.FC<NavigationProps> = ({ user }) => {

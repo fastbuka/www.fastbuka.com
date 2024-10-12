@@ -12,22 +12,22 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { fetchUser, user } = useAuth();
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchUser();
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchUser();
+  //     setLoading(false);
+  //   };
 
-    fetchData();
+  //   fetchData();
 
-    if (!loading && !user) {
-      window.location.href = '/login';
-    }
-  }, [fetchUser, user, loading]);
+  //   if (!loading && !user) {
+  //     window.location.href = '/login';
+  //   }
+  // }, [fetchUser, user, loading]);
 
-  if (loading || !user) {
-    return <Loading />;
-  }
+  // if (loading || !user) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className="min-h-screen bg-gray-100 scroll">

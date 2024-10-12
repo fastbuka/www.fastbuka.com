@@ -14,7 +14,8 @@ import Image from 'next/image';
 import toast, {Toaster} from 'react-hot-toast';
 
 interface Errors {
-  name?: string[];
+  first_name?: string[];
+  last_name?: string[];
   email?: string[];
   phone_number?: string[];
   password?: string[];
@@ -24,7 +25,8 @@ interface Errors {
 const Page: React.FC = () => {
   const { register } = useAuth();
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setUserName] = useState<string>('');
+  const [first_name, setUserFirstName] = useState<string>('');
+  const [last_name, setUserLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
@@ -48,7 +50,8 @@ const Page: React.FC = () => {
     event.preventDefault();
 
     register({
-      name,
+      first_name,
+      last_name,
       email,
       password,
       password_confirmation: passwordConfirmation,
@@ -68,10 +71,10 @@ const Page: React.FC = () => {
           className="img-fluid p-5 transition ease-in-out delay-150 hover:-translate-y-5 block md:hidden"
         />
         <h1 className="text-4xl font-bold md:tracking-wider md:text-center ms-3 mt-5">
-          Let's Get to know you!
+          Let&apos;s Get to know you!
         </h1>
         <p className="text-lg md:tracking-wide md:text-center ms-3">
-          We'll help you set up an account in less than a minute
+          We&apos;ll help you set up an account in less than a minute
         </p>
         <form
           onSubmit={submitForm}
@@ -83,14 +86,32 @@ const Page: React.FC = () => {
                 htmlFor="name"
                 className="block mb-2 text-lg font-medium text-gray-900"
               >
-                Full Name
+                First Name
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                value={name}
-                onChange={(event) => setUserName(event.target?.value)}
+                value={first_name}
+                onChange={(event) => setUserFirstName(event.target?.value)}
+                className="bg-white border border-black text-gray-900 text-sm rounded-full block w-full p-3 placeholder-gray-500"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+            <div className="mb-5">
+              <label
+                htmlFor="name"
+                className="block mb-2 text-lg font-medium text-gray-900"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={last_name}
+                onChange={(event) => setUserLastName(event.target?.value)}
                 className="bg-white border border-black text-gray-900 text-sm rounded-full block w-full p-3 placeholder-gray-500"
                 placeholder="Full Name"
                 required
