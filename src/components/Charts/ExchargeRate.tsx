@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Image from "next/image";
 
 interface CryptoData {
   id: string;
@@ -62,7 +63,7 @@ const CryptoTable: React.FC = () => {
                     className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-100`}
                   >
                     <td className="py-4 px-6 flex items-center gap-2">
-                      <img
+                      <Image
                         src={crypto.image}
                         alt={crypto.name}
                         className="w-6 h-6 rounded-full"

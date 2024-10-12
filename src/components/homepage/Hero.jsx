@@ -26,7 +26,7 @@ export default function Hero() {
           </h1>
           <p className="text-center md:text-xl text-lg mt-3">
             Experience the fastest way to order and deliver food with steller
-            blockchain technology. Join the FastBuka's revolution in food
+            blockchain technology. Join the FastBuka&apos;s revolution in food
             delivery and support locat food vendors
           </p>
 
