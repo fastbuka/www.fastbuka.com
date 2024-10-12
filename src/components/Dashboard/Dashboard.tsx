@@ -4,16 +4,16 @@ import React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import Deposit from "../../../public/images";
-// import Pay from "../../../public/images";
-// import Swap from "../../../public/images/swap.png";
-// import Add from "../../../public/images";
-// import Order from "../../../public/images";
-// import CardDataStats from "../CardDataStats";
-// import ExchangeRate from "@/components/Charts/ExchargeRate";
-// import MonthlyOverview from "@/components/Charts/ChartTwo";
+import Deposit from "../../../public/deposit.png";
+import Pay from "../../../public/pay.png";
+import Swap from "../../../public/swap.png";
+import Add from "../../../public/plus.png";
+import Order from "../../../public/order.png";
+import CardDataStats from "../CardDataStats";
+import ExchangeRate from "@/components/Charts/ExchargeRate";
+import MonthlyOverview from "@/components/Charts/ChartTwo";
 
-const Category: React.FC = () => {
+const Dashboard: React.FC = () => {
   const data = [
     { id: 1, name: "Burger", category: "Food", price: 10.99 },
     { id: 2, name: "Pizza", category: "Food", price: 8.99 },
@@ -60,12 +60,12 @@ const Category: React.FC = () => {
 
   return (
     <>
-      <h1 className="font-bold text-black text-xl my-3">Hi USER </h1>
+      <h1 className="font-bold text-black text-xl my-3">Hi, Rodinia Kitchen </h1>
       <div className="grid text-black grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <div className="bg-[#f2f9ff] h-fit border border-[#ddeeff] rounded-xl">
           <Link href="/dashboard/vendor/withdrawal">
             <div className="p-3">
-              <Image src={"/pay.png"} width={100} height={100} alt="deposit" />
+              <Image src={Pay} alt="deposit" />
               <h1 className="font-medium text-xl mt-1">Withdrawal</h1>
             </div>
           </Link>
@@ -73,7 +73,7 @@ const Category: React.FC = () => {
         <div className="bg-[#f2f9ff] h-fit border border-[#ddeeff] rounded-xl">
           <Link href="#">
             <div className="p-3">
-              <Image src={"/plus.png"} width={100} height={100} alt="deposit" />
+              <Image src={Add} alt="deposit" />
               <h1 className="font-medium text-xl mt-1">Add Bank Accounts</h1>
             </div>
           </Link>
@@ -81,7 +81,7 @@ const Category: React.FC = () => {
         <div className="bg-[#f2f9ff] h-fit border border-[#ddeeff] rounded-xl">
           <Link href="/dashboard/vendor/order">
             <div className="p-3">
-              <Image src={"/order.png"} width={100} height={100} alt="swap" />
+              <Image src={Order} alt="swap" />
               <h1 className="font-medium text-xl mt-1">Pending Orders</h1>
             </div>
           </Link>
@@ -89,7 +89,7 @@ const Category: React.FC = () => {
         <div className="bg-[#f2f9ff] h-fit border border-[#ddeeff] rounded-xl">
           <Link href="#">
             <div className="p-3">
-              <Image src={"/deposit.png"} width={100} height={100} alt="swap" />
+              <Image src={Deposit} alt="swap" />
               <h1 className="font-medium text-xl mt-1">Deposit</h1>
             </div>
           </Link>
@@ -97,8 +97,8 @@ const Category: React.FC = () => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 md:gap-6 2xl:gap-7.5 mt-5">
-        {/* <MonthlyOverview />
-        <ExchangeRate /> */}
+        <MonthlyOverview />
+        <ExchangeRate />
       </div>
 
       <div className="max-w-6xl mx-auto p-6">
@@ -207,4 +207,4 @@ const Category: React.FC = () => {
   );
 };
 
-export default Category;
+export default Dashboard;

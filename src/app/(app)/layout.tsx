@@ -1,40 +1,34 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/auth';
-import Navigation from '@/app/(app)/Navigation';
-import Loading from '@/app/(app)/Loading';
+"use client";
+import "jsvectormap/dist/jsvectormap.css";
+import "flatpickr/dist/flatpickr.min.css";
+import "@/css/satoshi.css";
+import "@/css/style.css";
+import React, { useEffect, useState } from "react";
+import Loader from "@/components/common/Loader";
 
-interface AppLayoutProps {
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
-
-const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const { fetchUser, user } = useAuth();
+}>) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await fetchUser();
-  //     setLoading(false);
-  //   };
+  // const pathname = usePathname();
 
-  //   fetchData();
-
-  //   if (!loading && !user) {
-  //     window.location.href = '/login';
-  //   }
-  // }, [fetchUser, user, loading]);
-
-  // if (loading || !user) {
-  //   return <Loading />;
-  // }
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 scroll">
-      <Navigation user={user} />
-      <main>{children}</main>
-    </div>
+    <html lang="en">
+      <body suppressHydrationWarning={true}>
+        <div className="dark:bg-boxdark-2 dark:text-bodydark">
+          < >
+            {loading ? <Loader /> : children}
+          </>
+        </div>
+      </body>
+    </html>
   );
-};
-
-export default AppLayout;
+}

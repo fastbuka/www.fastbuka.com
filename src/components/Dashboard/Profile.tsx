@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "../../../public/images/homepage/logo-dark.png";
+import Logo from "../../../public/logo-dark.png";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 
