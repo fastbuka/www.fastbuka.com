@@ -10,6 +10,7 @@ import Footer from "@/components/Homepage/Footer";
 
 const Index = () => {
   // const [isOpen, setIsOpen] = useState(false);
+  
 
   return (
     <div>
