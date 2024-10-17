@@ -4,6 +4,16 @@ import FeaturedRestaurants from "@/components/FeaturedRestaurants";
 import OurMenu from "@/components/OurMenu";
 import LearnMore from "@/components/LearnMore";
 
+const menuItems = [
+  { id: 1, name: "Grilled Chicken", description: "Delicious grilled chicken with spices", price: 3500, time: 30, image: "/images/meal1.jpg" },
+  // Add more meals here
+];
+
+const featuredMeals = [
+  { id: 1, name: "Grilled Chicken", description: "Delicious grilled chicken with spices", price: 3500, time: 30, image: "/images/meal1.jpg" },
+  // Add more meals here
+];
+
 export default function Home() {
   return (
     <>
@@ -18,9 +28,9 @@ export default function Home() {
           with fresh, quality ingredients to nourish your body and tantalize your taste buds.
         </p>
       </section>
-      <TrendingMeals /> {/* Meals section with price info */}
+      <TrendingMeals meals={featuredMeals} /> {/* Meals section with price info */}
       <FeaturedRestaurants /> {/* List of featured restaurants */}
-      <OurMenu /> {/* Our Menu section with menu items */}
+      <OurMenu meals={menuItems} /> {/* Our Menu section with menu items */}
       <LearnMore /> {/* Learn more section with call to action */}
     </>
   );

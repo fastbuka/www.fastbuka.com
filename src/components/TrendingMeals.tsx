@@ -4,14 +4,14 @@ import Image from "next/image";
 import { FiClock } from "react-icons/fi"; // For the clock icon
 
 interface TrendingMealsProps {
-  // meals: Array<{
-  //   id: number;
-  //   name: string;
-  //   description: string;
-  //   price: number;
-  //   time: number;
-  //   image: string;
-  // }>;
+  meals: Array<{
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    time: number;
+    image: string;
+  }>;
   title?: string; // Optional Title
   subtitle?: string; // Optional Subtitle
 }

@@ -36,7 +36,7 @@ export default function Register() {
                 />
               </div>
   
-              <Button className="w-full bg-green-600 text-white py-3 rounded-lg">Create Account</Button>
+              <button className="w-full bg-green-600 text-white py-3 rounded-lg">Create Account</button>
             </form>
   
             <p className="text-center text-gray-600 mt-6">

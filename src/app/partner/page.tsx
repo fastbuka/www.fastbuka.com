@@ -47,7 +47,7 @@ export default function Partner() {
       <section className="bg-green-50 py-16 rounded-lg shadow-lg">
         <h3 className="text-2xl font-bold text-center text-green-600 mb-6">Fill out the form to Partner with Us</h3>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-          We are actively looking for partners in various areas. Please fill out the form below to express your interest, and we'll get back to you shortly.
+          We are actively looking for partners in various areas. Please fill out the form below to express your interest, and we will get back to you shortly.
         </p>
 
         {/* Form */}

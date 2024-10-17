@@ -7,7 +7,21 @@ import { Button } from "@/components/ui/button"; // Assuming you're using Shadcn
 import { FiClock, FiSearch, FiSliders } from "react-icons/fi"; // Added FiFilter and FiSliders icons
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"; // Assuming you're using Shadcn UI for dialog
 
-export default function OurMenu() {
+interface OurMenuProps {
+  meals: Array<{
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    time: number;
+    image: string;
+  }>;
+  title?: string; // Optional Title
+  subtitle?: string; // Optional Subtitle
+}
+
+export default function OurMenu({
+}: OurMenuProps) {
   const [visibleMeals, setVisibleMeals] = useState(8); // Initially show 8 items
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [searchTerm, setSearchTerm] = useState("");
