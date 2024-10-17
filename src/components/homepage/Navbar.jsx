@@ -27,16 +27,16 @@ const Navbar = () => {
 
             {/* Desktop Menu */}
             <div className="flex md:order-2 space-x-3 md:space-x-3 rtl:space-x-reverse hidden md:block">
-              <Link href="/auth/login">
+              <Link href="/login">
                 <button
                   type="button"
-                  className="text-white bg-[#0a3a6b] border border-[#0a3a6b] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-full text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 drop-shadow-xl transition ease-in-out delay-150 hover:-translate-y-1 hover:bg-white hover:text-[#0a3a6b] duration-300 hover:drop-shadow-2xl"
+                  className="text-white bg-[#0a3a6b] border border-[#0a3a6b] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-full text-sm px-4 py-2 text-center dark:bg-black dark:hover:bg-blue-700 dark:focus:ring-blue-800 drop-shadow-xl transition ease-in-out delay-150 hover:-translate-y-1 hover:bg-white hover:text-[#0a3a6b] duration-300 hover:drop-shadow-2xl"
                 >
                   Login
                 </button>
               </Link>
 
-              <Link href="/auth/register">
+              <Link href="/register">
                 <button
                   type="button"
                   className="text-white bg-[#0a3a6b] border border-[#0a3a6b] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-full text-sm px-4 py-2 text-center drop-shadow-xl transition ease-in-out delay-150 hover:-translate-y-1 hover:bg-white hover:text-[#0a3a6b] duration-300 hover:drop-shadow-2xl"
@@ -53,7 +53,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href="#"
-                    className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-[#0a3a6b] md:p-0 md:dark:text-blue-500 font-semibold"
+                    className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-[#0a3a6b] md:p-0 md:dark:text-black font-semibold"
                     aria-current="page"
                   >
                     Home
@@ -62,7 +62,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href="#"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-black dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
                   >
                     About
                   </Link>
@@ -70,7 +70,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href="#"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-black dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
                   >
                     Services
                   </Link>
@@ -78,7 +78,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href="#"
-                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-[#0a3a6b] md:p-0 md:dark:hover:text-blue-500 dark:text-black dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 font-semibold"
                   >
                     Contact
                   </Link>
@@ -93,9 +93,9 @@ const Navbar = () => {
                 className="text-gray-800 hover:text-[#0a3a6b] focus:outline-none"
               >
                 {isOpen ? (
-                  <HiX className="w-6 h-6" /> // Close icon when menu is open
+                  <HiX className="w-6 h-6" /> 
                 ) : (
-                  <HiMenu className="w-6 h-6" /> // Hamburger icon when menu is closed
+                  <HiMenu className="w-6 h-6" />
                 )}
               </button>
             </div>
@@ -131,7 +131,7 @@ const Navbar = () => {
                 Contact
               </Link>
               <div className="flex">
-                <Link href="/auth/login">
+                <Link href="/login">
                   <button
                     type="button"
                     className="text-white bg-[#0a3a6b] border border-[#0a3a6b] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-full text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 drop-shadow-xl transition ease-in-out delay-150 hover:-translate-y-1 hover:bg-white hover:text-[#0a3a6b] duration-300 hover:drop-shadow-2xl me-3"
@@ -140,7 +140,7 @@ const Navbar = () => {
                   </button>
                 </Link>
 
-                <Link href="/auth/register">
+                <Link href="/register">
                   <button
                     type="button"
                     className="text-white bg-[#0a3a6b] border border-[#0a3a6b] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-full text-sm px-4 py-2 text-center drop-shadow-xl transition ease-in-out delay-150 hover:-translate-y-1 hover:bg-white hover:text-[#0a3a6b] duration-300 hover:drop-shadow-2xl"
