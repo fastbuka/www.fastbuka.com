@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "@/css/satoshi.css";
-import "@/css/style.css";
+import localFont from "next/font/local";
+import Header from "@/components/Header"; 
+import Footer from "@/components/Footer"; 
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// Import Satoshi fonts
+const satoshiFont = localFont({
+  src: "./fonts/Satoshi-Regular.woff",
+  variable: "--font-satoshi",
+  weight: "400 700",
+});
 
 export const metadata: Metadata = {
-  title: "FastBuka",
-  description: "Your No. 1 food delivery App",
+  title: "Fast Buka",
+  description: "FastBuka – Order meals and pay with tokens",
 };
 
 export default function RootLayout({
@@ -17,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${satoshiFont.variable} antialiased`}>
+        <Header /> 
+        <main>{children}</main>
+        <Footer /> 
+      </body>
     </html>
   );
 }

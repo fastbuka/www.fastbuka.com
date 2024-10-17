@@ -1,23 +1,25 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18-alpine
+# Use the official Node.js image.
+# https://hub.docker.com/_/node
+FROM node:18
 
-# Set the working directory inside the container
-WORKDIR /app
+# Create and change to the app directory.
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json (if available)
+# Copy application dependency manifests to the container image.
+# A wildcard is used to ensure both package.json AND package-lock.json are copied.
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install production dependencies.
+RUN npm install --only=production
 
-# Copy the rest of your application code to the container
+# Copy the local code to the container image.
 COPY . .
 
-# Build the Next.js app
+# Build the Next.js application
 RUN npm run build
 
-# Expose the port that Next.js runs on
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start the Next.js app
+# Run the web service on container startup.
 CMD ["npm", "run", "start"]
