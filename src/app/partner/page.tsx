@@ -31,7 +31,7 @@ export default function Partner() {
           <div className="p-6 bg-green-50 rounded-lg shadow-lg">
             <h3 className="text-xl font-semibold text-green-700 mb-4">Seamless Integration</h3>
             <p className="text-gray-600">
-              Easily integrate your services with FastBuka’s robust platform, enabling smooth transactions and customer satisfaction.
+              Easily integrate your services with FastBuka&apos;s robust platform, enabling smooth transactions and customer satisfaction.
             </p>
           </div>
           <div className="p-6 bg-green-50 rounded-lg shadow-lg">
@@ -47,7 +47,7 @@ export default function Partner() {
       <section className="bg-green-50 py-16 rounded-lg shadow-lg">
         <h3 className="text-2xl font-bold text-center text-green-600 mb-6">Fill out the form to Partner with Us</h3>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-          We are actively looking for partners in various areas. Please fill out the form below to express your interest, and we'll get back to you shortly.
+          We are actively looking for partners in various areas. Please fill out the form below to express your interest, and we&apos;ll get back to you shortly.
         </p>
 
         {/* Form */}

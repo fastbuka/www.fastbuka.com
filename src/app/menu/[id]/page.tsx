@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { FiClock, FiHeart } from "react-icons/fi";
+// import { FiClock, FiHeart } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import BreadCrumb from "@/components/BreadCrumb"; // Correct import for BreadCrumb
 import { OUR_MENU } from "@/constants";
