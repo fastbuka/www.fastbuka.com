@@ -9,6 +9,7 @@ import { BiHide } from "react-icons/bi";
 import { BiShowAlt } from "react-icons/bi";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
+import Body from '@/components/cart/body';
 
 interface Errors {
   first_name?: string[];
@@ -42,6 +43,7 @@ const Page: React.FC = () => {
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
+
 
   const submitForm = (event: FormEvent) => {
     event.preventDefault();

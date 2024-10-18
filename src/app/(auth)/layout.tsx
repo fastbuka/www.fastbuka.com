@@ -1,6 +1,7 @@
 // import Link from 'next/link';
 // import AuthCard from '@/app/(auth)/AuthCard';
 // import AuthLogo from '@/components/AuthLogo';
+import { AppContext } from '@/hooks/AppContext';
 
 export const metadata = {
   title: 'Authentication',
@@ -22,7 +23,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           }
         >
         </AuthCard> */}
+        <AppContext>
           {children}
+        </AppContext>
       </section>
     </div>
   );
