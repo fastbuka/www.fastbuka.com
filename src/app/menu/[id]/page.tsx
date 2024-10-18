@@ -8,12 +8,12 @@ import BreadCrumb from "@/components/BreadCrumb"; // Correct import for BreadCru
 import { OUR_MENU } from "@/constants";
 import Link from "next/link";
 
-export default function SingleMealPage({ params }) {
+export default function SingleMealPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const meal = OUR_MENU.find((item) => item.id === parseInt(id));
   const [quantity, setQuantity] = useState(1);
 
-  const handleQuantityChange = (type) => {
+  const handleQuantityChange = (type: 'increment' | 'decrement') => {
     if (type === "increment") {
       setQuantity((prev) => prev + 1);
     } else if (type === "decrement" && quantity > 1) {
@@ -94,7 +94,7 @@ export default function SingleMealPage({ params }) {
           <div className="flex items-center space-x-4 mt-4">
             <span className="text-gray-600">Category:</span>
             <Link href="#" className="text-green-500 hover:underline">
-              {meal.category || "Fastfood"}
+              Fastfood
             </Link>
           </div>
         </div>

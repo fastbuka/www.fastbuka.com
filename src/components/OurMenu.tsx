@@ -8,7 +8,15 @@ import { FiClock, FiSearch, FiSliders } from "react-icons/fi";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"; 
 import Link from "next/link";
 
-export default function OurMenu() {
+interface OurMenuProps {
+  title?: string;
+  subtitle?: string;
+}
+
+export default function OurMenu({
+  title = "Our Menu",
+  subtitle = "Our amazing menu spans a wide variety of nutritious meals: pasta, rice, grilled chicken, turkey & much more."
+}: OurMenuProps) {
   const [visibleMeals, setVisibleMeals] = useState(8); // Initially show 8 items
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,9 +41,9 @@ export default function OurMenu() {
 
   return (
     <section className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-8">Our Menu</h2>
+      <h2 className="text-3xl font-bold text-center mb-8">{title}</h2>
       <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-        Our amazing menu spans a wide variety of nutritious meals: pasta, rice, grilled chicken, turkey & much more.
+        {subtitle}
       </p>
 
       {/* Price Range, Search, and Sorting */}
