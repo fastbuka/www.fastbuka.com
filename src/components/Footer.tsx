@@ -74,7 +74,7 @@ export default function Footer() {
           <h4 className="font-semibold">TERMS</h4>
           <ul>
             <li><a href="/privacy" className="hover:underline">Privacy Policy</a></li>
-            <li><a href="/privacy" className="hover:underline">Terms of Use</a></li>
+            <li><a href="/terms" className="hover:underline">Terms of Use</a></li>
           </ul>
         </div>
       </div>
