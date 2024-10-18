@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Hero() {
   const [showFoodImage, setShowFoodImage] = useState(true);
@@ -30,8 +31,12 @@ export default function Hero() {
             FastBuka delivers hygienic and nutritious meals from your favorite restaurants in three simple steps.
           </p>
           <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 justify-center">
-            <Button className="bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base">Sign up for free</Button>
-            <Button className="bg-transparent border border-green-500 text-green-500 px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base">Order Now</Button>
+            <Link href="/auth/register">
+              <Button className="bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base">Sign up for free</Button>
+            </Link>
+            <Link href="/menu">
+              <Button className="bg-transparent border border-green-500 text-green-500 px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base">Order Now</Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -70,7 +75,9 @@ export default function Hero() {
             <p className="text-base md:text-xl text-white">
               Craving a delicious meal but short on time? We&apos;ve got you covered with our fast and fresh delivery service. Place your order and enjoy hot, freshly-prepared dishes delivered right to your doorstep. Satisfaction guaranteed!
             </p>
-            <Button className="bg-white text-green-500 px-7 md:px-9 py-7 md:py-9 rounded-full text-base md:text-lg font-semibold w-[180px] md:w-[220px]">See menu</Button>
+            <Link href="/menu">
+              <Button className="bg-white text-green-500 px-7 md:px-9 py-7 md:py-9 rounded-full text-base md:text-lg font-semibold w-[180px] md:w-[220px]">See menu</Button>
+            </Link>
           </div>
         </div>
       </div>

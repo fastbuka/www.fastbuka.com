@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function LearnMore() {
   return (
@@ -10,9 +11,11 @@ export default function LearnMore() {
           <h2 className="text-2xl md:text-3xl font-bold text-black">
             Want to learn more?
           </h2>
-          <Button className="bg-green-600 text-white px-6 py-3 rounded-full">
-            Learn more
-          </Button>
+          <Link href="/about">
+            <Button className="bg-green-600 text-white px-6 py-3 rounded-full">
+              Learn more
+            </Button>
+          </Link>
         </div>
         
         {/* Right Side: Description */}
