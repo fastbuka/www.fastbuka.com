@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { OUR_MENU } from "@/constants"; // Assume this is the data source for the meals
 import Image from "next/image";
-import { Button } from "@/components/ui/button"; // Assuming you're using Shadcn UI for buttons
-import { FiClock, FiSearch, FiSliders } from "react-icons/fi"; // Added FiFilter and FiSliders icons
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"; // Assuming you're using Shadcn UI for dialog
+import { Button } from "@/components/ui/button"; 
+import { FiClock, FiSearch, FiSliders } from "react-icons/fi"; 
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"; 
+import Link from "next/link";
 
 export default function OurMenu() {
   const [visibleMeals, setVisibleMeals] = useState(8); // Initially show 8 items
@@ -95,6 +96,8 @@ export default function OurMenu() {
       {/* Meals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {OUR_MENU.slice(0, visibleMeals).map((meal) => (
+            <Link key={meal.id} href={`/menu/${meal.id}`} passHref>
+
           <div key={meal.id} className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow duration-300">
             <div className="relative w-full h-48 mb-4 bg-gradient-to-r from-green-100 to-green-200 rounded-lg overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -124,6 +127,8 @@ export default function OurMenu() {
               <Button className="bg-green-500 text-white px-4 py-2 rounded-lg">Order</Button>
             </div>
           </div>
+          </Link>
+
         ))}
       </div>
 

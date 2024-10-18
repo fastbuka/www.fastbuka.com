@@ -38,7 +38,7 @@ export default function Footer() {
         
         {/* Company Links */}
         <div className="space-y-2">
-          <h4 className="font-semibold">COMPANY</h4>
+          <h4 className="font-semibold from-green-300">COMPANY</h4>
           <ul>
             <li><a href="/" className="hover:underline">Home</a></li>
             <li><a href="/menu" className="hover:underline">Our Menu</a></li>

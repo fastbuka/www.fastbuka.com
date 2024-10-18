@@ -1,4 +1,9 @@
+"use client";  
+
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
+
 export default function Register() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -60,5 +65,4 @@ export default function Register() {
         </div>
       </div>
     );
-  }
-  
+  }  

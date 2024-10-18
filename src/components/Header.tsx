@@ -36,7 +36,9 @@ export default function Header() {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-2xl font-bold">
-          <Image src="/images/logo.png" alt="Logo" width={120} height={70} />
+          <Link href="/">
+            <Image src="/images/logo.png" alt="Logo" width={120} height={70} />
+          </Link>
         </div>
 
         {/* Hamburger Menu for Mobile */}

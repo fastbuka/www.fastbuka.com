@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { TRENDING_MEALS } from "@/constants";
 import Image from "next/image";
 import { FiClock } from "react-icons/fi"; // For the clock icon
+import Link from "next/link";
 
 interface TrendingMealsProps {
   // meals: Array<{
@@ -48,7 +49,7 @@ export default function TrendingMeals({
       {/* Horizontal scroll wrapper */}
       <div className="flex overflow-x-auto pb-6 space-x-6">
         {TRENDING_MEALS.map((meal) => (
-          <a key={meal.id} href={`#`} className="shrink-0 w-[300px] relative">
+            <Link key={meal.id} href={`/menu/${meal.id}`} passHref className="shrink-0 w-[300px] relative">
             <Card className="hover:shadow-lg transition-shadow duration-200">
               <div className="relative w-full h-48" style={{ background: '#B0E8D4' }}>
               <Image
@@ -79,7 +80,8 @@ export default function TrendingMeals({
                 </button>
               </div>
             </Card>
-          </a>
+          </Link>
+
         ))}
       </div>
     </section>
