@@ -4,10 +4,12 @@ import Image from "next/image";
 import { MENU_ITEMS } from "@/constants";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext"; // Import the useCart hook
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cartItems } = useCart(); // Access cart items from context
 
   useEffect(() => {
     // Check if user is logged in
@@ -30,6 +32,9 @@ export default function Header() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Calculate total items in the cart
+  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <header className="bg-white shadow-md py-4 px-8">
@@ -63,15 +68,20 @@ export default function Header() {
 
         {/* Cart and Profile or Get Started button */}
         <div className="hidden md:flex items-center space-x-4">
+          <Link href="/cart">
+            <button className="relative p-2 bg-gray-100 rounded-full">
+              <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
+              {totalItems > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+          </Link>
           {isLoggedIn ? (
-            <>
-              <button className="p-2 bg-gray-100 rounded-full">
-                <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
-              </button>
-              <div className="rounded-full overflow-hidden w-10 h-10">
-                <Image src="/images/profile.png" alt="User Profile" width={40} height={40} />
-              </div>
-            </>
+            <div className="rounded-full overflow-hidden w-10 h-10">
+              <Image src="/images/profile.png" alt="User Profile" width={40} height={40} />
+            </div>
           ) : (
             <Link href="/auth/login">
               <button className="px-4 py-2 bg-[#0A9A66] text-white rounded-full">
@@ -103,11 +113,18 @@ export default function Header() {
             ))}
           </nav>
           <div className="mt-8">
+            <Link href="/cart">
+              <button className="relative p-2 bg-white rounded-full">
+                <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
+                {totalItems > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+            </Link>
             {isLoggedIn ? (
               <div className="flex items-center space-x-4">
-                <button className="p-2 bg-white rounded-full">
-                  <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
-                </button>
                 <div className="rounded-full overflow-hidden w-10 h-10">
                   <Image src="/images/profile.png" alt="User Profile" width={40} height={40} />
                 </div>

@@ -1,14 +1,28 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebookF, FaXTwitter, FaLinkedinIn, FaInstagram, FaTiktok, FaCartArrowDown } from "react-icons/fa6";
 import { FaHome, FaUtensils, FaWallet } from "react-icons/fa";
+import { useCart } from "@/context/CartContext"; // Import the useCart hook
+import { useEffect, useState } from "react";
+
 
 export default function Footer() {
+  const [mounted, setMounted] = useState(false);
+  const { cartItems } = useCart();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <footer className="bg-black text-white py-20">
       {/* Desktop and Laptop View */}
       <div className="hidden md:flex justify-between items-start max-w-7xl mx-auto px-4">
-        
         {/* Logo Section */}
         <div className="space-y-4">
           <Link href="/">
@@ -93,14 +107,15 @@ export default function Footer() {
           <FaWallet className="w-8 h-8 mx-auto mb-1" />
           <span className="block text-sm">Wallet</span>
         </a>
-        <a href="/cart" className="text-white text-center">
+        <a href="/cart" className="relative text-white text-center">
           <FaCartArrowDown className="w-6 h-8 mx-auto mb-1" />
+          {totalItems > 0 && (
+            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+              {totalItems}
+            </span>
+          )}
           <span className="block text-sm">Cart</span>
         </a>
-        {/* <a href="#" className="text-white text-center">
-          <FaEllipsisH className="w-8 h-8 mx-auto mb-1" />
-          <span className="block text-sm">More</span>
-        </a> */}
       </div>
     </footer>
   );
