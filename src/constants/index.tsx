@@ -15,7 +15,7 @@ export const TOKEN_PRICING = {
 };
 
 export const RESTAURANTS = [
-  { id: 1, name: "Mama Put Delight", logo: "/images/restaurant.png" },
+  {  id: 1, name: "Mama Put Delight", logo: "/images/restaurant.png" },
   { id: 2, name: "Iya Basira's Kitchen", logo: "/images/restaurant.png" },
   { id: 3, name: "Calabar Chop House", logo: "/images/restaurant.png" },
   { id: 4, name: "Buka Express", logo: "/images/restaurant.png" },
@@ -147,6 +147,7 @@ export const TRENDING_MEALS = [
 export const OUR_MENU = [
   {
     id: 1,
+    vendorId: "1",
     name: "Amala and Ewedu Soup",
     description: "Smooth yam flour swallow served with slimy ewedu soup and stew",
     price: 2200,
@@ -156,6 +157,7 @@ export const OUR_MENU = [
   },
   {
     id: 2,
+    vendorId: "1",
     name: "Eba and Okra Soup",
     description: "Cassava flour swallow served with delicious okra soup and assorted meat",
     price: 2400,
@@ -165,6 +167,7 @@ export const OUR_MENU = [
   },
   {
     id: 3,
+    vendorId: "3",
     name: "Coconut Rice",
     description: "Fragrant rice cooked in coconut milk, served with grilled chicken",
     price: 2600,
@@ -174,6 +177,7 @@ export const OUR_MENU = [
   },
   {
     id: 4,
+    vendorId: "4",
     name: "Yam Porridge",
     description: "Diced yam cooked with palm oil, peppers, and assorted vegetables",
     price: 1800,
@@ -183,6 +187,7 @@ export const OUR_MENU = [
   },
   {
     id: 5,
+    vendorId: "5",
     name: "Beans and Plantain",
     description: "Stewed beans served with fried ripe plantain",
     price: 1600,
@@ -192,6 +197,7 @@ export const OUR_MENU = [
   },
   {
     id: 6,
+    vendorId: "6",
     name: "Oha Soup and Semovita",
     description: "Traditional Igbo soup served with smooth semolina swallow",
     price: 2800,
@@ -201,6 +207,7 @@ export const OUR_MENU = [
   },
   {
     id: 7,
+    vendorId: "7",
     name: "Banga Soup and Starch",
     description: "Palm nut soup served with starch, a traditional Delta swallow",
     price: 3000,
@@ -210,6 +217,7 @@ export const OUR_MENU = [
   },
   {
     id: 8,
+    vendorId: 8,
     name: "Tuwo Shinkafa",
     description: "Smooth rice swallow served with miyan taushe (pumpkin soup)",
     price: 2200,
@@ -219,6 +227,7 @@ export const OUR_MENU = [
   },
   {
     id: 9,
+    vendorId: 9,
     name: "Ekpang Nkukwo",
     description: "Grated cocoyam and water yam wrapped in cocoyam leaves",
     price: 2500,
@@ -228,6 +237,7 @@ export const OUR_MENU = [
   },
   {
     id: 10,
+    vendorId: 10,
     name: "Abacha and Ugba",
     description: "African salad made with cassava flakes and oil bean seed",
     price: 1800,
@@ -237,6 +247,7 @@ export const OUR_MENU = [
   },
   {
     id: 11,
+    vendorId: 11,
     name: "Ogbono Soup and Fufu",
     description: "Draw soup made with ogbono seeds, served with cassava fufu",
     price: 2700,
@@ -246,6 +257,7 @@ export const OUR_MENU = [
   },
   {
     id: 12,
+    vendorId: 12,
     name: "Edikang Ikong Soup",
     description: "Rich vegetable soup from Calabar, served with pounded yam",
     price: 3200,
@@ -255,6 +267,7 @@ export const OUR_MENU = [
   },
   {
     id: 13,
+    vendorId: 13,
     name: "Ewa Agoyin and Bread",
     description: "Mashed beans served with spicy pepper sauce and bread",
     price: 1500,
@@ -264,6 +277,7 @@ export const OUR_MENU = [
   },
   {
     id: 14,
+    vendorId: 14,
     name: "Kilishi",
     description: "Spicy dried meat, a popular Northern Nigerian snack",
     price: 1200,
@@ -273,6 +287,7 @@ export const OUR_MENU = [
   },
   {
     id: 15,
+    vendorId: 15,
     name: "Masa (Rice Cake)",
     description: "Fermented rice cakes, often served with spicy sauce",
     price: 1000,
@@ -282,6 +297,7 @@ export const OUR_MENU = [
   },
   {
     id: 16,
+    vendorId: 15,
     name: "Efo Elegusi",
     description: "Melon seed soup with leafy vegetables and assorted meat",
     price: 2800,
@@ -291,6 +307,7 @@ export const OUR_MENU = [
   },
   {
     id: 17,
+    vendorId: 17,
     name: "Isi Ewu",
     description: "Spicy goat head delicacy popular in Eastern Nigeria",
     price: 3500,

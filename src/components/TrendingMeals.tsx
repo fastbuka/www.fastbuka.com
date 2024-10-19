@@ -25,9 +25,9 @@ export default function TrendingMeals({
     <section className="py-10 px-6 sm:px-8 lg:px-10 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold">{title}</h2>
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
-        {subtitle}
-      </p>
+        <p className="hidden sm:block sm:text-center sm:text-gray-600 sm:max-w-2xl sm:mx-auto sm:mb-12">
+  {subtitle}
+</p>
         <a href="#" className="text-green-500 flex items-center space-x-2">
           <span>See more</span>
           <svg

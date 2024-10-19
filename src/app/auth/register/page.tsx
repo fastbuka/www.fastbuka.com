@@ -7,7 +7,7 @@ export default function Register() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg flex items-center">
           {/* Left Side (Form) */}
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2 pr-0 md:pr-8">
             <h2 className="text-3xl font-bold text-green-600 mb-6">Create an Account</h2>
             <p className="text-gray-600 mb-8">Sign up to start ordering from FastBuka</p>
   
