@@ -8,7 +8,7 @@ interface BreadCrumbProps {
 export default function BreadCrumb({ items, title }: BreadCrumbProps) {
   return (
     <section
-      className="relative py-20 text-center text-dark"
+      className="relative py-20  text-extraBold text-center text-dark"
       style={{
         backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('/images/pattern.png')`, // Significantly reduced image opacity (90% white overlay)
         backgroundSize: "cover",

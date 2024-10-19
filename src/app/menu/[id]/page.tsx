@@ -1,17 +1,51 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo} from "react";
 // import { FiClock, FiHeart } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import BreadCrumb from "@/components/BreadCrumb"; // Correct import for BreadCrumb
 import { OUR_MENU } from "@/constants";
+import CustomDropdown from "@/components/ui/CustomDropdown";
 import Link from "next/link";
 
+
+// Define the DropdownOption type
+interface DropdownOption {
+  id: number | string;
+  name: string;
+  [key: string]: number | string; // Allow for additional properties
+}
+
+
 export default function SingleMealPage({ params }: { params: { id: string } }) {
+
+  
+
   const { id } = params;
   const meal = OUR_MENU.find((item) => item.id === parseInt(id));
   const [quantity, setQuantity] = useState(1);
+ 
+
+  
+
+  // Create vendor options from the OUR_MENU data
+  const vendorOptions: DropdownOption[] = useMemo(() => {
+    const vendors = new Set(OUR_MENU.map(item => item.vendorId));
+    return Array.from(vendors).map(vendorId => ({
+      id: vendorId as string,
+      name: `Vendor ${vendorId}`,
+    }));
+  }, []);
+
+  const [selectedVendor, setSelectedVendor] = useState<DropdownOption>(vendorOptions[0]);
+
+
+  const handleSelectVendorChange = (option: DropdownOption) => {
+    setSelectedVendor(option);
+  };
+  
+
 
   const handleQuantityChange = (type: 'increment' | 'decrement') => {
     if (type === "increment") {
@@ -24,6 +58,9 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
   if (!meal) {
     return <div>Meal not found</div>;
   }
+
+  
+
 
   return (
     <>
@@ -53,6 +90,7 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
         </div>
 
         <div className="flex flex-col justify-between space-y-6">
+        <div className="sm:flex">
           <div>
             <h1 className="text-4xl font-bold mb-4">{meal.name}</h1>
             <p className="text-lg text-gray-600 mb-4">{meal.description}</p>
@@ -60,6 +98,14 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
               ₦{meal.price.toLocaleString("en-NG", { minimumFractionDigits: 2 })}
             </span>
           </div>
+          <div className="pt-6  sm:pt-0">
+          <CustomDropdown 
+          options={vendorOptions}
+          initialSelectedOption={selectedVendor}
+          onSelectChange={handleSelectVendorChange}
+        />
+          </div>
+        </div>
           <div>
             <label htmlFor="extras" className="font-semibold mb-2">
               Extras:
@@ -88,6 +134,7 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
               +
             </button>
           </div>
+
           <Button className="bg-green-500 text-white py-3 rounded-lg w-full mt-6">
             Add to Cart
           </Button>

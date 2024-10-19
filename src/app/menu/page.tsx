@@ -8,9 +8,11 @@ export default function MenuPage() {
     <div>
       {/* Breadcrumb with the "Our Menu" title */}
       <BreadCrumb
+
         items={[{ name: "Home", href: "/" }, { name: "Our Menu", href: "/menu" }]}
         title="Our Menu"
       />
+      
 
       {/* Featured Meals Section */}
       <TrendingMeals  title="Featured Meals"/>

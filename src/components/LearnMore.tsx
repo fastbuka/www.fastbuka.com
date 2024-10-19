@@ -12,7 +12,7 @@ export default function LearnMore() {
             Want to learn more?
           </h2>
           <Link href="/about">
-            <Button className="bg-green-600 text-white px-6 py-3 rounded-full">
+            <Button className="bg-white text-green-600 px-6 py-3 rounded-full">
               Learn more
             </Button>
           </Link>
