@@ -103,7 +103,7 @@ export default function Footer() {
           <FaUtensils className="w-8 h-8 mx-auto mb-1" />
           <span className="block text-sm">Menu</span>
         </a>
-        <a href="/dashboard" className="text-white text-center">
+        <a href="/user/wallet" className="text-white text-center">
           <FaWallet className="w-8 h-8 mx-auto mb-1" />
           <span className="block text-sm">Wallet</span>
         </a>

@@ -1,39 +1,59 @@
-"use client";  
+"use client";
 
 import Image from "next/image";
 import { MENU_ITEMS } from "@/constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useCart } from "@/context/CartContext"; // Import the useCart hook
+import { useCart } from "@/context/CartContext";
+import { getUser } from "@/utils/token";
+
+const userMenuItems = [
+  { name: "Dashboard", path: "/user/dashboard" },
+  { name: "Orders", path: "/user/orders" },
+  { name: "Wallet", path: "/user/wallet" },
+  { name: "Settings", path: "/user/settings" },
+  { name: "Logout", path: "/auth/logout" },
+];
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cartItems } = useCart(); // Access cart items from context
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const { cartItems } = useCart();
+  const [user, setUser] = useState(null);
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
-    // Check if user is logged in
-    // This is a placeholder. Replace with actual API call
-    const checkLoginStatus = async () => {
-      try {
-        // const response = await fetch('/api/check-login');
-        // const data = await response.json();
-        // setIsLoggedIn(data.isLoggedIn);
-        setIsLoggedIn(false); // Placeholder: set to false for now
-      } catch (error) {
-        console.error("Error checking login status:", error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    checkLoginStatus();
+    const userData = getUser();
+    if (userData) {
+      setIsLoggedIn(true);
+      setUser(userData);
+    } else {
+      setIsLoggedIn(false);
+      setUser(null);
+    }
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userMenuRef]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Calculate total items in the cart
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -79,8 +99,27 @@ export default function Header() {
             </button>
           </Link>
           {isLoggedIn ? (
-            <div className="rounded-full overflow-hidden w-10 h-10">
-              <Image src="/images/profile.png" alt="User Profile" width={40} height={40} />
+            <div className="relative" ref={userMenuRef}>
+              <button onClick={toggleUserMenu} className="flex items-center space-x-2">
+                <div className="rounded-full overflow-hidden w-10 h-10">
+                  <Image src={user.profile.avatar || "/images/profile.png"} alt="User Profile" width={40} height={40} />
+                </div>
+                <span className="text-gray-600">{user.profile.first_name}</span>
+              </button>
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                  {userMenuItems.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.path}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <Link href="/auth/login">
@@ -94,7 +133,7 @@ export default function Header() {
 
       {/* Full-screen Menu for Mobile */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-green-500 z-50 flex flex-col items-start justify-start p-8">
+        <div className="fixed inset-y-0 left-0 w-64 bg-green-500 z-50 flex flex-col items-start justify-start p-8 transform transition-transform duration-300 ease-in-out">
           <button onClick={toggleMenu} className="self-end mb-8">
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -111,8 +150,23 @@ export default function Header() {
                 {item.name}
               </a>
             ))}
+            {isLoggedIn && (
+              <>
+                <div className="border-t border-white my-4"></div>
+                {userMenuItems.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.path}
+                    className="text-white text-xl"
+                    onClick={toggleMenu}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </>
+            )}
           </nav>
-          <div className="mt-8">
+          <div className="mt-8 flex items-center space-x-4">
             <Link href="/cart">
               <button className="relative p-2 bg-white rounded-full">
                 <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
@@ -124,10 +178,11 @@ export default function Header() {
               </button>
             </Link>
             {isLoggedIn ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
-                  <Image src="/images/profile.png" alt="User Profile" width={40} height={40} />
+                  <Image src={user.profile.avatar || "/images/profile.png"} alt="User Profile" width={40} height={40} />
                 </div>
+                <span className="text-white">{user.profile.first_name}</span>
               </div>
             ) : (
               <Link href="/auth/login">

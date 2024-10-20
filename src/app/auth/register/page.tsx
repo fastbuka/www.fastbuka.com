@@ -9,23 +9,27 @@ import { useRegister, RegisterData } from "@/queries/auth";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [registerError, setRegisterError] = useState<string | null>(null);
 
   const router = useRouter();
-  const { mutate: register } = useRegister();
+  const { mutate: register, isLoading } = useRegister();
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    const registerData: RegisterData = { fullName, email, password };
+    const registerData: RegisterData = { name, email, password };
     register(registerData, {
       onSuccess: () => {
         router.push('/auth/login');
       },
-      onError: () => {
-        setRegisterError('Registration failed. Please try again.');
+      onError: (error: any) => {
+        if (error.response && error.response.data && error.response.data.message) {
+          setRegisterError(error.response.data.message);
+        } else {
+          setRegisterError('Registration failed. Please try again.');
+        }
       }
     });
   };
@@ -47,13 +51,13 @@ export default function Register() {
 
           <form onSubmit={handleRegister}>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Full Name</label>
+              <label className="block text-gray-700 mb-2">Name</label>
               <input
                 type="text"
                 className="w-full p-3 border border-gray-300 rounded-lg"
                 placeholder="Your Name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
@@ -82,8 +86,8 @@ export default function Register() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg">
-              Create Account
+            <Button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg" disabled={isLoading}>
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </Button>
           </form>
 

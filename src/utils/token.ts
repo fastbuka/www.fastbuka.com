@@ -1,5 +1,6 @@
 // The key used to store the token in localStorage
 const TOKEN_KEY = 'fastbuka_auth_token';
+const USER_KEY = 'fastbuka_user_data';
 
 /**
  * Retrieves the authentication token from localStorage
@@ -37,4 +38,35 @@ export const clearToken = (): void => {
  */
 export const hasToken = (): boolean => {
   return !!getToken();
+};
+
+/**
+ * Stores the user data in localStorage
+ * @param {any} user - The user object to be stored
+ */
+export const setUser = (user: any): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+};
+
+/**
+ * Retrieves the user data from localStorage
+ * @returns {any | null} The stored user object or null if not found
+ */
+export const getUser = (): any | null => {
+  if (typeof window !== 'undefined') {
+    const userData = localStorage.getItem(USER_KEY);
+    return userData ? JSON.parse(userData) : null;
+  }
+  return null;
+};
+
+/**
+ * Removes the user data from localStorage
+ */
+export const clearUser = (): void => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem(USER_KEY);
+  }
 };

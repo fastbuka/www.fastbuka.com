@@ -2,7 +2,7 @@ import { useMutation, useQuery, QueryClient } from 'react-query';
 import { useRouter } from 'next/navigation';
 import { API_ENDPOINTS } from '@/constants';
 import { request } from '@/utils/request';
-import { setToken, getToken, clearToken } from '@/utils/token';
+import { setToken, getToken, clearToken, setUser } from '@/utils/token';
 import { useAuth } from '@/context/AuthContext'; 
 
 interface LoginData {
@@ -11,54 +11,65 @@ interface LoginData {
 }
 
 export interface RegisterData {
-  fullName: string;
-  email: string;
-  password: string;
-}
+    name: string;
+    email: string;
+    password: string;
+  }
 
-interface AuthResponse {
-  token: string;
-}
+  interface AuthResponse {
+    token: string;
+    user: any; //Interface check here
+  }
 
-export function useLogin() {
-  const router = useRouter();
-  const { logout } = useAuth();  // Use your existing auth context
-
-  return useMutation<AuthResponse, Error, LoginData>(
-    (data) => request(API_ENDPOINTS.LOGIN, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    }),
-    {
-      onSuccess: (data) => {
-        setToken(data.token);
-        router.push('/user/dashboard');
-      },
-      onError: (error) => {
-        console.error('Login failed', error);
-        logout();  // Use the logout function from your auth context
-      },
-    }
-  );
-}
-export function useRegister() {
-  return useMutation<AuthResponse, Error, RegisterData>(
-    async (data: RegisterData) => {
-      const response = await request(API_ENDPOINTS.REGISTER, {
+  export function useLogin() {
+    const router = useRouter();
+  
+    return useMutation<AuthResponse, Error, LoginData>(
+      (data) => request(API_ENDPOINTS.LOGIN, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Registration failed');
+      }),
+      {
+        onSuccess: (data) => {
+          setToken(data.token);
+          setUser(data.user);
+          router.push('/user/dashboard');
+        },
+        onError: (error) => {
+          console.error('Login failed', error);
+          // Handle login error (e.g., show error message)
+        },
       }
-      return response.json();
-    }
-  );
-}
+    );
+  }
+export function useRegister() {
+    return useMutation<AuthResponse, Error, RegisterData>(
+      (data) => request(API_ENDPOINTS.REGISTER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }),
+      {
+        onError: (error: any) => {
+          console.error('Registration failed', error);
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error(error.response.data);
+            console.error(error.response.status);
+            console.error(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.error(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error', error.message);
+          }
+        },
+      }
+    );
+  }
 
 export function useVerifyToken() {
   const { logout } = useAuth();  // Use your existing auth context
