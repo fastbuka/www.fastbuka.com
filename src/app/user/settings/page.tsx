@@ -1,14 +1,25 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getUser, setUser } from "@/utils/token";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
+interface UserData {
+  email: string;
+  profile: {
+    first_name: string;
+    last_name: string;
+    avatar: string;
+    phone: string;
+    address: string;
+  };
+}
+
 export default function UserSettings() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -22,7 +33,7 @@ export default function UserSettings() {
     }
   }, [router]);
 
-  const handleUpdateProfile = async (e) => {
+  const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -30,24 +41,29 @@ export default function UserSettings() {
     try {
       // Here you would typically make an API call to update the user's profile
       // For now, we'll just update the local storage
-      setUser(userData);
-      setIsLoading(false);
-      alert('Profile updated successfully!');
+      if (userData) {
+        setUser(userData);
+        setIsLoading(false);
+        alert('Profile updated successfully!');
+      }
     } catch (err) {
       setError('Failed to update profile. Please try again.');
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData(prevState => ({
-      ...prevState,
-      profile: {
-        ...prevState.profile,
-        [name]: value
-      }
-    }));
+    setUserData(prevState => {
+      if (!prevState) return null;
+      return {
+        ...prevState,
+        profile: {
+          ...prevState.profile,
+          [name]: value
+        }
+      };
+    });
   };
 
   if (!userData) {

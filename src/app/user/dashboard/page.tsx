@@ -9,9 +9,15 @@ import { QueryClient } from 'react-query';
 import { getUser, getToken } from "@/utils/token";
 import { ShoppingBag, Wallet, AlertCircle } from 'lucide-react';
 
+interface UserProfile {
+  profile: {
+    first_name: string;
+  };
+}
+
 export default function UserDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [queryClient] = useState(() => new QueryClient());
   const logout = useLogout(queryClient);
 
@@ -21,7 +27,7 @@ export default function UserDashboard() {
     if (!token || !userData) {
       router.push("/auth/login");
     } else {
-      setUser(userData);
+      setUser(userData as UserProfile);
     }
   }, [router]);
 

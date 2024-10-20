@@ -10,7 +10,7 @@ export default function UserTickets() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmitTicket = (e) => {
+  const handleSubmitTicket = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Implement ticket submission logic here
     console.log('Ticket submitted:', { subject, message });

@@ -7,6 +7,13 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { getUser } from "@/utils/token";
 
+interface UserData {
+  profile: {
+    avatar: string;
+    first_name: string;
+  };
+}
+
 const userMenuItems = [
   { name: "Dashboard", path: "/user/dashboard" },
   { name: "Orders", path: "/user/orders" },
@@ -20,14 +27,14 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { cartItems } = useCart();
-  const [user, setUser] = useState(null);
-  const userMenuRef = useRef(null);
+  const [user, setUser] = useState<UserData | null>(null);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const userData = getUser();
     if (userData) {
       setIsLoggedIn(true);
-      setUser(userData);
+      setUser(userData as UserData);
     } else {
       setIsLoggedIn(false);
       setUser(null);
@@ -35,8 +42,8 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
       }
     }
@@ -44,7 +51,7 @@ export default function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [userMenuRef]);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -98,7 +105,7 @@ export default function Header() {
               )}
             </button>
           </Link>
-          {isLoggedIn ? (
+          {isLoggedIn && user ? (
             <div className="relative" ref={userMenuRef}>
               <button onClick={toggleUserMenu} className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
@@ -177,7 +184,7 @@ export default function Header() {
                 )}
               </button>
             </Link>
-            {isLoggedIn ? (
+            {isLoggedIn && user ? (
               <div className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
                   <Image src={user.profile.avatar || "/images/profile.png"} alt="User Profile" width={40} height={40} />
