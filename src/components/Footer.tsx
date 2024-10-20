@@ -34,16 +34,16 @@ export default function Footer() {
             <a href="#" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center">
               <FaFacebookF className="text-white" />
             </a>
-            <a href="https://x.com/fastbuka" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center">
+            <a href="https://x.com/fastbuka" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center" target="_blank">
               <FaXTwitter className="text-white" />
             </a>
-            <a href="https://www.linkedin.com/company/fastbukadelivery/" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center">
+            <a href="https://www.linkedin.com/company/fastbukadelivery/" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center" target="_blank">
               <FaLinkedinIn className="text-white" />
             </a>
-            <a href="https://www.instagram.com/fastbuka/" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center">
+            <a href="https://www.instagram.com/fastbuka/" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center" target="_blank">
               <FaInstagram className="text-white" />
             </a>
-            <a href="tiktok.com/@fastbukadelivery" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center">
+            <a href="https://tiktok.com/@fastbukadelivery" className="bg-[#0faf62] w-8 h-8 rounded-full flex items-center justify-center" target="_blank">
               <FaTiktok className="text-white" />
             </a>
           </div>
