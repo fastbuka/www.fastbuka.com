@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCart } from "@/context/CartContext";
+import { useCart, CartItem } from "@/context/CartContext";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -45,7 +45,7 @@ export default function CartPage() {
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
-  const handleQuantityChange = (item, change) => {
+  const handleQuantityChange = (item: CartItem, change: number) => {
     if (item.quantity + change > 0) {
       addToCart({ ...item, quantity: change });
     } else if (item.quantity + change === 0) {
