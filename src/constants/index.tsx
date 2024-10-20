@@ -1,5 +1,11 @@
 export const APP_NAME = "Fast Buka";
-export const BASE_API_URL = "https://api.fastbuka.com";
+export const API_ENDPOINTS = {
+  LOGIN: "https://api.fastbuka.com/api/v1/auth/login",
+  REGISTER: "https://api.fastbuka.com/api/v1/auth/register",
+  VERIFY_TOKEN: "https://api.fastbuka.com/api/v1/auth/verify-token",
+  LOGOUT: "https://api.fastbuka.com/api/v1/auth/logout",
+  // Add other endpoints as needed
+};
 
 export const MENU_ITEMS = [
   { name: "Home", path: "/" },

@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function CartPage() {
-  const { cartItems, addToCart, removeFromCart, clearCart } = useCart();
+  const { cartItems, addToCart, removeFromCart } = useCart();
   const [isClient, setIsClient] = useState(false);
-
-  // Flag to indicate if cart items were already restored
   const [restored, setRestored] = useState(false);
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export default function CartPage() {
       const savedCartItems = localStorage.getItem("cartItems");
       if (savedCartItems) {
         try {
-          const parsedCartItems = JSON.parse(savedCartItems);{}
+          const parsedCartItems = JSON.parse(savedCartItems);
           if (Array.isArray(parsedCartItems)) {
             parsedCartItems.forEach((item) => {
               addToCart(item);
@@ -44,84 +42,95 @@ export default function CartPage() {
 
   if (!isClient) return null;
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-center mb-8">Your Cart</h1>
-      {cartItems.length === 0 ? (
-        <p className="text-center text-gray-500">Your cart is empty.</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg shadow-md mt-8 mb-16 hover:shadow-lg transition-shadow duration-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-6 py-4 text-left">Item</th>
-                <th className="px-6 py-4 text-left">Name</th>
-                <th className="px-6 py-4 text-center">Quantity</th>
-                <th className="px-6 py-4 text-right">Price</th>
-                <th className="px-6 py-4 text-right">Total</th>
-                <th className="px-6 py-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cartItems.map((item) => (
-                <tr key={item.id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="relative w-[150px] h-[100px]">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-lg"
-                      />
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">{item.name}</td>
-                  <td className="px-6 py-4 text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <button
-                        onClick={() => item.quantity > 1 && addToCart({ ...item, quantity: -1 })}
-                        className="px-2 py-1 bg-gray-200 rounded-full text-gray-800"
-                      >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        onClick={() => addToCart({ ...item, quantity: 1 })}
-                        className="px-2 py-1 bg-gray-200 rounded-full text-gray-800"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right">₦{item.price.toLocaleString("en-NG", { minimumFractionDigits: 2 })}</td>
-                  <td className="px-6 py-4 text-right">₦{(item.price * item.quantity).toLocaleString("en-NG", { minimumFractionDigits: 2 })}</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button
-                      variant="outline"
-                      className="text-red-500"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Remove
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
-      {cartItems.length > 0 && (
-        <div className="flex justify-between items-center mt-10">
-          <Button onClick={clearCart} variant="destructive" className="bg-red-500 text-white">
-            Clear Cart
-          </Button>
-          <Link href="/checkout">
-            <Button className="bg-green-500 text-white">Proceed to Checkout</Button>
-          </Link>
+  const handleQuantityChange = (item, change) => {
+    if (item.quantity + change > 0) {
+      addToCart({ ...item, quantity: change });
+    } else if (item.quantity + change === 0) {
+      removeFromCart(item.id);
+    }
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <Link href="/menu" className="flex items-center text-gray-600 mb-6">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Menu
+      </Link>
+
+      <h1 className="text-3xl font-bold mb-8">Cart</h1>
+
+      <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex-grow">
+          {cartItems.map((item) => (
+            <div key={item.id} className="flex items-center mb-6 bg-green-50 p-4 rounded-lg">
+              <div className="w-24 h-24 mr-4 relative flex-shrink-0">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  layout="fill"
+                  objectFit="contain"
+                  className="rounded-md"
+                />
+                <button 
+                  onClick={() => removeFromCart(item.id)}
+                  className="absolute -top-2 -left-2 bg-red-500 rounded-full p-1 shadow-md"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-semibold text-lg">{item.name}</h3>
+                <p className="text-gray-600 text-sm">{item.restaurant || "Chicken Republic"}</p>
+                <p className="text-gray-500 text-sm">Extras: Water, Salad</p>
+                <p className="font-bold mt-1">₦{item.price.toLocaleString()}</p>
+              </div>
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleQuantityChange(item, -1)}
+                  className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600"
+                >
+                  -
+                </button>
+                <span className="mx-3">{item.quantity}</span>
+                <button
+                  onClick={() => handleQuantityChange(item, 1)}
+                  className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+
+        <div className="md:w-1/3">
+          <div className="bg-green-100 p-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4">Subtotal</h2>
+            <div className="flex justify-between mb-2">
+              <span>Summary</span>
+              <span>₦{totalAmount.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between mb-2">
+              <span>Item count</span>
+              <span>{itemCount}</span>
+            </div>
+            <div className="flex justify-between font-bold mt-4">
+              <span>Amount to pay</span>
+              <span>₦{totalAmount.toLocaleString()}</span>
+            </div>
+            <Button className="w-full mt-6 bg-green-500 text-white py-3 rounded-full text-lg font-semibold">
+              Checkout
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

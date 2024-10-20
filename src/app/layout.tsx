@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Header from "@/components/Header"; 
 import Footer from "@/components/Footer"; 
-import { CartProvider } from "@/context/CartContext"; // Import the CartProvider
+import Providers from "@/Providers"; // Import the new Providers component
 import "./globals.css";
 
 // Import Satoshi fonts
@@ -25,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshiFont.variable} antialiased`}>
-        <CartProvider> {/* Ensure CartProvider wraps the entire app */}
+        <Providers>
           <Header /> 
           <main>{children}</main>
           <Footer /> 
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );

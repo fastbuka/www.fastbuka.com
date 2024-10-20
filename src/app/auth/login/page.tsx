@@ -2,26 +2,56 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { useLogin } from "@/queries/auth";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { mutate: login } = useLogin();
+  const router = useRouter();
+  const [loginError, setLoginError] = useState<string | null>(null);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    login({ email, password }, {
+      onSuccess: () => {
+        router.push('/user/dashboard');
+      },
+      onError: () => {
+        setLoginError('Login failed. Please check your credentials and try again.');
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg flex items-center">
+      <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg flex items-center">
         {/* Left Side (Form) */}
         <div className="w-full md:w-1/2 pr-0 md:pr-8">
           <h2 className="text-3xl font-bold text-green-600 mb-6">Welcome Back!</h2>
-          <p className="text-gray-600 mb-8">Enter your login details below</p>
+          <p className="text-gray-600 mb-4">Enter your login details below</p>
 
-          <form>
+          {loginError && (
+            <Alert variant="destructive" className="mb-4">
+              <ExclamationTriangleIcon className="h-4 w-4" />
+              <AlertDescription>{loginError}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Email</label>
               <input
                 type="email"
                 className="w-full p-3 border border-gray-300 rounded-lg"
                 placeholder="example@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -32,6 +62,8 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   className="w-full p-3 border border-gray-300 rounded-lg"
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -46,14 +78,7 @@ export default function Login() {
               </a>
             </div>
 
-            <div className="mb-4">
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox h-5 w-5 text-green-600" />
-                <span className="ml-2 text-gray-700">Keep me logged in</span>
-              </label>
-            </div>
-
-            <Button className="w-full bg-green-600 text-white py-3 rounded-lg">Login</Button>
+            <Button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg">Login</Button>
           </form>
 
           <p className="text-center text-gray-600 mt-6">
