@@ -87,7 +87,7 @@ export default function CartPage() {
               </div>
               <div className="flex-grow">
                 <h3 className="font-semibold text-lg">{item.name}</h3>
-                <p className="text-gray-600 text-sm">{item.restaurant || "Chicken Republic"}</p>
+                <p className="text-gray-600 text-sm"> "Chicken Republic"</p>
                 <p className="text-gray-500 text-sm">Extras: Water, Salad</p>
                 <p className="font-bold mt-1">₦{item.price.toLocaleString()}</p>
               </div>
