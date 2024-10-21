@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import Image from "next/image";
 import { useLogin } from "@/queries/auth";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,9 @@ export default function Login() {
       <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg flex items-center">
         {/* Left Side (Form) */}
         <div className="w-full md:w-1/2 pr-0 md:pr-8">
-          <h2 className="text-3xl font-bold text-green-600 mb-6">Welcome Back!</h2>
+          <h2 className="text-3xl font-bold text-green-600 mb-6">
+            Welcome Back!
+          </h2>
           <p className="text-gray-600 mb-4">Enter your login details below</p>
 
           {loginError && (
@@ -67,18 +70,31 @@ export default function Login() {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-3"
+                  className="absolute right-3 top-3 align-middle"
                   onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? "Hide password" : "Show password"}
                 >
-                  👁️
+                  {showPassword ? (
+                    <LuEye fontSize={20} />
+                  ) : (
+                    <LuEyeOff fontSize={20} />
+                  )}
                 </button>
               </div>
-              <a href="/auth/forgot-password" className="text-green-600 text-sm mt-2 block">
+              <a
+                href="/auth/forgot-password"
+                className="text-green-600 text-sm mt-2 block"
+              >
                 Forgot password?
               </a>
             </div>
 
-            <Button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg">Login</Button>
+            <Button
+              type="submit"
+              className="w-full bg-green-600 text-white py-3 rounded-lg"
+            >
+              Login
+            </Button>
           </form>
 
           <p className="text-center text-gray-600 mt-6">
