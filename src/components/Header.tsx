@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { getUser } from "@/utils/token";
+import { getDefaultAvatar, getDefaultFirstName } from "@/utils/defaults";
 
 interface UserData {
   profile: {
@@ -43,7 +44,10 @@ export default function Header() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setIsUserMenuOpen(false);
       }
     }
@@ -60,7 +64,7 @@ export default function Header() {
   const toggleUserMenu = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
   };
-
+  
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -75,8 +79,19 @@ export default function Header() {
 
         {/* Hamburger Menu for Mobile */}
         <button className="md:hidden" onClick={toggleMenu}>
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
           </svg>
         </button>
 
@@ -97,7 +112,12 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-4">
           <Link href="/cart">
             <button className="relative p-2 bg-gray-100 rounded-full">
-              <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
+              <Image
+                src="/svg/cart-icon.svg"
+                alt="Cart"
+                width={20}
+                height={20}
+              />
               {totalItems > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                   {totalItems}
@@ -107,11 +127,19 @@ export default function Header() {
           </Link>
           {isLoggedIn && user ? (
             <div className="relative" ref={userMenuRef}>
-              <button onClick={toggleUserMenu} className="flex items-center space-x-2">
+              <button
+                onClick={toggleUserMenu}
+                className="flex items-center space-x-2"
+              >
                 <div className="rounded-full overflow-hidden w-10 h-10">
-                  <Image src={user.profile.avatar || "/images/profile.png"} alt="User Profile" width={40} height={40} />
+                  <Image
+                    src={getDefaultAvatar(user?.profile?.avatar)}
+                    alt="User Profile"
+                    width={40}
+                    height={40}
+                  />
                 </div>
-                <span className="text-gray-600">{user.profile.first_name}</span>
+                <span className="text-gray-600">{getDefaultFirstName(user?.profile?.first_name)}</span>
               </button>
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
@@ -142,8 +170,19 @@ export default function Header() {
       {isMenuOpen && (
         <div className="fixed inset-y-0 left-0 w-64 bg-green-500 z-50 flex flex-col items-start justify-start p-8 transform transition-transform duration-300 ease-in-out">
           <button onClick={toggleMenu} className="self-end mb-8">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
           <nav className="flex flex-col space-y-6 w-full">
@@ -176,7 +215,12 @@ export default function Header() {
           <div className="mt-8 flex items-center space-x-4">
             <Link href="/cart">
               <button className="relative p-2 bg-white rounded-full">
-                <Image src="/svg/cart-icon.svg" alt="Cart" width={20} height={20} />
+                <Image
+                  src="/svg/cart-icon.svg"
+                  alt="Cart"
+                  width={20}
+                  height={20}
+                />
                 {totalItems > 0 && (
                   <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                     {totalItems}
@@ -187,7 +231,12 @@ export default function Header() {
             {isLoggedIn && user ? (
               <div className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
-                  <Image src={user.profile.avatar || "/images/profile.png"} alt="User Profile" width={40} height={40} />
+                  <Image
+                    src={user.profile.avatar || "/images/profile.png"}
+                    alt="User Profile"
+                    width={40}
+                    height={40}
+                  />
                 </div>
                 <span className="text-white">{user.profile.first_name}</span>
               </div>

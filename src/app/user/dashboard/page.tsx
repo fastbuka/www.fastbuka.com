@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { QueryClient } from 'react-query';
 import { getUser, getToken } from "@/utils/token";
 import { ShoppingBag, Wallet, AlertCircle } from 'lucide-react';
+import {  getDefaultFirstName } from "@/utils/defaults";
+
 
 interface UserProfile {
   profile: {
@@ -47,7 +49,7 @@ export default function UserDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl md:text-4xl font-bold mb-6">Welcome, {user.profile.first_name}!</h1>
+      <h1 className="text-2xl md:text-4xl font-bold mb-6">Welcome, {getDefaultFirstName(user.profile?.first_name)}!</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {widgets.map((widget, index) => (
