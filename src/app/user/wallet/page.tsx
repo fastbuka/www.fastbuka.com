@@ -35,8 +35,8 @@ export default function UserWallet() {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button onClick={() => handleTopUp('Solana')} className="flex items-center justify-center">
-              <img src="/images/solana-logo.png" alt="Solana" className="h-5 w-5 mr-2" />
-              Top-Up with Solana
+              <img src="/images/ngnc.png" alt="Solana" className="h-5 w-5 mr-2" />
+              Top-Up with NGNC (Stellar)
             </Button>
             <Button onClick={() => handleTopUp('Paystack')} className="flex items-center justify-center">
               <CreditCard className="h-5 w-5 mr-2" />
