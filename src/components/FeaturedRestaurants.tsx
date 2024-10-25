@@ -13,10 +13,10 @@ interface Restaurant {
   state: string;
   city: string;
   address: string;
-  opening_time: Date;
-  closing_time: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  opening_time: string;
+  closing_time: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export default function FeaturedRestaurants({
