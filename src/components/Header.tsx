@@ -5,8 +5,10 @@ import { MENU_ITEMS } from "@/constants";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { getUser } from "@/utils/token";
+import { getUser, getToken } from "@/utils/token";
+import { useLogout } from "@/queries/auth";
 import { getDefaultAvatar, getDefaultFirstName } from "@/utils/defaults";
+import { QueryClient } from "react-query";
 
 interface UserData {
   profile: {
@@ -20,7 +22,7 @@ const userMenuItems = [
   { name: "Orders", path: "/user/orders" },
   { name: "Wallet", path: "/user/wallet" },
   { name: "Settings", path: "/user/settings" },
-  { name: "Logout", path: "/auth/logout" },
+  { name: "Logout" }, // Logout will use the function, not a path
 ];
 
 export default function Header() {
@@ -30,11 +32,19 @@ export default function Header() {
   const { cartItems } = useCart();
   const [user, setUser] = useState<UserData | null>(null);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
+  const [queryClient] = useState(() => new QueryClient());
+  const token = getToken();
+  const logout = useLogout(token, queryClient);
 
   useEffect(() => {
     const userData = getUser();
-    if (userData) {
+    const user_token = getToken();
+    if (user_token) {
       setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+    if (userData) {
       setUser(userData as UserData);
     } else {
       setIsLoggedIn(false);
@@ -64,8 +74,15 @@ export default function Header() {
   const toggleUserMenu = () => {
     setIsUserMenuOpen(!isUserMenuOpen);
   };
-  
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
+
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
     <header className="bg-white shadow-md py-4 px-8">
@@ -125,7 +142,7 @@ export default function Header() {
               )}
             </button>
           </Link>
-          {isLoggedIn && user ? (
+          {isLoggedIn ? (
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={toggleUserMenu}
@@ -139,20 +156,35 @@ export default function Header() {
                     height={40}
                   />
                 </div>
-                <span className="text-gray-600">{getDefaultFirstName(user?.profile?.first_name)}</span>
+                <span className="text-gray-600">
+                  {getDefaultFirstName(user?.profile?.first_name)}
+                </span>
               </button>
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                  {userMenuItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.path}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  {userMenuItems.map((item) =>
+                    item.name === "Logout" ? (
+                      <button
+                        key={item.name}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => {
+                          handleLogout(); // Trigger the logout
+                          setIsUserMenuOpen(false); // Close the menu
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        href={item.path || "#"}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  )}
                 </div>
               )}
             </div>
@@ -228,17 +260,19 @@ export default function Header() {
                 )}
               </button>
             </Link>
-            {isLoggedIn && user ? (
+            {isLoggedIn ? (
               <div className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
                   <Image
-                    src={user.profile.avatar || "/images/profile.png"}
+                    src={getDefaultAvatar(user?.profile?.avatar)}
                     alt="User Profile"
                     width={40}
                     height={40}
                   />
                 </div>
-                <span className="text-white">{user.profile.first_name}</span>
+                <span className="text-white">
+                  {getDefaultFirstName(user?.profile?.first_name)}
+                </span>
               </div>
             ) : (
               <Link href="/auth/login">
