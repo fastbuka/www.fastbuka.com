@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/queries/auth";
 import { Button } from "@/components/ui/button";
-import { QueryClient } from 'react-query';
+import { QueryClient } from "react-query";
 import { getUser, getToken } from "@/utils/token";
-import { ShoppingBag, Wallet, AlertCircle } from 'lucide-react';
-import {  getDefaultFirstName } from "@/utils/defaults";
-
+import { ShoppingBag, Wallet, AlertCircle } from "lucide-react";
+import { getDefaultFirstName } from "@/utils/defaults";
+import { API_ENDPOINTS } from "@/constants";
 
 interface UserProfile {
   profile: {
@@ -20,8 +20,9 @@ interface UserProfile {
 export default function UserDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
+  const token = getToken(); // Get the token from storage
   const [queryClient] = useState(() => new QueryClient());
-  const logout = useLogout(queryClient);
+  const logout = useLogout(token, queryClient); // Pass token to useLogout hook
 
   useEffect(() => {
     const token = getToken();
@@ -31,7 +32,8 @@ export default function UserDashboard() {
     } else {
       setUser(userData as UserProfile);
     }
-  }, [router]);
+  }, [router, getToken, getUser]);
+
 
   const handleLogout = () => {
     logout.mutate();
@@ -42,18 +44,38 @@ export default function UserDashboard() {
   }
 
   const widgets = [
-    { title: 'Total Orders', value: '12', icon: ShoppingBag, color: 'bg-blue-500' },
-    { title: 'Wallet Balance', value: '₦50,000', icon: Wallet, color: 'bg-green-500' },
-    { title: 'Active Orders', value: '3', icon: AlertCircle, color: 'bg-yellow-500' },
+    {
+      title: "Total Orders",
+      value: "12",
+      icon: ShoppingBag,
+      color: "bg-blue-500",
+    },
+    {
+      title: "Wallet Balance",
+      value: "₦50,000",
+      icon: Wallet,
+      color: "bg-green-500",
+    },
+    {
+      title: "Active Orders",
+      value: "3",
+      icon: AlertCircle,
+      color: "bg-yellow-500",
+    },
   ];
 
   return (
     <div>
-      <h1 className="text-2xl md:text-4xl font-bold mb-6">Welcome, {getDefaultFirstName(user.profile?.first_name)}!</h1>
-      
+      <h1 className="text-2xl md:text-4xl font-bold mb-6">
+        Welcome, {getDefaultFirstName(user.profile?.first_name)}!
+      </h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {widgets.map((widget, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-md p-6 flex items-center">
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-md p-6 flex items-center"
+          >
             <div className={`${widget.color} rounded-full p-3 mr-4`}>
               <widget.icon className="h-6 w-6 text-white" />
             </div>
@@ -70,7 +92,9 @@ export default function UserDashboard() {
         {/* Add a table or list of recent orders here */}
       </div>
 
-      <Button onClick={handleLogout} className="bg-red-600 text-white">Logout</Button>
+      <Button onClick={handleLogout} className="bg-red-600 text-white">
+        Logout
+      </Button>
     </div>
   );
-} 
+}
