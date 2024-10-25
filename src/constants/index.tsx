@@ -6,9 +6,9 @@ export const API_ENDPOINTS = {
   LOGOUT: "https://api.fastbuka.com/api/v1/auth/logout",
   MEALS: "https://api.fastbuka.com/api/v1/food",
   FRONT_PAGE:
-    "https://api.fastbuka.com/api/v1/home?sortField=featured&sortOrder=asc",
+    "https://api.fastbuka.com/api/v1/home",
   MENU_ITEMS:
-    "https://api.fastbuka.com/api/v1/menu?sortField=ratings&sortOrder=asc",
+    "https://api.fastbuka.com/api/v1/menu",
   // Add other endpoints as needed
 };
 
