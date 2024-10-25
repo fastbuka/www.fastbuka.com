@@ -1,40 +1,18 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { TRENDING_MEALS } from "@/constants";
+import { Meal } from "@/lib/meal.interface";
 import { useGetTrendingMeals } from "@/queries/frontPage";
 import Image from "next/image";
 import { FiClock } from "react-icons/fi"; // For the clock icon
 import Link from "next/link";
 
 interface TrendingMealsProps {
-  // meals: Array<{
-  //   id: number;
-  //   name: string;
-  //   description: string;
-  //   price: number;
-  //   time: number;
-  //   image: string;
-  // }>;
   title?: string; // Optional Title
   subtitle?: string; // Optional Subtitle
 }
 
-interface Meal {
-  id: number;
-  uuid: string;
-  vendor_uuid: string;
-  category_uuid: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  discount: number;
-  processing_time: string;
-  ready_made: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+
 
 export default function TrendingMeals({
   title = "Trending Meals", // Default title
@@ -79,7 +57,7 @@ export default function TrendingMeals({
 
       {/* Horizontal scroll wrapper */}
       <div className="flex overflow-x-auto pb-6 space-x-6">
-        {meals.map((meal: Meal) => (
+        {meals?.map((meal: Meal) => (
           <Link
             key={meal.id}
             href={`/menu/${meal.id}`}

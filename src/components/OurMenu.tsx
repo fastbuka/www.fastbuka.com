@@ -11,33 +11,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { useGetMenu } from "@/queries/frontPage";
+import { useGetFeaturedMenu } from "@/queries/frontPage";
+import {Meal} from "@/lib/meal.interface";
 
 interface OurMenuProps {
   title?: string;
   subtitle?: string;
-}
-interface MenuItem {
-  id: number;
-  uuid: string;
-  vendor_uuid: string;
-  category_uuid: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  discount: number;
-  processing_time: string;
-  ready_made: boolean;
-  createdAt: Date; // ISO 8601 date string
-  updatedAt: Date; // ISO 8601 date string
 }
 
 export default function OurMenu({
   title = "Our Menu",
   subtitle = "Our amazing menu spans a wide variety of nutritious meals: pasta, rice, grilled chicken, turkey & much more.",
 }: OurMenuProps) {
-  const { data: our_menu, isLoading, error } = useGetMenu();
+  const { data: our_menu, isLoading, error } = useGetFeaturedMenu();
 
   const [visibleMeals, setVisibleMeals] = useState(8); // Initially show 8 items
   const [priceRange, setPriceRange] = useState([0, 50000]);
@@ -137,7 +123,7 @@ export default function OurMenu({
 
       {/* Meals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {our_menu?.slice(0, visibleMeals).map((meal: MenuItem) => (
+        {our_menu?.slice(0, visibleMeals).map((meal: Meal) => (
           <Link key={meal.id} href={`/menu/${meal.id}`} passHref>
             <div
               key={meal.id}
@@ -161,10 +147,10 @@ export default function OurMenu({
                   })}
                 </span>
                 {/* No rating available in api */}
-                {/* 
+
                 <span className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-lg text-sm">
-                  {meal.rating} ⭐
-                </span> */}
+                  {meal.ratings} ⭐
+                </span>
               </div>
               <h3 className="text-xl font-semibold mb-2">{meal.name}</h3>
               <p className="text-gray-500 mb-4">{meal.description}</p>

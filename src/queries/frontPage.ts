@@ -1,16 +1,7 @@
 import { useQuery } from "react-query";
 import { request } from "@/utils/request";
 import { API_ENDPOINTS } from "@/constants";
-
-interface Meal {
-  id: number;
-  uuid: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  processing_time: string;
-}
+import { Meal } from "@/lib/meal.interface";
 
 interface FilterParams {
   search?: string;
@@ -119,8 +110,29 @@ export function useGetRestaurants() {
  * @returns The list of menu items
  * @throws {Error} If the request fails
  */
-export function useGetMenu() {
+export function useGetFeaturedMenu() {
   return useQuery("menu", async () => {
+    const response = await request(API_ENDPOINTS.MENU_ITEMS, {
+      method: "GET",
+    });
+    if (!response.success) {
+      throw new Error(response.message || "Failed to fetch menu" );
+    }
+    return response.data.featured;
+  },
+      {
+      keepPreviousData: true,
+  });
+}
+
+/**
+ * Fetches all others meals that are not featured from the server.
+ *
+ * @returns The list of all meals
+ * @throws {Error} If the request fails
+ */
+export function useGetOtherMeals() {
+  return useQuery<Meal[], Error>("otherMeals", async () => {
     const response = await request(API_ENDPOINTS.MENU_ITEMS, {
       method: "GET",
     });
@@ -132,6 +144,26 @@ export function useGetMenu() {
       {
       keepPreviousData: true,
   });
+}
+
+export function useGetOtherMealsWithParams(params: FilterParams) {
+  const urlParams = new URLSearchParams(Object.entries(params).map(([key, value]) => [key, String(value)]));
+  return useQuery(
+    "otherMealsWithParams",
+    async () => {
+      const response = await request(
+        `${API_ENDPOINTS.MENU_ITEMS}?${urlParams.toString()}`,
+        { method: "GET" }
+      );
+      if (!response.success) {
+        throw new Error(response.message || "Failed to fetch menu" );
+      }
+      return response.data.menu.food;
+    },
+    {
+      keepPreviousData: true,
+    }
+  );
 }
 
 export function useGetMenuWithParams(params: FilterParams) {
@@ -146,7 +178,7 @@ export function useGetMenuWithParams(params: FilterParams) {
       if (!response.success) {
         throw new Error(response.message || "Failed to fetch menu" );
       }
-      return response.data.menu.food;
+      return response.data.featured;
     },
     {
       keepPreviousData: true,
