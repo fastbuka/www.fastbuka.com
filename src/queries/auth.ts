@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from "@/constants";
 import { request } from "@/utils/request";
 import { setToken, getToken, clearToken, setUser } from "@/utils/token";
 import { useAuth } from "@/context/AuthContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface LoginData {
   email: string;
@@ -22,6 +23,11 @@ interface AuthResponse {
     user: any; //Interface check here
   };
 }
+
+type LogoutResponse = {
+  success: boolean;
+  message: string;
+};
 
 export function useLogin() {
   const router = useRouter();
@@ -107,33 +113,35 @@ export function useVerifyToken() {
   );
 }
 
-export function useLogout(queryClient: QueryClient) {
-  return useMutation(
+export function useLogout(token: string | null, queryClient: QueryClient) {
+  return useMutation<LogoutResponse, Error>(
     async () => {
-      const token = getToken();
-      if (!token) {
-        throw new Error("No token found");
+    console.log("this is the token: ", token);
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    const response = await fetch(API_ENDPOINTS.LOGOUT, {
+      method: "DELETE",
+      headers: {
+        'accept': '*/*',  // Accept header
+        'token': token,  // Token header
       }
+    }
+);
 
-      const response = await fetch(API_ENDPOINTS.LOGOUT, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Logout failed");
+    }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Logout failed");
-      }
-
-      return response.json();
+    return response.json();
     },
     {
       onSuccess: () => {
         clearToken();
         queryClient.clear(); // Clear all React Query caches
-        window.location.href = "/auth/login"; // Redirect to login page
+        window.location.href = "/"; // Redirect to home page
       },
       onError: (error) => {
         console.error("Logout failed", error);
