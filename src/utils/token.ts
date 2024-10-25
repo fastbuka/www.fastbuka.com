@@ -1,5 +1,5 @@
 // The key used to store the token in localStorage
-const TOKEN_KEY = 'fastbuka_auth_token';
+const TOKEN_KEY = "fastbuka_auth_token";
 const USER_KEY = 'fastbuka_user_data';
 
 /**

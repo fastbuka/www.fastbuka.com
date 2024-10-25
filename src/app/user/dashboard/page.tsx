@@ -32,7 +32,7 @@ export default function UserDashboard() {
     } else {
       setUser(userData as UserProfile);
     }
-  }, [router, getToken, getUser]);
+  }, [router]);
 
 
   const handleLogout = () => {
