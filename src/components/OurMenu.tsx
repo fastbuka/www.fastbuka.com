@@ -126,6 +126,7 @@ export default function OurMenu({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {our_menu?.slice(0, visibleMeals).map((meal: Meal) => (
           <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
+            {/* {console.log("this is the meal uuid being clicked: ", meal.uuid)} */}
             <div
               key={meal.id}
               className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow duration-300"

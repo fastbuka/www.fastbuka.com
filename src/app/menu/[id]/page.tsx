@@ -8,7 +8,9 @@ import BreadCrumb from "@/components/BreadCrumb"; // Correct import for BreadCru
 import { OUR_MENU } from "@/constants";
 import CustomDropdown from "@/components/ui/CustomDropdown";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useGetOtherMeals } from "@/queries/frontPage";
+import { Meal } from "@/lib/meal.interface";
 
 // Define the DropdownOption type
 interface DropdownOption {
@@ -17,9 +19,11 @@ interface DropdownOption {
   [key: string]: number | string; // Allow for additional properties
 }
 
-export default function SingleMealPage({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const meal = OUR_MENU.find((item) => item.id === parseInt(id));
+export default function SingleMealPage() {
+  const params = useParams<{id: string }>()
+  const uuid = params.id;
+  const { data: our_menu, isLoading, error } = useGetOtherMeals();
+  const meal = our_menu?.find((item: Meal) => item.uuid.toString() === uuid);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const router = useRouter();
@@ -30,16 +34,27 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
     router.push("/cart"); // Redirect to cart after adding
   };
 
-  // Create vendor options from the OUR_MENU data
+  // Make a list of vendors from the OUR_MENU data
+  // This code makes a list of all the vendors from the OUR_MENU data
+  // It makes sure each vendor is only in the list once
+  // It uses the vendor's uuid as the id and the vendor's name as the name
   const vendorOptions: DropdownOption[] = useMemo(() => {
-    const vendors = new Set(OUR_MENU.map((item) => item.vendorId));
-    return Array.from(vendors).map((vendorId) => ({
-      id: vendorId as string,
-      name: `Vendor ${vendorId}`,
+    const vendors: Record<string, string> = {}; // Create an empty object to store the vendors
+    our_menu?.forEach((item) => {
+      if (vendors[item.category_uuid]) return; // If the vendor is already in the list, don't add it again
+      vendors[item.category_uuid] = item.vendor.name; // Add the vendor to the list
+    });
+    // Make the list of vendors into an array of objects with id and name
+    return Object.entries(vendors).map(([uuid, name]) => ({
+      id: uuid,
+      name,
     }));
-  }, []);
+  }, [our_menu]);
 
-  const [selectedVendor, setSelectedVendor] = useState<DropdownOption>(vendorOptions[0]);
+
+  const [selectedVendor, setSelectedVendor] = useState<DropdownOption>(
+    vendorOptions[0]
+  );
 
   const handleSelectVendorChange = (option: DropdownOption) => {
     setSelectedVendor(option);
@@ -64,7 +79,7 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
         items={[
           { name: "Home", href: "/" },
           { name: "Our Menu", href: "/menu" },
-          { name: meal.name, href: `/menu/${id}` },
+          { name: meal.name, href: `/menu/${uuid}` },
         ]}
         title="Our Menu"
       />
@@ -87,7 +102,10 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
                 <h1 className="text-4xl font-bold mb-4">{meal.name}</h1>
                 <p className="text-lg text-gray-600 mb-4">{meal.description}</p>
                 <span className="bg-green-500 text-white px-4 py-1 rounded-lg font-semibold">
-                  ₦{meal.price.toLocaleString("en-NG", { minimumFractionDigits: 2 })}
+                  ₦
+                  {meal.price.toLocaleString("en-NG", {
+                    minimumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="pt-6 sm:pt-0">
@@ -102,7 +120,10 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
               <label htmlFor="extras" className="font-semibold mb-2">
                 Extras:
               </label>
-              <select id="extras" className="border rounded px-4 py-2 mb-6 w-full">
+              <select
+                id="extras"
+                className="border rounded px-4 py-2 mb-6 w-full"
+              >
                 <option value="">Select an extra...</option>
                 <option value="drink">Drink</option>
                 <option value="sauce">Extra Sauce</option>
@@ -151,10 +172,16 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
 
         {/* Other Dishes You'll Love */}
         <div className="mt-16">
-          <h2 className="text-3xl font-bold mb-8">Other Dishes You&apos;ll Love</h2>
+          <h2 className="text-3xl font-bold mb-8">
+            Other Dishes You&apos;ll Love
+          </h2>
           <div className="flex overflow-x-auto pb-6 space-x-6">
             {OUR_MENU.slice(0, 4).map((otherMeal) => (
-              <Link key={otherMeal.id} href={`/menu/${otherMeal.id}`} className="shrink-0 w-[300px] relative">
+              <Link
+                key={otherMeal.id}
+                href={`/menu/${otherMeal.id}`}
+                className="shrink-0 w-[300px] relative"
+              >
                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
                   <div
                     className="relative w-full h-48"
@@ -169,7 +196,8 @@ export default function SingleMealPage({ params }: { params: { id: string } }) {
                       priority={otherMeal.id <= 4}
                     />
                     <span className="absolute top-2 left-2 bg-orange-400 text-white px-3 py-1 rounded-lg font-bold">
-                      ₦{otherMeal.price.toLocaleString("en-NG", {
+                      ₦
+                      {otherMeal.price.toLocaleString("en-NG", {
                         minimumFractionDigits: 2,
                       })}
                     </span>
