@@ -54,7 +54,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ options, initialSelecte
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className="block truncate">{selected.name}</span>
+        <span className="block truncate">{selected ? selected.name : "Choose an option"}</span>
         <ChevronDown
           className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isOpen ? 'transform rotate-180' : ''}`}
           aria-hidden="true"
