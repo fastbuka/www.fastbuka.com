@@ -49,7 +49,9 @@ export function useGetHomeData() {
  * @throws {Error} If the request fails
  */
 export function useGetFilteredHomeData(params: FilterParams) {
-  const urlParams = new URLSearchParams(Object.entries(params).map(([key, value]) => [key, String(value)]));
+  const urlParams = new URLSearchParams(
+    Object.entries(params).map(([key, value]) => [key, String(value)])
+  );
   return useQuery(
     "frontPageDataWithParams",
     async () => {
@@ -111,18 +113,21 @@ export function useGetRestaurants() {
  * @throws {Error} If the request fails
  */
 export function useGetFeaturedMenu() {
-  return useQuery("menu", async () => {
-    const response = await request(API_ENDPOINTS.MENU_ITEMS, {
-      method: "GET",
-    });
-    if (!response.success) {
-      throw new Error(response.message || "Failed to fetch menu" );
-    }
-    return response.data.featured;
-  },
-      {
+  return useQuery(
+    "menu",
+    async () => {
+      const response = await request(API_ENDPOINTS.MENU_ITEMS, {
+        method: "GET",
+      });
+      if (!response.success) {
+        throw new Error(response.message || "Failed to fetch menu");
+      }
+      return response.data.featured;
+    },
+    {
       keepPreviousData: true,
-  });
+    }
+  );
 }
 
 /**
@@ -132,22 +137,27 @@ export function useGetFeaturedMenu() {
  * @throws {Error} If the request fails
  */
 export function useGetOtherMeals() {
-  return useQuery<Meal[], Error>("otherMeals", async () => {
-    const response = await request(API_ENDPOINTS.MENU_ITEMS, {
-      method: "GET",
-    });
-    if (!response.success) {
-      throw new Error(response.message || "Failed to fetch menu" );
-    }
-    return response.data.menu.food;
-  },
-      {
+  return useQuery<Meal[], Error>(
+    "otherMeals",
+    async () => {
+      const response = await request(API_ENDPOINTS.MENU_ITEMS, {
+        method: "GET",
+      });
+      if (!response.success) {
+        throw new Error(response.message || "Failed to fetch menu");
+      }
+      return response.data.meal.food;
+    },
+    {
       keepPreviousData: true,
-  });
+    }
+  );
 }
 
 export function useGetOtherMealsWithParams(params: FilterParams) {
-  const urlParams = new URLSearchParams(Object.entries(params).map(([key, value]) => [key, String(value)]));
+  const urlParams = new URLSearchParams(
+    Object.entries(params).map(([key, value]) => [key, String(value)])
+  );
   return useQuery(
     "otherMealsWithParams",
     async () => {
@@ -156,7 +166,7 @@ export function useGetOtherMealsWithParams(params: FilterParams) {
         { method: "GET" }
       );
       if (!response.success) {
-        throw new Error(response.message || "Failed to fetch menu" );
+        throw new Error(response.message || "Failed to fetch menu");
       }
       return response.data.menu.food;
     },
@@ -167,7 +177,9 @@ export function useGetOtherMealsWithParams(params: FilterParams) {
 }
 
 export function useGetMenuWithParams(params: FilterParams) {
-  const urlParams = new URLSearchParams(Object.entries(params).map(([key, value]) => [key, String(value)]));
+  const urlParams = new URLSearchParams(
+    Object.entries(params).map(([key, value]) => [key, String(value)])
+  );
   return useQuery(
     "menuWithParams",
     async () => {
@@ -176,7 +188,7 @@ export function useGetMenuWithParams(params: FilterParams) {
         { method: "GET" }
       );
       if (!response.success) {
-        throw new Error(response.message || "Failed to fetch menu" );
+        throw new Error(response.message || "Failed to fetch menu");
       }
       return response.data.featured;
     },
