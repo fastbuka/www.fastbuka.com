@@ -14,10 +14,11 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export function AuthProvider({ children, queryClient }: { children: ReactNode; queryClient: QueryClient }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const logoutMutation = useLogout(queryClient);
+  // get token from storage
+  const token = getToken();
+  const logoutMutation = useLogout(token, queryClient);
 
   useEffect(() => {
-    const token = getToken();
     setIsAuthenticated(Boolean(token));
   }, []);
 
