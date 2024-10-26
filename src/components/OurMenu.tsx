@@ -11,8 +11,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { useGetFeaturedMenu } from "@/queries/frontPage";
-import {Meal} from "@/lib/meal.interface";
+import { useGetFeaturedMenu, useGetOtherMeals } from "@/queries/frontPage";
+import { Meal } from "@/lib/meal.interface";
+import { reduceImageWidth } from "@/utils/reduceImageWidth";
 
 interface OurMenuProps {
   title?: string;
@@ -23,7 +24,7 @@ export default function OurMenu({
   title = "Our Menu",
   subtitle = "Our amazing menu spans a wide variety of nutritious meals: pasta, rice, grilled chicken, turkey & much more.",
 }: OurMenuProps) {
-  const { data: our_menu, isLoading, error } = useGetFeaturedMenu();
+  const { data: our_menu, isLoading, error } = useGetOtherMeals();
 
   const [visibleMeals, setVisibleMeals] = useState(8); // Initially show 8 items
   const [priceRange, setPriceRange] = useState([0, 50000]);
@@ -124,7 +125,7 @@ export default function OurMenu({
       {/* Meals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {our_menu?.slice(0, visibleMeals).map((meal: Meal) => (
-          <Link key={meal.id} href={`/menu/${meal.id}`} passHref>
+          <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
             <div
               key={meal.id}
               className="bg-white rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow duration-300"
@@ -132,7 +133,7 @@ export default function OurMenu({
               <div className="relative w-full h-48 mb-4 bg-gradient-to-r from-green-100 to-green-200 rounded-lg overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center p-4">
                   <Image
-                    src={meal.image}
+                    src={reduceImageWidth(meal.image)}
                     alt={meal.name}
                     width={250}
                     height={250}
@@ -169,7 +170,8 @@ export default function OurMenu({
       </div>
 
       {/* See More Button */}
-      {visibleMeals < our_menu.length && (
+      {/* using the non-null assertion operator (!) to assert that our_menu is not null or undefined for stupid typescript  or the conditional `&&` operator*/}
+      {our_menu && visibleMeals < our_menu.length && (
         <div className="flex justify-center mt-12">
           <Button
             onClick={loadMoreMeals}

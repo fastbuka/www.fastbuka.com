@@ -6,6 +6,7 @@ import { useGetTrendingMeals } from "@/queries/frontPage";
 import Image from "next/image";
 import { FiClock } from "react-icons/fi"; // For the clock icon
 import Link from "next/link";
+import { reduceImageWidth } from "@/utils/reduceImageWidth";
 
 interface TrendingMealsProps {
   title?: string; // Optional Title
@@ -60,7 +61,7 @@ export default function TrendingMeals({
         {meals?.map((meal: Meal) => (
           <Link
             key={meal.id}
-            href={`/menu/${meal.id}`}
+            href={`/menu/${meal.uuid}`}
             passHref
             className="shrink-0 w-[300px] relative"
           >
@@ -70,7 +71,7 @@ export default function TrendingMeals({
                 style={{ background: "#B0E8D4" }}
               >
                 <Image
-                  src={meal.image}
+                  src={reduceImageWidth(meal.image)}
                   alt={meal.name}
                   layout="fill" // Use fill for full coverage
                   style={{ objectFit: "cover" }} // Use style for objectFit
