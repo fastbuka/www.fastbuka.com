@@ -8,6 +8,7 @@ import { LuEye, LuEyeOff } from "react-icons/lu";
 import Image from "next/image";
 import { useLogin } from "@/queries/auth";
 import { useRouter } from "next/navigation";
+import { CheckCircleIcon } from "lucide-react";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,11 +17,13 @@ export default function Login() {
   const { mutate: login } = useLogin();
   const router = useRouter();
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     login({ email, password }, {
       onSuccess: () => {
+        setLoginSuccess(true);
         router.push('/user/dashboard');
       },
       onError: () => {
@@ -44,6 +47,17 @@ export default function Login() {
               <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertDescription>{loginError}</AlertDescription>
             </Alert>
+          )}
+
+          {/* Show success alert when login is successful */}
+          {loginSuccess && (
+            <Alert variant="success" className="mt-4">
+              <CheckCircleIcon className="h-4 w-4" color="green" size={28} />
+              <AlertDescription>
+                Login successful! Welcome back.
+              </AlertDescription>
+            </Alert>
+            
           )}
 
           <form onSubmit={handleLogin}>
