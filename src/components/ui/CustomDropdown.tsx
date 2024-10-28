@@ -12,7 +12,7 @@ interface DropdownOption {
 
 interface CustomDropdownProps {
   options: DropdownOption[];
-  initialSelectedOption: DropdownOption;
+  initialSelectedOption: DropdownOption | null;
   onSelectChange: (option: DropdownOption) => void;
 }
 
