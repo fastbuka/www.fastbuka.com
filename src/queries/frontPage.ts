@@ -77,16 +77,22 @@ export function useGetFilteredHomeData(params: FilterParams) {
  * @throws {Error} If the request fails
  */
 export function useGetTrendingMeals() {
-  return useQuery<Meal[], Error>("trendingMeals", async () => {
-    const response = await request(API_ENDPOINTS.FRONT_PAGE, {
-      method: "GET",
-    });
-    console.log("This is the home data from the server: ", response);
-    if (!response.success) {
-      throw new Error("Failed to fetch trending meals");
+  return useQuery<Meal[], Error>(
+    "trendingMeals",
+    async () => {
+      const response = await request(API_ENDPOINTS.FRONT_PAGE, {
+        method: "GET",
+      });
+      console.log("This is the home data from the server: ", response);
+      if (!response.success) {
+        throw new Error("Failed to fetch trending meals");
+      }
+      return response.data.trending;
+    },
+    {
+      keepPreviousData: true,
     }
-    return response.data.trending;
-  });
+  );
 }
 
 /**
@@ -104,6 +110,8 @@ export function useGetRestaurants() {
       throw new Error("Failed to fetch restaurants");
     }
     return response.data.restaurants;
+  }, {
+    keepPreviousData: true
   });
 }
 /**
