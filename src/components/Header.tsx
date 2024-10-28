@@ -77,6 +77,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout.mutate();
+    setIsLoggedIn(false);
   };
 
   const totalItems = cartItems.reduce(
@@ -231,16 +232,29 @@ export default function Header() {
             {isLoggedIn && (
               <>
                 <div className="border-t border-white my-4"></div>
-                {userMenuItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.path}
-                    className="text-white text-xl"
-                    onClick={toggleMenu}
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {userMenuItems.map((item) =>
+                  item.name === "Logout" ? (
+                    <button
+                      key={item.name}
+                      className="text-white text-xl text-left"  
+                      onClick={() => {
+                        handleLogout(); // Trigger the logout
+                        toggleMenu( ); // Close the menu
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <a
+                      key={item.name}
+                      href={item.path}
+                      className="text-white text-xl"
+                      onClick={toggleMenu}
+                    >
+                      {item.name}
+                    </a>
+                  )
+                )}
               </>
             )}
           </nav>
