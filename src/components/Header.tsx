@@ -239,7 +239,7 @@ export default function Header() {
                       className="text-white text-xl text-left"  
                       onClick={() => {
                         handleLogout(); // Trigger the logout
-                        toggleMenu( ); // Close the menu
+                        toggleMenu(); // Close the menu
                       }}
                     >
                       {item.name}
