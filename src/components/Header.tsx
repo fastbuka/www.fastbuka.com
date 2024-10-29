@@ -27,7 +27,7 @@ const userMenuItems = [
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!getToken());
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [ isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { cartItems } = useCart();
   const [user, setUser] = useState<UserData | null>(null);

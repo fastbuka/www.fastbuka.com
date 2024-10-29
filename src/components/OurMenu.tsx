@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Link from "next/link";
-import { useGetFeaturedMenu, useGetOtherMeals } from "@/queries/frontPage";
+import { useGetOtherMeals } from "@/queries/frontPage";
 import { Meal } from "@/lib/meal.interface";
 import { reduceImageWidth } from "@/utils/reduceImageWidth";
 
