@@ -1,4 +1,5 @@
 @tailwind base;
+@import "@radix-ui/themes/styles.css";
 @tailwind components;
 @tailwind utilities;
 
@@ -8,6 +9,10 @@
 
 body {
   font-family: var(--font-satoshi), sans-serif;
+}
+/* To override the default radix theme typography */
+.radix-themes {
+  --default-font-family: var(--font-satoshi);
 }
 
 @layer utilities {
