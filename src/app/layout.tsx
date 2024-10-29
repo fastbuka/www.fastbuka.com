@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Header from "@/components/Header"; 
-import Footer from "@/components/Footer"; 
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Providers from "@/Providers"; // Import the new Providers component
+import { Theme } from "@radix-ui/themes";
 import "./globals.css";
 
 // Import Satoshi fonts
@@ -26,9 +27,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${satoshiFont.variable} antialiased`}>
         <Providers>
-          <Header /> 
-          <main>{children}</main>
-          <Footer /> 
+          <Header />
+          <Theme>
+            <main>{children}</main>
+          </Theme>
+          <Footer />
         </Providers>
       </body>
     </html>
