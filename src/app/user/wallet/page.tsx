@@ -5,12 +5,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getToken } from "@/utils/token";
-import { Wallet, CreditCard, RefreshCcw } from "lucide-react";
+import { Wallet, CreditCard, RefreshCcw, Check, Copy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
 export default function UserWallet() {
   const [amount, setAmount] = useState("");
+  const [address, setAddress] = useState("");
+  const [isCopied, setIsCopied] = useState(false)
 
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!getToken());
   const router = useRouter()
@@ -19,6 +21,16 @@ export default function UserWallet() {
     // Implement top-up logic here
     console.log(`Top up ${amount} via ${method}`);
   };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(address)
+      setIsCopied(true)
+      setTimeout(() => setIsCopied(false), 4000)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+    }
+  }
 
   return (
     <>
@@ -30,7 +42,23 @@ export default function UserWallet() {
             <div className="flex items-center mb-4">
               <Wallet className="h-8 w-8 text-green-500 mr-3" />
               <h2 className="text-2xl font-semibold">Balance: ₦50,000.00</h2>
+              
             </div>
+            
+            <button
+                    onClick={copyToClipboard}
+                    className="focus:outline-none flex "
+                    aria-label="Copy mint hash"
+                  >
+                    0x33300000
+                    {isCopied ? (
+                      <Check className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <Copy className="w-5 h-5" />
+                    )}
+                  </button>
+          
+            
             <p className="text-gray-600 mb-4">
               Top up your wallet to order from your favorite restaurants.
             </p>
