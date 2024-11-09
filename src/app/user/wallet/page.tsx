@@ -16,6 +16,7 @@ import { getDefaultAddress } from "@/utils/defaults";
 export default function UserWallet() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
+  const [balance, setBalance] = useState(0);
   const [isCopied, setIsCopied] = useState(false)
   const [token, setToken] = useState<string | null>(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!getToken());
@@ -28,9 +29,11 @@ export default function UserWallet() {
   useEffect(() => {
    
     const profile = getProfile(); 
+    // console.log(profile)
     if (profile) {
 
       setAddress(profile.walletAddress);
+      setBalance(profile.balance);
     }
   }, []);
 
@@ -68,7 +71,7 @@ export default function UserWallet() {
           <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <div className="flex items-center mb-4">
               <Wallet className="h-8 w-8 text-green-500 mr-3" />
-              <h2 className="text-2xl font-semibold">Balance: ₦50,000.00</h2>
+              <h2 className="text-2xl font-semibold">Balance: ₦{balance}</h2>
               
             </div>
             
