@@ -9,6 +9,10 @@ export const API_ENDPOINTS = {
     "https://api.fastbuka.com/api/v1/home",
   MENU_ITEMS:
     "https://api.fastbuka.com/api/v1/menu",
+  USERS_PROFILE:
+    "https://api.fastbuka.com/api/v1/users/profile",
+  USERS_WALLET:
+    "https://api.fastbuka.com/api/v1/users/wallet",
   // Add other endpoints as needed
 };
 
