@@ -1,26 +1,64 @@
 // src/app/user/wallet/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getToken } from "@/utils/token";
+import { getToken, getUser } from "@/utils/token";
 import { Wallet, CreditCard, RefreshCcw, Check, Copy } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
+import { useProfile } from "@/queries/profile";
 
+interface UserProfile {
+  profile: {
+    walletAddress: string;
+  };
+}
 export default function UserWallet() {
   const [amount, setAmount] = useState("");
   const [address, setAddress] = useState("");
   const [isCopied, setIsCopied] = useState(false)
-
+  const [token, setToken] = useState<string | null>(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!getToken());
+  const [user, setUser] = useState<UserProfile | null>(null);
   const router = useRouter()
+
+  useEffect(() => {
+    const tokenValue = getToken();
+    setToken(tokenValue);
+    setIsUserLoggedIn(!!tokenValue);
+  }, []);
+
+  useEffect(() => {
+    const tokenValue = getToken();
+    const userData = getUser();
+
+    if (!tokenValue || !userData) {
+      router.push("/auth/login");
+    } else {
+      setToken(tokenValue);
+      setUser(userData as UserProfile);
+    }
+  }, [router]);
+
+  // Fetch the profile using the token
+  const { data: profile, error, isLoading } = useProfile(token);
+
+  // Set the wallet address when profile data is available
+  useEffect(() => {
+    if (profile && profile.data) {
+      setAddress(profile.data.user.walletAddress);
+    }
+  }, [profile]);
+
 
   const handleTopUp = (method: string) => {
     // Implement top-up logic here
     console.log(`Top up ${amount} via ${method}`);
   };
+
+  
 
   const copyToClipboard = async () => {
     try {
@@ -50,7 +88,7 @@ export default function UserWallet() {
                     className="focus:outline-none flex "
                     aria-label="Copy mint hash"
                   >
-                    0x33300000
+                    {address}
                     {isCopied ? (
                       <Check className="w-5 h-5 text-green-500" />
                     ) : (
