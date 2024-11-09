@@ -27,7 +27,6 @@ export default function UserWallet() {
 
   // Set the wallet address directly from profile data when available
   useEffect(() => {
-   
     const profile = getProfile(); 
     // console.log(profile)
     if (profile) {
@@ -51,7 +50,7 @@ export default function UserWallet() {
   };
 
   
-
+  // copy wallet address to clipboard
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(address)
