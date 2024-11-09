@@ -8,3 +8,7 @@ export function getDefaultAvatar(avatar: string | undefined): string {
 export function getDefaultFirstName(first_name: string | undefined): string {
     return first_name?.trim() ? first_name : "Guest user";
 }
+
+export function getDefaultAddress(address: string | undefined): string {
+    return address?.trim() ? address : "No address";
+}

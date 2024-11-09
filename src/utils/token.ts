@@ -62,6 +62,8 @@ export const getUser = (): any | null => {
   return null;
 };
 
+
+
 /**
  * Removes the user data from localStorage
  */
