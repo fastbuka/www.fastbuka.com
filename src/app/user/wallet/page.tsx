@@ -19,6 +19,8 @@ import { useRouter } from 'next/navigation';
 import { useProfile } from '@/queries/profile';
 import { getDefaultAddress } from '@/utils/defaults';
 import { FaNairaSign } from 'react-icons/fa6';
+import Bridge from '@ngnc/bridge';
+
 
 export default function UserWallet() {
   const [amount, setAmount] = useState(100);
@@ -59,7 +61,6 @@ export default function UserWallet() {
       return;
     }
 
-    const Bridge = require('@ngnc/bridge');
     const widget = new Bridge({
       key: process.env.NEXT_PUBLIC_BRIDGE_KEY,
       type: 'buy',
