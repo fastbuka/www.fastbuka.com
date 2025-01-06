@@ -20,15 +20,23 @@ import { useProfile } from '@/queries/profile';
 import { getDefaultAddress } from '@/utils/defaults';
 import { FaNairaSign } from 'react-icons/fa6';
 import Bridge from '@ngnc/bridge';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 export default function UserWallet() {
-  const [amount, setAmount] = useState(100);
+  const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(!!getToken());
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   // Set the wallet address directly from profile data when available
@@ -44,20 +52,28 @@ export default function UserWallet() {
   // Display only the first 4 and last 4 characters of the address
   const formattedAddress =
     address.length > 8
-      ? `${getDefaultAddress(address).slice(0, 6)}...${getDefaultAddress(
+      ? `${getDefaultAddress(address).slice(0, 9)}...${getDefaultAddress(
           address
-        ).slice(-6)}`
+        ).slice(-9)}`
       : getDefaultAddress(address);
 
   const handleTopUp = (method: string) => {
     // Implement top-up logic here
     console.log(`Top up ${amount} via ${method}`);
 
-    if (amount < 100) {
-      alert('Amount must be greater than 0');
+    if (method === 'ngn' && amount < 5000) {
+      alert('Amount must be at least 5000 NGN');
       return;
-    } else if (method !== 'ngn' && method !== 'usd') {
+    } else if (method === 'usd' && amount < 5) {
+      alert('Amount must be at least 5 USD');
+      return;
+    } else if (method !== 'ngn' && method !== 'usd' && method !== 'exchange') {
       alert('Invalid method');
+      return;
+    }
+
+    if (method === 'exchange') {
+      setIsModalOpen(true);
       return;
     }
 
@@ -68,7 +84,7 @@ export default function UserWallet() {
       data: {
         amount: amount,
         network: 'Stellar',
-        wallet_address: formattedAddress,
+        wallet_address: address,
         type: 'buy',
       },
       onSuccess: (response: {}) => alert('Transaction successful'),
@@ -92,7 +108,7 @@ export default function UserWallet() {
   return (
     <>
       {isUserLoggedIn ? (
-        <div>
+        <>
           <h1 className='text-2xl md:text-4xl font-bold mb-6'>Your Wallet</h1>
 
           <div className='bg-white rounded-lg shadow-md p-6 mb-8'>
@@ -131,11 +147,6 @@ export default function UserWallet() {
                   onClick={() => handleTopUp('ngn')}
                   className='flex items-center justify-center'
                 >
-                  {/* <img
-                    src="/images/ngnc.png"
-                    alt="Solana"
-                    className="h-5 w-5 mr-2"
-                  /> */}
                   <FaNairaSign className='h-5 w-5 mr-2' />
                   Top-Up with NGN (Links)
                 </Button>
@@ -147,21 +158,20 @@ export default function UserWallet() {
                   Top-Up with USD (Links)
                 </Button>
                 <Button
-                  onClick={() => handleTopUp('Flutterwave')}
+                  onClick={() => handleTopUp('exchange')}
                   className='flex items-center justify-center'
                 >
                   <RefreshCcw className='h-5 w-5 mr-2' />
-                  Top-Up with Exachange
+                  Top-Up with Exchange
                 </Button>
               </div>
             </div>
           </div>
-
           <div className='bg-white rounded-lg shadow-md p-6'>
             <h2 className='text-xl font-semibold mb-4'>Transaction History</h2>
             {/* Add transaction history table or list here */}
           </div>
-        </div>
+        </>
       ) : (
         <>
           <Alert variant={'warning'} className='mb-4'>
@@ -177,6 +187,30 @@ export default function UserWallet() {
             Login
           </button>
         </>
+      )}
+
+      {isModalOpen && (
+        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Exchange Details</DialogTitle>
+              <DialogDescription>
+                <div className='flex items-center justify-between'>
+                  <p className='truncate max-w-xs'>Wallet Address: {formattedAddress}</p>
+                  <Button variant='ghost' onClick={copyToClipboard}>
+                  {isCopied ? (
+                    <Check className='w-5 h-5 text-green-500' />
+                  ) : (
+                    <Copy className='w-5 h-5' />
+                  )}
+                  </Button>
+                </div>
+                <p>Network: Stellar</p>
+              </DialogDescription>
+            </DialogHeader>
+            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );
