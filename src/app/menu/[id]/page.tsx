@@ -86,7 +86,7 @@ export default function SingleMealPage() {
           { name: 'Menu', href: '/menu' },
           { name: meal.name, href: `/menu/${uuid}` },
         ]}
-        title='Our Menu'
+        title='Browse from top Restaurant'
       />
       <div className='max-w-7xl mx-auto px-4 py-16'>
         {/* Meal Details Section */}

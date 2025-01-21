@@ -9,8 +9,8 @@ export default function MenuPage() {
       {/* Breadcrumb with the "Our Menu" title */}
       <BreadCrumb
 
-        items={[{ name: "Home", href: "/" }, { name: "Our Menu", href: "/menu" }]}
-        title="Our Menu"
+        items={[{ name: "Home", href: "/" }, { name: "Menu", href: "/menu" }]}
+        title="Browse from top Restaurant"
       />
       
 
