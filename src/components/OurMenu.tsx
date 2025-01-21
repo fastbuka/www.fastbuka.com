@@ -14,6 +14,8 @@ import Link from 'next/link';
 import { useGetOtherMeals } from '@/queries/frontPage';
 import { Meal } from '@/lib/meal.interface';
 import { reduceImageWidth } from '@/utils/reduceImageWidth';
+import { FiLoader } from 'react-icons/fi';
+import { useCart } from '@/context/CartContext';
 
 interface OurMenuProps {
   title?: string;
@@ -21,7 +23,7 @@ interface OurMenuProps {
 }
 
 export default function OurMenu({
-  title = 'Our Restaurant',
+  title = 'Browse from top Restaurant',
   subtitle = 'Amazing wide variety of nutritious meals: pasta, rice, grilled chicken, turkey & much more.',
 }: OurMenuProps) {
   const { data: our_menu, isLoading, error } = useGetOtherMeals();
@@ -30,18 +32,41 @@ export default function OurMenu({
   const [priceRange, setPriceRange] = useState([0, 50000]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('default');
+  const { addToCart } = useCart();
 
   // Load more meals when 'See More' is clicked
   const loadMoreMeals = () => {
     setVisibleMeals((prevVisible) => prevVisible + 8); // Load 8 more items per click
   };
 
+  const handleAddToCart = (meal: Meal) => {
+    if (!meal) return;
+    addToCart({ ...meal, quantity: 1 });
+  };
+
   if (isLoading) {
-    return <h2>Loading our menu...</h2>;
+    return (
+      <div className='flex flex-col justify-center items-center h-40'>
+        <FiLoader className='w-12 h-12 text-green-500 animate-spin' />
+        <span className='mt-3 text-gray-700 text-lg font-medium'>
+          Fetching delicious meals...
+        </span>
+      </div>
+    );
   }
 
   if (error) {
-    return <h2>Failed to get menu. Please try again</h2>;
+    return (
+      <div className='flex flex-col items-center justify-center h-40'>
+        <h2 className='text-red-600 text-lg'>Failed. Please try again.</h2>
+        <button
+          onClick={() => window.location.reload()}
+          className='mt-3 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition'
+        >
+          Retry
+        </button>
+      </div>
+    );
   }
 
   const handlePriceRangeChange = (
@@ -78,20 +103,6 @@ export default function OurMenu({
             <DialogTitle className='sr-only'>Filters</DialogTitle>
             <div className='grid gap-4 py-4'>
               <div className='grid gap-2'>
-                <label htmlFor='price-range' className='font-semibold'>
-                  Price range: ₦{priceRange[0]} - ₦{priceRange[1]}
-                </label>
-                <input
-                  id='price-range'
-                  type='range'
-                  min='0'
-                  max='50000'
-                  value={priceRange[1]}
-                  onChange={handlePriceRangeChange}
-                  className='w-full'
-                />
-              </div>
-              <div className='grid gap-2'>
                 <label htmlFor='sort' className='font-semibold'>
                   Sort by:
                 </label>
@@ -101,9 +112,26 @@ export default function OurMenu({
                   value={sortOption}
                   onChange={handleSortChange}
                 >
-                  <option value='default'>Default sorting</option>
-                  <option value='price-low-high'>Price (low to high)</option>
-                  <option value='price-high-low'>Price (high to low)</option>
+                  <option value='price'>Price</option>
+                  <option value='category'>Category</option>
+                  <option value='ratings'>Ratings</option>
+                  <option value='featured'>Featured</option>
+                  <option value='created'>Created</option>
+                  <option value='updated'>Updated</option>
+                </select>
+              </div>
+              <div className='grid gap-2'>
+                <label htmlFor='sort' className='font-semibold'>
+                  Order by:
+                </label>
+                <select
+                  id='order'
+                  className='border rounded px-4 py-2'
+                  value={sortOption}
+                  onChange={handleSortChange}
+                >
+                  <option value='asc'>Ascending</option>
+                  <option value='desc'>Descending</option>
                 </select>
               </div>
             </div>
@@ -125,12 +153,11 @@ export default function OurMenu({
       {/* Meals Grid */}
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8'>
         {our_menu?.slice(0, visibleMeals).map((meal: Meal) => (
-          <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
-            {/* {console.log("this is the meal uuid being clicked: ", meal.uuid)} */}
-            <div
-              key={meal.id}
-              className='bg-white rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow duration-300'
-            >
+          <div
+            key={meal.id}
+            className='bg-white rounded-lg shadow-lg p-3 hover:shadow-xl transition-shadow duration-300'
+          >
+            <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
               <div className='relative w-full h-48 mb-4 bg-gradient-to-r from-green-100 to-green-200 rounded-lg overflow-hidden'>
                 <div className='absolute inset-0 flex items-center justify-center'>
                   <Image
@@ -167,17 +194,20 @@ export default function OurMenu({
                   ? `${meal.description.substring(0, 30)}...`
                   : meal.description}
               </p>
-              <div className='flex items-center justify-between'>
-                <div className='flex items-center space-x-2 text-gray-500'>
-                  <FiClock />
-                  <span>{meal.processing_time} mins</span>
-                </div>
-                <Button className='bg-green-500 text-white px-4 py-2 rounded-lg'>
-                  Order
-                </Button>
+            </Link>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center space-x-2 text-gray-500'>
+                <FiClock />
+                <span>{meal.processing_time} mins</span>
               </div>
+              <Button
+                onClick={() => handleAddToCart(meal)}
+                className='bg-green-500 text-white px-4 py-2 rounded-lg'
+              >
+                Order
+              </Button>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
 

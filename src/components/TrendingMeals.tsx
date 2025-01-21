@@ -10,6 +10,7 @@ import { reduceImageWidth } from '@/utils/reduceImageWidth';
 import { Skeleton } from '@radix-ui/themes';
 import { Alert, AlertDescription } from './ui/alert';
 import { TriangleAlert } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
 
 interface TrendingMealsProps {
   title?: string;
@@ -21,6 +22,7 @@ export default function TrendingMeals({
   subtitle = 'Nutritious meals from our top restaurants you would love',
 }: TrendingMealsProps) {
   const { data: meals, isLoading, isFetching, error } = useGetTrendingMeals();
+  const { addToCart } = useCart();
 
   if (error) {
     console.error(error);
@@ -33,6 +35,11 @@ export default function TrendingMeals({
       </Alert>
     );
   }
+
+  const handleAddToCart = (meal: Meal) => {
+    if (!meal) return;
+    addToCart({ ...meal, quantity: 1 });
+  };
   // Loading skeleton array
   const skeletonArray = Array.from({ length: 4 }) as Array<Meal | undefined>;
 
@@ -74,27 +81,29 @@ export default function TrendingMeals({
             meal ? (
               <div key={index} className='shrink-0 w-80 relative rounded-lg'>
                 <Card className='hover:shadow-lg transition-shadow duration-200'>
-                  <div
-                    className='relative h-48 w-full'
-                    style={{ background: '#B0E8D4' }}
-                  >
-                    <Image
-                      src={reduceImageWidth(meal.image ?? 'images/logo.png')}
-                      alt={meal.name}
-                      layout='fill'
-                      style={{ objectFit: 'cover' }}
-                      priority={meal.id <= 4}
-                      onError={(e) => {
-                        e.currentTarget.src = 'images/logo.png';
-                      }}
-                    />
-                    <span className='absolute top-2 left-2 bg-orange-400 text-white px-3 py-1 rounded-lg font-bold'>
-                      ₦
-                      {meal.price.toLocaleString('en-NG', {
-                        minimumFractionDigits: 2,
-                      })}
-                    </span>
-                  </div>
+                  <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
+                    <div
+                      className='relative h-48 w-full'
+                      style={{ background: '#B0E8D4' }}
+                    >
+                      <Image
+                        src={reduceImageWidth(meal.image ?? 'images/logo.png')}
+                        alt={meal.name}
+                        layout='fill'
+                        style={{ objectFit: 'cover' }}
+                        priority={meal.id <= 4}
+                        onError={(e) => {
+                          e.currentTarget.src = 'images/logo.png';
+                        }}
+                      />
+                      <span className='absolute top-2 left-2 bg-orange-400 text-white px-3 py-1 rounded-lg font-bold'>
+                        ₦
+                        {meal.price.toLocaleString('en-NG', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </span>
+                    </div>
+                  </Link>
                   <div className='p-4'>
                     <div className='flex items-center justify-between mb-2'>
                       <h3 className='text-sm font-semibold line-clamp-1'>
@@ -112,7 +121,10 @@ export default function TrendingMeals({
                         ? meal.description.substring(0, 30) + '...'
                         : meal.description}
                     </p>
-                    <button className='mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200'>
+                    <button
+                      onClick={() => handleAddToCart(meal)}
+                      className='mt-4 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors duration-200'
+                    >
                       Order Now
                     </button>
                   </div>
