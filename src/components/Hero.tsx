@@ -23,18 +23,18 @@ export default function Hero() {
       {/* Top Section: Text + Buttons */}
       <div className='container mx-auto flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 lg:py-16 mb-8 sm:mb-10 md:mb-12 lg:mb-[120px]'>
         <div className='w-full max-w-2xl text-center space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 px-6 sm:px-8 md:px-10'>
+          <p className='text-sm sm:text-base md:text-lg text-gray-600'>
+            We delivers hygienic and nutritious meals from your favorite local
+            restaurants in town.
+          </p>
           <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug'>
             Are you <span className='text-green-500'>Hungry?</span> Place an
-            order with <span className='text-green-500'>FastBuka</span>
+            order <span className='text-green-500'>Now</span>
           </h1>
-          <p className='text-sm sm:text-base md:text-lg text-gray-600'>
-            FastBuka delivers hygienic and nutritious meals from your favorite
-            restaurants in three simple steps.
-          </p>
           <div className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 justify-center'>
             <Link href='/auth/register'>
               <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
-                Sign up for free
+                Sign up
               </Button>
             </Link>
             <Link href='/menu'>
