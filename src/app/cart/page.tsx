@@ -96,11 +96,9 @@ export default function CartPage() {
                 className='flex items-center mb-6 bg-green-50 p-4 rounded-lg'
               >
                 <div className='w-24 h-24 mr-4 relative flex-shrink-0'>
-                  <Image
+                  <img
                     src={item.image ?? 'images/logo.png'}
                     alt={item.name}
-                    layout='fill'
-                    objectFit='cover'
                     className='h-full w-full rounded-md'
                     onError={(e) => {
                       e.currentTarget.src = 'images/logo.png';

@@ -3,7 +3,6 @@
 import { Card } from '@/components/ui/card';
 import { Meal } from '@/lib/meal.interface';
 import { useGetTrendingMeals } from '@/queries/frontPage';
-import Image from 'next/image';
 import { FiClock } from 'react-icons/fi';
 import Link from 'next/link';
 import { reduceImageWidth } from '@/utils/reduceImageWidth';
@@ -83,15 +82,13 @@ export default function TrendingMeals({
                 <Card className='hover:shadow-lg transition-shadow duration-200'>
                   <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
                     <div
-                      className='relative h-48 w-full'
+                      className='relative m-2 rounded-md'
                       style={{ background: '#B0E8D4' }}
                     >
-                      <Image
+                      <img
                         src={reduceImageWidth(meal.image ?? 'images/logo.png')}
                         alt={meal.name}
-                        layout='fill'
-                        style={{ objectFit: 'cover' }}
-                        priority={meal.id <= 4}
+                        className='h-40 w-full object-cover rounded-lg'
                         onError={(e) => {
                           e.currentTarget.src = 'images/logo.png';
                         }}
@@ -132,16 +129,15 @@ export default function TrendingMeals({
               </div>
             ) : (
               <div key={index} className='shrink-0 w-80 relative'>
-                <Card className='hover:shadow-lg transition-shadow duration-200'>
+                <Card className='hover:shadow transition-shadow duration-200'>
                   <div className='p-4 space-y-4'>
                     <Skeleton
                       width='100%'
                       height='192px'
-                      className='rounded-t-lg'
+                      className='rounded-lg'
                     />
                     <Skeleton width='80%' height='20px' />
                     <Skeleton width='60%' height='16px' />
-                    <Skeleton width='90%' height='16px' />
                     <Skeleton
                       width='100%'
                       height='40px'
