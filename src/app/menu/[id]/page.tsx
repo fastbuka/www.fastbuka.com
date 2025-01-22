@@ -92,11 +92,9 @@ export default function SingleMealPage() {
         {/* Meal Details Section */}
         <div className='grid grid-cols-1 md:grid-cols-2 gap-10 mt-8'>
           <div className='relative w-full h-96 bg-green-200 rounded-[32px]'>
-            <Image
+            <img
               src={meal.image ?? 'images/logo.png'}
               alt={meal.name}
-              layout='fill'
-              objectFit='cover'
               className='rounded-lg'
               onError={(e) => {
                 e.currentTarget.src = 'images/logo.png';
@@ -195,17 +193,13 @@ export default function SingleMealPage() {
                     className='relative w-full h-48'
                     style={{ background: '#B0E8D4' }}
                   >
-                    <Image
+                    <img
                       src={otherMeal.image ?? 'images/logo.png'}
                       alt={otherMeal.name}
-                      width={250}
-                      height={250}
-                      objectFit='fill'
                       className='rounded-lg w-56 h-40 object-cover'
                       onError={(e) => {
                         e.currentTarget.src = 'images/logo.png';
                       }}
-                      priority={otherMeal.id <= 4}
                     />
                     <span className='absolute top-2 left-2 bg-orange-400 text-white px-3 py-1 rounded-lg font-bold'>
                       ₦

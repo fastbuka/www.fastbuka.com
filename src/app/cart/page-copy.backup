@@ -67,11 +67,9 @@ export default function CartPage() {
                 <tr key={item.id} className="border-b hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <div className="relative w-[150px] h-[100px]">
-                      <Image
+                      <img
                         src={item.image}
                         alt={item.name}
-                        layout="fill"
-                        objectFit="cover"
                         className="rounded-lg"
                       />
                     </div>

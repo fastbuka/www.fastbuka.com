@@ -4,9 +4,18 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { getUser, getToken } from '@/utils/token';
+
+interface UserProfile {
+  balance: number;
+  profile: {
+    first_name: string;
+  };
+}
 
 export default function Hero() {
   const [showFoodImage, setShowFoodImage] = useState(true);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
   // Hide the image on mobile screens
   useEffect(() => {
@@ -18,25 +27,33 @@ export default function Hero() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const token = getToken();
+    const userData = getUser();
+    setUser(userData as UserProfile);
+  }, []);
+
   return (
     <section className='relative bg-white'>
       {/* Top Section: Text + Buttons */}
       <div className='container mx-auto flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 lg:py-16 mb-8 sm:mb-10 md:mb-12 lg:mb-[120px]'>
         <div className='w-full max-w-2xl text-center space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 px-6 sm:px-8 md:px-10'>
-          <p className='text-sm sm:text-base md:text-lg text-gray-600'>
-            We delivers hygienic and nutritious meals from your favorite local
-            restaurants in town.
-          </p>
           <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug'>
             Are you <span className='text-green-500'>Hungry?</span> Place an
             order <span className='text-green-500'>Now</span>
           </h1>
+          <p className='text-sm sm:text-base md:text-lg text-gray-600'>
+            We delivers hygienic and nutritious meals from your favorite local
+            restaurants in town.
+          </p>
           <div className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 justify-center'>
-            <Link href='/auth/register'>
-              <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
-                Sign up
-              </Button>
-            </Link>
+            {!user && (
+              <Link href='/auth/register'>
+                <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
+                  Sign Up
+                </Button>
+              </Link>
+            )}
             <Link href='/menu'>
               <Button className='bg-transparent border border-green-500 text-green-500 px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
                 Order Now
@@ -59,7 +76,7 @@ export default function Hero() {
         {/* Bouncing Food Image */}
         {showFoodImage && (
           <div className='absolute -top-32 left-1/2 transform -translate-x-1/2 z-10'>
-            <Image
+            <img
               className='animate-bounce'
               src='/images/food_flower.png'
               alt='Food'

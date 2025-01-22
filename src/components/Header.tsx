@@ -150,7 +150,7 @@ export default function Header() {
                 className="flex items-center space-x-2"
               >
                 <div className="rounded-full overflow-hidden w-10 h-10">
-                  <Image
+                  <img
                     src={getDefaultAvatar(user?.profile?.avatar)}
                     alt="User Profile"
                     width={40}
@@ -277,7 +277,7 @@ export default function Header() {
             {isLoggedIn ? (
               <div className="flex items-center space-x-2">
                 <div className="rounded-full overflow-hidden w-10 h-10">
-                  <Image
+                  <img
                     src={getDefaultAvatar(user?.profile?.avatar)}
                     alt="User Profile"
                     width={40}

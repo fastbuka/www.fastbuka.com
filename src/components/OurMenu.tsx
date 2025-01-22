@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { FiClock, FiSearch, FiSliders } from 'react-icons/fi';
 import {
@@ -160,12 +159,9 @@ export default function OurMenu({
             <Link key={meal.id} href={`/menu/${meal.uuid}`} passHref>
               <div className='relative w-full h-48 mb-4 bg-gradient-to-r from-green-100 to-green-200 rounded-lg overflow-hidden'>
                 <div className='absolute inset-0 flex items-center justify-center'>
-                  <Image
+                  <img
                     src={reduceImageWidth(meal.image ?? 'images/logo.png')}
                     alt={meal.name}
-                    width={250}
-                    height={250}
-                    objectFit='fill'
                     className='rounded-lg w-56 h-40 object-cover'
                     onError={(e) => {
                       e.currentTarget.src = 'images/logo.png';

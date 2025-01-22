@@ -4,9 +4,10 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Settings, ShoppingBag, Ticket, Wallet } from 'lucide-react';
+import { DashboardIcon } from '@radix-ui/react-icons';
 
 const menuItems = [
-  { name: 'Dashboard', href: '/user/dashboard', icon: ShoppingBag },
+  { name: 'Dashboard', href: '/user/dashboard', icon: DashboardIcon },
   { name: 'Orders', href: '/user/orders', icon: ShoppingBag },
   { name: 'Wallet', href: '/user/wallet', icon: Wallet },
   { name: 'Tickets', href: '/user/tickets', icon: Ticket },
@@ -21,10 +22,10 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
       {/* Sidebar - hidden on mobile, visible on md and larger screens */}
       <aside className="hidden md:block w-64 bg-white shadow-lg">
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center h-16 bg-green-600 text-white">
+          {/* <div className="flex items-center justify-center h-16 bg-green-600 text-white">
             <h2 className="text-2xl font-bold">FastBuka</h2>
-          </div>
-          <nav className="flex-1 px-4 py-4">
+          </div> */}
+          <nav className="flex-1 px-4 py-4 border-t">
             {menuItems.map((item) => (
               <Link
                 key={item.name}
