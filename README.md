@@ -1,1 +1,1 @@
-# FastBuka
+# FastBuka Customer DApp
