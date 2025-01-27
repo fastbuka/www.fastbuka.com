@@ -22,7 +22,7 @@ export function StoreCategoriesSection() {
     const fetchData = async () => {
       try {
         const response = await categories();
-        setData(response.data);
+        setData(response.data.categories);
       } catch (error) {
         setMessage('Failed to load categories');
       }

@@ -23,7 +23,7 @@ export function StoreFeedSection() {
     const fetchData = async () => {
       try {
         const response = await vendors();
-        setData(response.data);
+        setData(response.data.vendors);
       } catch (error) {
         setMessage('Failed to load categories');
       }
