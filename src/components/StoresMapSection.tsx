@@ -9,6 +9,7 @@ import {
 } from '@react-google-maps/api';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from './ui/skeleton';
 
 const libraries: ('places' | 'drawing' | 'geometry' | 'visualization')[] = [
   'places',
@@ -88,8 +89,6 @@ const StoresMapSection: React.FC = () => {
 
   const defaultCenter = { lat: 6.5244, lng: 3.3792 }; // Lagos coordinates
 
-  if (!isLoaded) return <p>Loading map...</p>;
-
   return (
     <section className='py-12'>
       <div className='container mx-auto px-4'>
@@ -106,60 +105,64 @@ const StoresMapSection: React.FC = () => {
           </Button>
         </div>
         <div className='relative h-[400px] overflow-hidden rounded-xl border'>
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            center={userLocation || defaultCenter}
-            zoom={14}
-          >
-            {/* User Location Marker */}
-            {userLocation && (
-              <Marker
-                position={userLocation}
-                icon={{
-                  url: '/placeholder.svg?height=30&width=30',
-                  scaledSize: new google.maps.Size(30, 30),
-                }}
-              />
-            )}
+          {!isLoaded ? (
+            <Skeleton />
+          ) : (
+            <GoogleMap
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+              center={userLocation || defaultCenter}
+              zoom={14}
+            >
+              {/* User Location Marker */}
+              {userLocation && (
+                <Marker
+                  position={userLocation}
+                  icon={{
+                    url: '/placeholder.svg?height=30&width=30',
+                    scaledSize: new google.maps.Size(30, 30),
+                  }}
+                />
+              )}
 
-            {/* Store Markers */}
-            {mockStores.map((store) => (
-              <Marker
-                key={store.id}
-                position={store.position}
-                onClick={() => setSelectedStore(store)}
-              />
-            ))}
+              {/* Store Markers */}
+              {mockStores.map((store) => (
+                <Marker
+                  key={store.id}
+                  position={store.position}
+                  onClick={() => setSelectedStore(store)}
+                />
+              ))}
 
-            {/* Store Info Window */}
-            {selectedStore && (
-              <InfoWindow
-                position={selectedStore.position}
-                onCloseClick={() => setSelectedStore(null)}
-              >
-                <div className='max-w-[200px] p-2'>
-                  <h3 className='font-semibold'>{selectedStore.name}</h3>
-                  <p className='mt-1 text-sm text-gray-600'>
-                    {selectedStore.address}
-                  </p>
-                  <div className='mt-2 flex items-center justify-between text-sm'>
-                    <span className='text-yellow-500'>
-                      ★ {selectedStore.rating}
-                    </span>
-                    <span className='text-gray-500'>
-                      {selectedStore.distance}
-                    </span>
+              {/* Store Info Window */}
+              {selectedStore && (
+                <InfoWindow
+                  position={selectedStore.position}
+                  onCloseClick={() => setSelectedStore(null)}
+                >
+                  <div className='max-w-[200px] p-2'>
+                    <h3 className='font-semibold'>{selectedStore.name}</h3>
+                    <p className='mt-1 text-sm text-gray-600'>
+                      {selectedStore.address}
+                    </p>
+                    <div className='mt-2 flex items-center justify-between text-sm'>
+                      <span className='text-yellow-500'>
+                        ★ {selectedStore.rating}
+                      </span>
+                      <span className='text-gray-500'>
+                        {selectedStore.distance}
+                      </span>
+                    </div>
+                    <Button
+                      className='mt-3 w-full bg-emerald-600 hover:bg-emerald-700'
+                      size='sm'
+                    >
+                      Order Now
+                    </Button>
                   </div>
-                  <Button
-                    className='mt-3 w-full bg-emerald-600 hover:bg-emerald-700'
-                    size='sm'
-                  >
-                    Order Now
-                  </Button>
-                </div>
-              </InfoWindow>
-            )}
-          </GoogleMap>
+                </InfoWindow>
+              )}
+            </GoogleMap>
+          )}
         </div>
       </div>
     </section>

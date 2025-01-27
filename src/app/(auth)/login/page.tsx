@@ -18,30 +18,35 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/auth';
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const [loginError, setLoginError] = useState<string | null>(null);
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [data, setData] = useState<any | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setLoginError(null);
+    setMessage(null);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setLoginSuccess(true);
-      router.push('/dashboard');
+      await login({ email, password, setData, setMessage });
+      if (data?.success) {
+        setLoginSuccess(true);
+        router.push('/dashboard');
+        setMessage(data.message || 'Login successful');
+      } else {
+        setMessage(data.message || 'Failed to login');
+      }
     } catch (error) {
-      setLoginError(
-        'Login failed. Please check your credentials and try again.'
-      );
+      setMessage('Login failed. Please check your credentials and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +67,7 @@ export default function Login() {
               </CardDescription>
             </CardHeader>
 
-            {loginError && (
+            {message && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -70,7 +75,7 @@ export default function Login() {
               >
                 <Alert variant='destructive' className='mb-4'>
                   <ExclamationTriangleIcon className='h-4 w-4' />
-                  <AlertDescription>{loginError}</AlertDescription>
+                  <AlertDescription>{message}</AlertDescription>
                 </Alert>
               </motion.div>
             )}
