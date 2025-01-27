@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { Apple, PlayIcon as PlayStore } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getUser, getToken } from '@/utils/token';
@@ -13,7 +14,7 @@ interface UserProfile {
   };
 }
 
-export default function Hero() {
+export default function HeroSection() {
   const [showFoodImage, setShowFoodImage] = useState(true);
   const [user, setUser] = useState<UserProfile | null>(null);
 
@@ -50,13 +51,15 @@ export default function Hero() {
             {!user && (
               <Link href='/auth/register'>
                 <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
-                  Sign Up
+                  <Apple className='mr-2 h-5 w-5' />
+                  App Store
                 </Button>
               </Link>
             )}
             <Link href='/menu'>
               <Button className='bg-transparent border border-green-500 text-green-500 px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
-                Order Now
+                <PlayStore className='mr-2 h-5 w-5' />
+                Play Store
               </Button>
             </Link>
           </div>
@@ -65,7 +68,7 @@ export default function Hero() {
 
       {/* Call-to-Action Section with Food Image */}
       <div
-        className='relative py-10 md:py-16 mt-4 md:mt-16'
+        className='relative py-2 md:py-16 mt-4 md:mt-16'
         style={{
           backgroundImage: `url('/images/pattern.png')`,
           backgroundSize: '400px 400px',
@@ -89,7 +92,7 @@ export default function Hero() {
         {/* Content Section: Two Columns */}
         <div className='relative w-full grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-8 pt-6 md:pt-16 px-6 sm:px-8 lg:px-10 max-w-7xl mx-auto mt-[20px] md:mt-[30px] mb-10 md:mb-16'>
           {/* Left Column: Title and Text */}
-          <div className='text-white space-y-6 md:space-y-8 relative z-10 mt-[120px] md:mt-0'>
+          <div className='text-white space-y-6 md:space-y-8 relative z-10'>
             <h2 className='text-4xl md:text-6xl font-extrabold leading-tight mb-6 md:mb-8'>
               Hygienic and <br /> Nutritious Meals
             </h2>
@@ -133,9 +136,9 @@ export default function Hero() {
               and enjoy hot, freshly-prepared dishes delivered right to your
               doorstep. Satisfaction guaranteed!
             </p>
-            <Link href='/menu'>
+            <Link href='/feeds'>
               <Button className='bg-white text-green-500 px-7 md:px-9 py-7 md:py-9 rounded-full text-base md:text-lg font-semibold w-[180px] md:w-[220px]'>
-                See menu
+                Browse feeds
               </Button>
             </Link>
           </div>

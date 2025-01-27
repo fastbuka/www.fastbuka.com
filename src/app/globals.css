@@ -1,5 +1,5 @@
 @tailwind base;
-@import "@radix-ui/themes/styles.css";
+@import '@radix-ui/themes/styles.css';
 @tailwind components;
 @tailwind utilities;
 
@@ -10,15 +10,18 @@
 body {
   font-family: var(--font-satoshi), sans-serif;
 }
-/* To override the default radix theme typography */
-.radix-themes {
-  --default-font-family: var(--font-satoshi);
+
+body::-webkit-scrollbar {
+  width: 0.1em;
+  background-color: #f5f5f500;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+body::-webkit-scrollbar-thumb {
+  background-color: #41c209;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #04e973d1;
 }
 
 .scroll-hidden {
@@ -28,6 +31,17 @@ body {
 
 .scroll-hidden::-webkit-scrollbar {
   display: none; /* WebKit */
+}
+
+/* To override the default radix theme typography */
+.radix-themes {
+  --default-font-family: var(--font-satoshi);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
 @layer base {

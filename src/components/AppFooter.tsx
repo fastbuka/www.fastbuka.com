@@ -15,7 +15,7 @@ import { FaHome, FaUtensils, FaWallet } from 'react-icons/fa';
 import { useCart } from '@/context/CartContext'; // Import the useCart hook
 import { useEffect, useState } from 'react';
 
-export default function Footer() {
+export default function AppFooter() {
   const [mounted, setMounted] = useState(false);
   const { cartItems } = useCart();
 
@@ -197,7 +197,7 @@ export default function Footer() {
       </div>
 
       {/* Mobile and Tablet View */}
-      <div className='fixed md:hidden z-40 inset-x-0 bottom-0 bg-black flex justify-between items-center p-4 shadow-lg'>
+      {/* <div className='fixed md:hidden z-40 inset-x-0 bottom-0 bg-black flex justify-between items-center p-4 shadow-lg'>
         <a href='/' className='text-white text-center'>
           <FaHome className='w-6 h-6 mx-auto mb-1' />
           <span className='block text-xs font-thin'>Home</span>
@@ -219,7 +219,7 @@ export default function Footer() {
           )}
           <span className='block text-xs font-thin'>Cart</span>
         </a>
-      </div>
+      </div> */}
     </footer>
   );
 }

@@ -34,6 +34,7 @@ export function useGetHomeData() {
     return response.data;
   });
 }
+
 /**
  * Fetches filtered data for the home page from the server.
  *
