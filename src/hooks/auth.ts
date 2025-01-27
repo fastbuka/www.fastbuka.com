@@ -10,14 +10,10 @@ export const useAuth = () => {
     name,
     email,
     password,
-    setData,
-    setMessage,
   }: {
     name: string;
     email: string;
     password: string;
-    setData: (response: any) => void;
-    setMessage: (message: string) => void;
   }) => {
     try {
       const response = await axios.post('/api/v1/auth/register', {
@@ -26,13 +22,22 @@ export const useAuth = () => {
         password,
       });
       if (response.data.success) {
-        setData(response.data);
-        setMessage(response.data.message || 'Registration successful');
+        return {
+          success: true,
+          message: response.data.message || 'Registration successful',
+          data: response.data.data,
+        };
       } else {
-        setMessage(response.data.message || 'Failed to login');
+        return {
+          success: false,
+          message: response.data.message || 'Failed to register',
+        };
       }
     } catch (error: any) {
-      setMessage(`Error: ${error?.message}`);
+      return {
+        success: false,
+        message: error?.message || 'Failed to register.',
+      };
     }
   };
 
@@ -44,13 +49,9 @@ export const useAuth = () => {
   const login = async ({
     email,
     password,
-    setData,
-    setMessage,
   }: {
     email: string;
     password: string;
-    setData: (response: any) => void;
-    setMessage: (message: string) => void;
   }) => {
     try {
       const response = await axios.post('/api/v1/auth/login', {
@@ -58,15 +59,22 @@ export const useAuth = () => {
         password,
       });
       if (response.data.success) {
-        setData(response.data);
-        setMessage(response.data.message || 'Login successful');
         localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.data.user));
+        return {
+          success: true,
+          message: response.data.message || 'Login successful',
+        };
       } else {
-        setMessage(response.data.message || 'Failed to login');
+        return {
+          success: false,
+          message: response.data.message || 'Failed to login',
+        };
       }
     } catch (error: any) {
-      setMessage(`Error: ${error?.message}`);
+      return {
+        success: false,
+        message: error?.message || 'Invalid credentials, please try again.',
+      };
     }
   };
 

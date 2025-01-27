@@ -19,7 +19,16 @@ export function StoreCategoriesSection() {
   const [data, setData] = useState<Category[]>([]);
 
   useEffect(() => {
-    categories({ setMessage, setData });
+    const fetchData = async () => {
+      try {
+        const response = await categories();
+        setData(response.data);
+      } catch (error) {
+        setMessage('Failed to load categories');
+      }
+    };
+
+    fetchData();
   }, [categories]);
 
   return (

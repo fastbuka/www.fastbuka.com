@@ -1,12 +1,21 @@
 'use client';
 
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  type ChangeEvent,
+  type FormEvent,
+  useCallback,
+} from 'react';
+import { useUser } from '@/hooks/users';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { getUser, setUser } from '@/utils/token';
-import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertCircle, RefreshCw, User } from 'lucide-react';
 
-interface UserData {
+interface User {
   email: string;
   profile: {
     first_name: string;
@@ -17,43 +26,54 @@ interface UserData {
   };
 }
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export default function UserSettings() {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const { profile } = useUser();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProfile = useCallback(async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const response = await profile();
+      if (response.success) {
+        setUser(response.data.user);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [profile]);
 
   useEffect(() => {
-    const user = getUser();
-    if (user) {
-      setUserData(user);
-    } else {
-      router.push('/auth/login');
+    if (!user) {
+      fetchProfile();
     }
-  }, [router]);
+  }, [user, profile, fetchProfile]);
 
   const handleUpdateProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError('');
+    setLoading(true);
+    setError(null);
 
     try {
-      // Here you would typically make an API call to update the user's profile
-      // For now, we'll just update the local storage
-      if (userData) {
-        setUser(userData);
-        setIsLoading(false);
-        alert('Profile updated successfully!');
-      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoading(false);
+      alert('Profile updated successfully!');
     } catch (err) {
       setError('Failed to update profile. Please try again.');
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData((prevState) => {
+    setUser((prevState) => {
       if (!prevState) return null;
       return {
         ...prevState,
@@ -65,135 +85,197 @@ export default function UserSettings() {
     });
   };
 
-  if (!userData) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900'></div>
+      </div>
+    );
   }
 
   return (
-    <div className='max-w-4xl mx-auto p-4'>
-      <h1 className='text-2xl md:text-4xl font-bold mb-6'>Account Settings</h1>
-
-      <div className='bg-white rounded-lg shadow-md p-6'>
-        <div className='flex items-center space-x-4 mb-6'>
-          <div className='relative w-20 h-20'>
-            <img
-              src={userData.profile.avatar || '/images/profile.png'}
-              alt='Profile'
-              className='rounded-full'
-              onError={(e) => {
-                e.currentTarget.src = 'images/logo.png';
-              }}
-            />
-          </div>
-          <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
-            Change Avatar
-          </Button>
-        </div>
-
-        <form onSubmit={handleUpdateProfile}>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                First Name
-              </label>
-              <Input
-                type='text'
-                name='first_name'
-                value={userData.profile.first_name || ''}
-                onChange={handleInputChange}
-                className='w-full'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Last Name
-              </label>
-              <Input
-                type='text'
-                name='last_name'
-                value={userData.profile.last_name || ''}
-                onChange={handleInputChange}
-                className='w-full'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Email
-              </label>
-              <Input
-                type='email'
-                name='email'
-                value={userData.email || ''}
-                onChange={handleInputChange}
-                className='w-full'
-                disabled
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Phone Number
-              </label>
-              <Input
-                type='tel'
-                name='phone'
-                value={userData.profile.phone || ''}
-                onChange={handleInputChange}
-                className='w-full'
-              />
-            </div>
+    <AnimatePresence>
+      {error ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <Alert variant='destructive'>
+            <AlertCircle className='h-4 w-4' />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial='hidden'
+          animate='visible'
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+          }}
+          className='space-y-8 max-w-4xl mx-auto p-4'
+        >
+          <div className='flex justify-between items-center'>
+            <motion.h1
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className='text-4xl font-bold text-gray-800'
+            >
+              Account Settings
+            </motion.h1>
+            <Button
+              onClick={fetchProfile}
+              variant='outline'
+              size='sm'
+              className='bg-white hover:bg-gray-100 transition-colors'
+            >
+              <RefreshCw className='mr-2 h-4 w-4' />
+              Refresh
+            </Button>
           </div>
 
-          <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-700 mb-1'>
-              Address
-            </label>
-            <Input
-              type='text'
-              name='address'
-              value={userData.profile.address || ''}
-              onChange={handleInputChange}
-              className='w-full'
-            />
-          </div>
+          <motion.div variants={cardVariants}>
+            <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
+              <CardHeader>
+                <CardTitle className='text-2xl font-bold text-gray-800'>
+                  Profile Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className='flex items-center space-x-4 mb-6'>
+                  <div className='relative w-20 h-20'>
+                    <img
+                      src={user?.profile.avatar || '/images/profile.png'}
+                      alt='Profile'
+                      className='rounded-full'
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/logo.png';
+                      }}
+                    />
+                  </div>
+                  <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
+                    Change Avatar
+                  </Button>
+                </div>
 
-          {error && <p className='text-red-500 mb-4'>{error}</p>}
+                <form onSubmit={handleUpdateProfile}>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        First Name
+                      </label>
+                      <Input
+                        type='text'
+                        name='first_name'
+                        value={user?.profile.first_name || ''}
+                        onChange={handleInputChange}
+                        className='w-full'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Last Name
+                      </label>
+                      <Input
+                        type='text'
+                        name='last_name'
+                        value={user?.profile.last_name || ''}
+                        onChange={handleInputChange}
+                        className='w-full'
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Email
+                      </label>
+                      <Input
+                        type='email'
+                        name='email'
+                        value={user?.email || ''}
+                        onChange={handleInputChange}
+                        className='w-full'
+                        disabled
+                      />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Phone Number
+                      </label>
+                      <Input
+                        type='tel'
+                        name='phone'
+                        value={user?.profile.phone || ''}
+                        onChange={handleInputChange}
+                        className='w-full'
+                      />
+                    </div>
+                  </div>
 
-          <Button
-            type='submit'
-            className='bg-green-600 text-white'
-            disabled={isLoading}
-          >
-            {isLoading ? 'Updating...' : 'Update Profile'}
-          </Button>
-        </form>
-      </div>
+                  <div className='mb-4'>
+                    <label className='block text-sm font-medium text-gray-700 mb-1'>
+                      Address
+                    </label>
+                    <Input
+                      type='text'
+                      name='address'
+                      value={user?.profile.address || ''}
+                      onChange={handleInputChange}
+                      className='w-full'
+                    />
+                  </div>
 
-      <div className='mt-8 bg-white rounded-lg shadow-md p-6'>
-        <h2 className='text-xl font-semibold mb-4'>Change Password</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Current Password
-              </label>
-              <Input type='password' className='w-full' />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                New Password
-              </label>
-              <Input type='password' className='w-full' />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Confirm New Password
-              </label>
-              <Input type='password' className='w-full' />
-            </div>
-          </div>
-          <Button className='bg-blue-600 text-white'>Change Password</Button>
-        </form>
-      </div>
-    </div>
+                  <Button
+                    type='submit'
+                    className='bg-green-600 text-white'
+                    disabled={loading}
+                  >
+                    {loading ? 'Updating...' : 'Update Profile'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          <motion.div variants={cardVariants}>
+            <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
+              <CardHeader>
+                <CardTitle className='text-2xl font-bold text-gray-800'>
+                  Change Password
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={(e) => e.preventDefault()}>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Current Password
+                      </label>
+                      <Input type='password' className='w-full' />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        New Password
+                      </label>
+                      <Input type='password' className='w-full' />
+                    </div>
+                    <div>
+                      <label className='block text-sm font-medium text-gray-700 mb-1'>
+                        Confirm New Password
+                      </label>
+                      <Input type='password' className='w-full' />
+                    </div>
+                  </div>
+                  <Button className='bg-blue-600 text-white'>
+                    Change Password
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

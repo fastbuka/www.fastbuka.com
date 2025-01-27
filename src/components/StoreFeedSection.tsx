@@ -1,26 +1,35 @@
 'use client';
 import { useApp } from '@/hooks/app';
-import { StoreFeedItem } from '@/components/StoreFeedItem';
 import { useEffect, useState } from 'react';
+import { StoreFeedItem } from '@/components/StoreFeedItem';
+
+interface Vendor {
+  id: string;
+  uuid: string;
+  name: string;
+  image: string;
+  category: string;
+  ratings: number;
+  deliveryTime: string;
+  distance: string;
+}
 
 export function StoreFeedSection() {
-  interface Vendor {
-    id: string;
-    uuid: string;
-    name: string;
-    image: string;
-    category: string;
-    ratings: number;
-    deliveryTime: string;
-    distance: string;
-  }
-
   const { vendors } = useApp();
   const [message, setMessage] = useState('');
   const [data, setData] = useState<Vendor[]>([]);
 
   useEffect(() => {
-    vendors({ setMessage, setData });
+    const fetchData = async () => {
+      try {
+        const response = await vendors();
+        setData(response.data);
+      } catch (error) {
+        setMessage('Failed to load categories');
+      }
+    };
+
+    fetchData();
   }, [vendors]);
 
   return (

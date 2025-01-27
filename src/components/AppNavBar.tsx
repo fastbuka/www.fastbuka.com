@@ -1,14 +1,30 @@
 'use client';
 
-import { useState } from 'react';
-import { MapPin, Search, ShoppingBag, MenuIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useUser } from '@/hooks/users';
+import { Button } from '@/components/ui/button';
+import { MapPin, Search, ShoppingBag, MenuIcon } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function AppNavBar() {
+  const { profile } = useUser();
   const [location, setLocation] = useState('Lagos, Nigeria');
+  const [user, setUser] = useState<any | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await profile();
+      if (response.success) {
+        setUser(response.data.user);
+      } else {
+        localStorage.removeItem('token');
+      }
+    };
+
+    fetchProfile();
+  }, [profile, setUser]);
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-white'>
@@ -41,11 +57,19 @@ export default function AppNavBar() {
           <Button variant='ghost' size='icon'>
             <ShoppingBag className='h-5 w-5' />
           </Button>
-          <Link href='/login'>
-            <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
-              Get Started
-            </Button>
-          </Link>
+          {user ? (
+            <Link href='/dashboard'>
+              <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
+                Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <Link href='/login'>
+              <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
+                Get Started
+              </Button>
+            </Link>
+          )}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant='ghost' size='icon' className='md:hidden'>

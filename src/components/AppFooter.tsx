@@ -8,26 +8,15 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaTiktok,
-  FaCartArrowDown,
 } from 'react-icons/fa6';
-import { FaBowlFood } from 'react-icons/fa6';
-import { FaHome, FaUtensils, FaWallet } from 'react-icons/fa';
-import { useCart } from '@/context/CartContext'; // Import the useCart hook
 import { useEffect, useState } from 'react';
 
 export default function AppFooter() {
   const [mounted, setMounted] = useState(false);
-  const { cartItems } = useCart();
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  if (!mounted) return null;
-  const totalItems = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
 
   return (
     <footer className='bg-black text-white py-20'>

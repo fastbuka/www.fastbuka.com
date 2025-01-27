@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useApp } from '@/hooks/app';
 import { Star } from 'lucide-react';
 import { Skeleton } from '@radix-ui/themes';
-import { useGetRestaurants } from '@/queries/frontPage';
 
 interface Restaurant {
   id: number;
@@ -25,12 +26,23 @@ interface Restaurant {
 }
 
 export default function RestaurantsSection() {
-  const {
-    data: restaurants,
-    isLoading,
-    isFetching,
-    error,
-  } = useGetRestaurants();
+  const { vendors } = useApp();
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await vendors();
+        setRestaurants(response.data);
+      } catch (error) {
+        setMessage('Failed to load categories');
+      }
+    };
+
+    fetchData();
+  }, [vendors]);
 
   return (
     <section className='py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto'>
@@ -48,7 +60,7 @@ export default function RestaurantsSection() {
           </p>
         </div>
         <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
-          {isLoading || isFetching
+          {loading
             ? Array.from({ length: 4 }).map((_, index) => (
                 <div
                   key={index}

@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useAuth } from '@/hooks/auth';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Eye, EyeOff, CheckCircle, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -17,38 +19,40 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import Link from 'next/link';
-import { useAuth } from '@/hooks/auth';
 
 export default function Login() {
-  const { login } = useAuth();
   const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [data, setData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const user = localStorage.getItem('token');
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     setMessage(null);
-
     try {
-      await login({ email, password, setData, setMessage });
-      if (data?.success) {
-        setLoginSuccess(true);
+      const response = await login({ email, password });
+      if (response.success) {
+        setSuccess(true);
         router.push('/dashboard');
-        setMessage(data.message || 'Login successful');
       } else {
-        setMessage(data.message || 'Failed to login');
+        setMessage(response.message || 'Failed to login');
       }
     } catch (error) {
-      setMessage('Login failed. Please check your credentials and try again.');
+      setMessage('Invalid credentials, please try again.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -80,7 +84,7 @@ export default function Login() {
               </motion.div>
             )}
 
-            {loginSuccess && (
+            {success && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -105,7 +109,8 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className='h-12'
-                  disabled={isLoading}
+                  disabled={loading}
+                  required
                 />
               </div>
 
@@ -119,7 +124,8 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className='h-12 pr-10'
-                    disabled={isLoading}
+                    disabled={loading}
+                    required
                   />
                   <Button
                     type='button'
@@ -127,7 +133,7 @@ export default function Login() {
                     size='sm'
                     className='absolute right-0 top-0 h-12 px-3 hover:bg-transparent'
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+                    disabled={loading}
                   >
                     {showPassword ? (
                       <EyeOff className='h-4 w-4 text-gray-400' />
@@ -150,9 +156,9 @@ export default function Login() {
               <Button
                 type='submit'
                 className='w-full h-12 bg-emerald-600 hover:bg-emerald-700'
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? (
+                {loading ? (
                   <motion.div
                     className='h-5 w-5 border-2 border-white border-t-transparent rounded-full'
                     animate={{ rotate: 360 }}

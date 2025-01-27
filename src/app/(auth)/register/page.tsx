@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/auth';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { Eye, EyeOff, CheckCircle, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -18,38 +19,40 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-}
-
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { register } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const [registerError, setRegisterError] = useState<string | null>(null);
-  const [registerSuccess, setRegisterSuccess] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const user = localStorage.getItem('token');
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [router]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setRegisterError(null);
-
+    setLoading(true);
+    setMessage(null);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setRegisterSuccess(true);
-      setTimeout(() => {
+      const response = await register({ name, email, password });
+      if (response.success) {
+        setSuccess(true);
         router.push('/login');
-      }, 1500);
+      } else {
+        setMessage(response.message || 'Failed to register');
+      }
     } catch (error) {
-      setRegisterError('Registration failed. Please try again.');
+      setMessage('Registration failed. Please try again.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -68,7 +71,7 @@ export default function Register() {
               </CardDescription>
             </CardHeader>
 
-            {registerError && (
+            {message && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -76,12 +79,12 @@ export default function Register() {
               >
                 <Alert variant='destructive' className='mb-4'>
                   <ExclamationTriangleIcon className='h-4 w-4' />
-                  <AlertDescription>{registerError}</AlertDescription>
+                  <AlertDescription>{message}</AlertDescription>
                 </Alert>
               </motion.div>
             )}
 
-            {registerSuccess && (
+            {success && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -106,7 +109,7 @@ export default function Register() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className='h-12'
-                  disabled={isLoading}
+                  disabled={loading}
                   required
                 />
               </div>
@@ -120,7 +123,7 @@ export default function Register() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className='h-12'
-                  disabled={isLoading}
+                  disabled={loading}
                   required
                 />
               </div>
@@ -135,7 +138,7 @@ export default function Register() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className='h-12 pr-10'
-                    disabled={isLoading}
+                    disabled={loading}
                     required
                   />
                   <Button
@@ -144,7 +147,7 @@ export default function Register() {
                     size='sm'
                     className='absolute right-0 top-0 h-12 px-3 hover:bg-transparent'
                     onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
+                    disabled={loading}
                   >
                     {showPassword ? (
                       <EyeOff className='h-4 w-4 text-gray-400' />
@@ -158,9 +161,9 @@ export default function Register() {
               <Button
                 type='submit'
                 className='w-full h-12 bg-emerald-600 hover:bg-emerald-700'
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? (
+                {loading ? (
                   <motion.div
                     className='h-5 w-5 border-2 border-white border-t-transparent rounded-full'
                     animate={{ rotate: 360 }}

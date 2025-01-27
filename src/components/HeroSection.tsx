@@ -1,37 +1,38 @@
 'use client'; // This ensures it's a client-side component
 
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useUser } from '@/hooks/users';
 import { Apple, PlayIcon as PlayStore } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { getUser, getToken } from '@/utils/token';
 
-interface UserProfile {
-  balance: number;
-  profile: {
-    first_name: string;
-  };
-}
 
 export default function HeroSection() {
+  const { profile } = useUser();
   const [showFoodImage, setShowFoodImage] = useState(true);
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [user, setUser] = useState<any | null>(null);
 
-  // Hide the image on mobile screens
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await profile();
+      if (response.success) {
+        setUser(response.data.user);
+      } else {
+        localStorage.removeItem('token');
+      }
+    };
+
+    fetchProfile();
+  }, [profile, setUser]);
+
   useEffect(() => {
     const handleResize = () => {
-      setShowFoodImage(window.innerWidth > 768); // Show only on screens larger than mobile
+      setShowFoodImage(window.innerWidth > 768);
     };
     window.addEventListener('resize', handleResize);
-    handleResize(); // Set the initial value
+    handleResize();
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    const token = getToken();
-    const userData = getUser();
-    setUser(userData as UserProfile);
   }, []);
 
   return (
@@ -48,15 +49,13 @@ export default function HeroSection() {
             restaurants in town.
           </p>
           <div className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 justify-center'>
-            {!user && (
-              <Link href='/auth/register'>
-                <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
-                  <Apple className='mr-2 h-5 w-5' />
-                  App Store
-                </Button>
-              </Link>
-            )}
-            <Link href='/menu'>
+            <Link href='/'>
+              <Button className='bg-green-500 text-white px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
+                <Apple className='mr-2 h-5 w-5' />
+                App Store
+              </Button>
+            </Link>
+            <Link href='/'>
               <Button className='bg-transparent border border-green-500 text-green-500 px-5 sm:px-6 md:px-7 py-3 md:py-4 rounded-lg text-sm sm:text-base'>
                 <PlayStore className='mr-2 h-5 w-5' />
                 Play Store
