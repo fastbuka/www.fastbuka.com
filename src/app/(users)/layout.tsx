@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { AppSidebar } from '@/components/AppSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/Partials/use-toast';
 import { Loader2 } from 'lucide-react';
 
 interface User {
