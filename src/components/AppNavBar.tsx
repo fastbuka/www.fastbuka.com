@@ -54,9 +54,11 @@ export default function AppNavBar() {
 
         {/* Actions */}
         <div className='flex items-center gap-2'>
-          <Button variant='ghost' size='icon'>
-            <ShoppingBag className='h-5 w-5' />
-          </Button>
+          <Link href='/cart'>
+            <Button variant='ghost' size='icon'>
+              <ShoppingBag className='h-5 w-5' />
+            </Button>
+          </Link>
           {user ? (
             <Link href='/dashboard'>
               <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
