@@ -69,7 +69,7 @@ export default function UserWallet() {
   }, [user, fetchProfile]);
 
   const formattedAddress = user?.walletAddress
-    ? `${user.walletAddress.slice(0, 9)}...${user.walletAddress.slice(-9)}`
+    ? `${user.walletAddress.slice(0, 4)}...${user.walletAddress.slice(-4)}`
     : '';
 
   const handleTopUp = (method: string) => {

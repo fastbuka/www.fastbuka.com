@@ -5,7 +5,14 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useUser } from '@/hooks/users';
 import { Button } from '@/components/ui/button';
-import { MapPin, Search, ShoppingBag, MenuIcon, Sidebar, SidebarOpenIcon } from 'lucide-react';
+import {
+  MapPin,
+  Search,
+  ShoppingBag,
+  MenuIcon,
+  Sidebar,
+  SidebarOpenIcon,
+} from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function AppNavBar() {
@@ -29,14 +36,6 @@ export default function AppNavBar() {
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-white'>
       <div className='container mx-auto flex h-16 items-center justify-between px-4'>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant='ghost' size='icon' className='flex items-center'>
-              <SidebarOpenIcon className='h-9 w-6' />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side='left'>{/* Mobile menu content */}</SheetContent>
-        </Sheet>
         {/* Logo */}
         <div className='flex items-center gap-6'>
           <Link href='/' className='flex items-center gap-2 pt-2'>
@@ -61,7 +60,7 @@ export default function AppNavBar() {
         </div>
 
         {/* Actions */}
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center'>
           <Link href='/cart'>
             <Button variant='ghost' size='icon'>
               <ShoppingBag className='h-5 w-5' />
@@ -80,6 +79,44 @@ export default function AppNavBar() {
               </Button>
             </Link>
           )}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant='ghost'
+                size='icon'
+                className='flex items-center md:hidden'
+              >
+                <SidebarOpenIcon className='h-9 w-6' />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side='left'>
+              {user ? (
+                <div className='space-y-3 py-3'>
+                  <Link href='/dashboard'>
+                    <Button className='bg-emerald-600 hover:bg-emerald-700 w-full'>
+                      Dashboard
+                    </Button>
+                  </Link>
+                  <Button className='bg-red-600 hover:bg-red-700 w-full'>
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className='flex flex-col gap-3 py-3'>
+                  <Link href='/register'>
+                    <Button className='bg-slate-600 hover:bg-slate-700 w-full'>
+                      Register
+                    </Button>
+                  </Link>
+                  <Link href='/login'>
+                    <Button className='bg-slate-600 hover:bg-slate-700 w-full'>
+                      Login
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

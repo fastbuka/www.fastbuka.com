@@ -73,11 +73,11 @@ export default function UserLayout({
             <Separator orientation='vertical' className='mr-2 h-4' />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem>
+                <BreadcrumbItem className='hidden md:block'>
                   <BreadcrumbPage>{user?.profile?.first_name}</BreadcrumbPage>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
-                <BreadcrumbItem className='capitalize hidden md:block'>
+                <BreadcrumbItem className='capitalize'>
                   <BreadcrumbLink href={pathname}>
                     {pathname.replace(/^\//, '')}
                   </BreadcrumbLink>
