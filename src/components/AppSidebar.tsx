@@ -1,23 +1,22 @@
 'use client';
 
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DashboardIcon } from '@radix-ui/react-icons';
 import {
-  Settings,
-  ShoppingBag,
-  Ticket,
-  Wallet,
-  Menu,
   X,
+  Menu,
+  PieChart,
+  ShoppingBag,
+  Wallet,
+  Ticket,
+  Settings,
   LogOut,
 } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import Image from 'next/image';
 
 interface User {
   email: string;
@@ -33,7 +32,7 @@ interface AppSidebarProps {
 }
 
 const items = [
-  { title: 'Dashboard', url: '/dashboard', icon: DashboardIcon },
+  { title: 'Dashboard', url: '/dashboard', icon: PieChart },
   { title: 'Orders', url: '/orders', icon: ShoppingBag },
   { title: 'Wallet', url: '/wallet', icon: Wallet },
   { title: 'Tickets', url: '/tickets', icon: Ticket },
@@ -101,7 +100,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                   </Button>
                 )}
               </div>
-              {user && (
+              {/* {user && (
                 <div className='flex items-center space-x-4 p-4 border-b bg-green-50'>
                   <Avatar className='h-10 w-10'>
                     <AvatarImage
@@ -130,7 +129,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                     </p>
                   </div>
                 </div>
-              )}
+              )} */}
               <ScrollArea className='flex-1 py-4'>
                 <nav className='space-y-1 px-2'>
                   {items.map((item) => (

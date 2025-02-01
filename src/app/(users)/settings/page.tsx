@@ -108,173 +108,168 @@ export default function UserSettings() {
           </Alert>
         </motion.div>
       ) : (
-        <motion.div
-          initial='hidden'
-          animate='visible'
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-          }}
-          className='space-y-8 max-w-4xl mx-auto p-4'
-        >
-          <div className='flex justify-between items-center'>
-            <motion.h1
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className='text-4xl font-bold text-gray-800'
-            >
-              Account Settings
-            </motion.h1>
-            <Button
-              onClick={fetchProfile}
-              variant='outline'
-              size='sm'
-              className='bg-white hover:bg-gray-100 transition-colors'
-            >
-              <RefreshCw className='mr-2 h-4 w-4' />
-              Refresh
-            </Button>
-          </div>
+        <CardContent>
+          <motion.div
+            initial='hidden'
+            animate='visible'
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+            }}
+            className='space-y-8 py-5'
+          >
+            <div className='flex justify-end items-center'>
+              <Button
+                onClick={fetchProfile}
+                variant='outline'
+                size='sm'
+                className='bg-white hover:bg-gray-100 transition-colors'
+              >
+                <RefreshCw className='mr-2 h-4 w-4' />
+                Refresh
+              </Button>
+            </div>
 
-          <motion.div variants={cardVariants}>
-            <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
-              <CardHeader>
-                <CardTitle className='text-2xl font-bold text-gray-800'>
-                  Profile Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className='flex items-center space-x-4 mb-6'>
-                  <div className='relative w-20 h-20'>
-                    <img
-                      src={user?.profile.avatar || '/images/profile.png'}
-                      alt='Profile'
-                      className='rounded-full'
-                      onError={(e) => {
-                        e.currentTarget.src = '/images/logo.png';
-                      }}
-                    />
+            <motion.div variants={cardVariants}>
+              <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
+                <CardHeader>
+                  <CardTitle className='text-2xl font-bold text-gray-800'>
+                    Profile Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className='flex items-center space-x-4 mb-6'>
+                    <div className='relative w-20 h-20'>
+                      <img
+                        src={user?.profile.avatar || '/images/profile.png'}
+                        alt='Profile'
+                        className='rounded-full'
+                        onError={(e) => {
+                          e.currentTarget.src = '/images/logo.png';
+                        }}
+                      />
+                    </div>
+                    <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
+                      Change Avatar
+                    </Button>
                   </div>
-                  <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
-                    Change Avatar
-                  </Button>
-                </div>
 
-                <form onSubmit={handleUpdateProfile}>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
-                    <div>
+                  <form onSubmit={handleUpdateProfile}>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          First Name
+                        </label>
+                        <Input
+                          type='text'
+                          name='first_name'
+                          value={user?.profile.first_name || ''}
+                          onChange={handleInputChange}
+                          className='w-full'
+                        />
+                      </div>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          Last Name
+                        </label>
+                        <Input
+                          type='text'
+                          name='last_name'
+                          value={user?.profile.last_name || ''}
+                          onChange={handleInputChange}
+                          className='w-full'
+                        />
+                      </div>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          Email
+                        </label>
+                        <Input
+                          type='email'
+                          name='email'
+                          value={user?.email || ''}
+                          onChange={handleInputChange}
+                          className='w-full'
+                          disabled
+                        />
+                      </div>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          Phone Number
+                        </label>
+                        <Input
+                          type='tel'
+                          name='phone'
+                          value={user?.profile.phone || ''}
+                          onChange={handleInputChange}
+                          className='w-full'
+                        />
+                      </div>
+                    </div>
+
+                    <div className='mb-4'>
                       <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        First Name
+                        Address
                       </label>
                       <Input
                         type='text'
-                        name='first_name'
-                        value={user?.profile.first_name || ''}
+                        name='address'
+                        value={user?.profile.address || ''}
                         onChange={handleInputChange}
                         className='w-full'
                       />
                     </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Last Name
-                      </label>
-                      <Input
-                        type='text'
-                        name='last_name'
-                        value={user?.profile.last_name || ''}
-                        onChange={handleInputChange}
-                        className='w-full'
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Email
-                      </label>
-                      <Input
-                        type='email'
-                        name='email'
-                        value={user?.email || ''}
-                        onChange={handleInputChange}
-                        className='w-full'
-                        disabled
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Phone Number
-                      </label>
-                      <Input
-                        type='tel'
-                        name='phone'
-                        value={user?.profile.phone || ''}
-                        onChange={handleInputChange}
-                        className='w-full'
-                      />
-                    </div>
-                  </div>
 
-                  <div className='mb-4'>
-                    <label className='block text-sm font-medium text-gray-700 mb-1'>
-                      Address
-                    </label>
-                    <Input
-                      type='text'
-                      name='address'
-                      value={user?.profile.address || ''}
-                      onChange={handleInputChange}
-                      className='w-full'
-                    />
-                  </div>
+                    <Button
+                      type='submit'
+                      className='bg-green-600 text-white'
+                      disabled={loading}
+                    >
+                      {loading ? 'Updating...' : 'Update Profile'}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-                  <Button
-                    type='submit'
-                    className='bg-green-600 text-white'
-                    disabled={loading}
-                  >
-                    {loading ? 'Updating...' : 'Update Profile'}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div variants={cardVariants}>
-            <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
-              <CardHeader>
-                <CardTitle className='text-2xl font-bold text-gray-800'>
-                  Change Password
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Current Password
-                      </label>
-                      <Input type='password' className='w-full' />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        New Password
-                      </label>
-                      <Input type='password' className='w-full' />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Confirm New Password
-                      </label>
-                      <Input type='password' className='w-full' />
-                    </div>
-                  </div>
-                  <Button className='bg-blue-600 text-white'>
+            <motion.div variants={cardVariants}>
+              <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
+                <CardHeader>
+                  <CardTitle className='text-2xl font-bold text-gray-800'>
                     Change Password
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={(e) => e.preventDefault()}>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          Current Password
+                        </label>
+                        <Input type='password' className='w-full' />
+                      </div>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          New Password
+                        </label>
+                        <Input type='password' className='w-full' />
+                      </div>
+                      <div>
+                        <label className='block text-sm font-medium text-gray-700 mb-1'>
+                          Confirm New Password
+                        </label>
+                        <Input type='password' className='w-full' />
+                      </div>
+                    </div>
+                    <Button className='bg-blue-600 text-white'>
+                      Change Password
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
-        </motion.div>
+        </CardContent>
       )}
     </AnimatePresence>
   );

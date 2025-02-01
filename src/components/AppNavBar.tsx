@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useUser } from '@/hooks/users';
 import { Button } from '@/components/ui/button';
-import { MapPin, Search, ShoppingBag, MenuIcon } from 'lucide-react';
+import { MapPin, Search, ShoppingBag, MenuIcon, Sidebar, SidebarOpenIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function AppNavBar() {
@@ -29,6 +29,14 @@ export default function AppNavBar() {
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-white'>
       <div className='container mx-auto flex h-16 items-center justify-between px-4'>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant='ghost' size='icon' className='flex items-center'>
+              <SidebarOpenIcon className='h-9 w-6' />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side='left'>{/* Mobile menu content */}</SheetContent>
+        </Sheet>
         {/* Logo */}
         <div className='flex items-center gap-6'>
           <Link href='/' className='flex items-center gap-2 pt-2'>
@@ -72,14 +80,6 @@ export default function AppNavBar() {
               </Button>
             </Link>
           )}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant='ghost' size='icon' className='md:hidden'>
-                <MenuIcon className='h-6 w-6' />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side='left'>{/* Mobile menu content */}</SheetContent>
-          </Sheet>
         </div>
       </div>
     </header>
