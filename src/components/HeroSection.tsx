@@ -37,7 +37,7 @@ export default function HeroSection() {
   return (
     <section className='relative bg-white'>
       {/* Top Section: Text + Buttons */}
-      <div className='container mx-auto flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 lg:py-16 mb-8 sm:mb-10 md:mb-12 lg:mb-[120px] min-h-scren'>
+      <div className='container mx-auto flex flex-col items-center justify-center py-8 sm:py-10 md:py-12 lg:py-16 mb-8 sm:mb-10 md:mb-12 lg:mb-[120px]'>
         <div className='w-full max-w-2xl text-center space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8 px-6 sm:px-8 md:px-10'>
           <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-snug'>
             Are you <span className='text-green-500'>Hungry?</span> Place an
