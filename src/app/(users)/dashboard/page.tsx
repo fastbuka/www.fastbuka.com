@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/table';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Notifications } from '@/components/Notifications';
 
 interface UserProfile {
   balance: number;
@@ -63,12 +64,6 @@ function DashboardCard({
   );
 }
 
-const mockOrders: Order[] = [
-  { id: '1', date: '2023-06-01', total: 25.99, status: 'Delivered' },
-  { id: '2', date: '2023-06-03', total: 34.5, status: 'Processing' },
-  { id: '3', date: '2023-06-05', total: 19.99, status: 'Pending' },
-];
-
 export default function UserDashboard() {
   const { profile } = useUser();
   const [loading, setLoading] = useState(true);
@@ -92,7 +87,6 @@ export default function UserDashboard() {
   useEffect(() => {
     if (!user) {
       fetchProfile();
-      setOrders(mockOrders);
     }
   }, [user, fetchProfile]);
 
@@ -126,98 +120,64 @@ export default function UserDashboard() {
             hidden: { opacity: 0 },
             visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
           }}
-          className='space-y-8'
+          className='space-y-1 py-2'
         >
-          <div className='flex justify-between items-center'>
-            <motion.h1
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className='text-4xl font-bold text-gray-800'
-            >
-              Welcome, {user?.profile?.first_name}!
-            </motion.h1>
-            <Button
-              onClick={fetchProfile}
-              variant='outline'
-              size='sm'
-              className='bg-white hover:bg-gray-100 transition-colors'
-            >
-              <RefreshCcw className='mr-2 h-4 w-4' />
-              Refresh
-            </Button>
-          </div>
+          <CardContent>
+            <div className='flex justify-end items-center'>
+              <Button
+                onClick={fetchProfile}
+                variant='outline'
+                size='sm'
+                className='bg-white hover:bg-gray-100 transition-colors'
+              >
+                <RefreshCcw className='mr-2 h-4 w-4' />
+                Refresh
+              </Button>
+            </div>
+          </CardContent>
 
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            <DashboardCard
-              title='Wallet Balance'
-              value={user?.balance || 0}
-              icon={<Wallet className='h-6 w-6 text-white' />}
-              color='bg-gradient-to-r from-green-400 to-green-600'
-            />
-            <DashboardCard
-              title='Active Orders'
-              value={
-                orders.filter((order) => order.status !== 'Delivered').length
-              }
-              icon={<AlertCircle className='h-6 w-6 text-white' />}
-              color='bg-gradient-to-r from-yellow-400 to-yellow-600'
-            />
-            <DashboardCard
-              title='Total Orders'
-              value={orders.length}
-              icon={<ShoppingBag className='h-6 w-6 text-white' />}
-              color='bg-gradient-to-r from-blue-400 to-blue-600'
-            />
-          </div>
+          <CardContent>
+            <div className='flex flex-1 flex-col gap-4 pt-0'>
+              <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
+                <DashboardCard
+                  title='Wallet Balance'
+                  value={user?.balance || 0}
+                  icon={<Wallet className='h-6 w-6 text-white' />}
+                  color='bg-gradient-to-r from-green-400 to-green-600 aspect-video rounded-xl'
+                />
+                <DashboardCard
+                  title='Active Orders'
+                  value={
+                    orders.filter((order) => order.status !== 'Delivered')
+                      .length
+                  }
+                  icon={<AlertCircle className='h-6 w-6 text-white' />}
+                  color='bg-gradient-to-r from-yellow-400 to-yellow-600 aspect-video rounded-xl'
+                />
+                <DashboardCard
+                  title='Total Orders'
+                  value={orders.length}
+                  icon={<ShoppingBag className='h-6 w-6 text-white' />}
+                  color='bg-gradient-to-r from-blue-400 to-blue-600 aspect-video rounded-xl'
+                />
+              </div>
+            </div>
+          </CardContent>
 
-          <motion.div variants={cardVariants}>
-            <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
-              <CardHeader>
-                <CardTitle className='text-2xl font-bold text-gray-800'>
-                  Recent Orders
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className='text-gray-600'>Order ID</TableHead>
-                      <TableHead className='text-gray-600'>Date</TableHead>
-                      <TableHead className='text-gray-600'>Total</TableHead>
-                      <TableHead className='text-gray-600'>Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {orders.map((order) => (
-                      <TableRow
-                        key={order.id}
-                        className='hover:bg-gray-50 transition-colors'
-                      >
-                        <TableCell className='font-medium'>
-                          {order.id}
-                        </TableCell>
-                        <TableCell>{order.date}</TableCell>
-                        <TableCell>${order.total.toFixed(2)}</TableCell>
-                        <TableCell>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              order.status === 'Delivered'
-                                ? 'bg-green-100 text-green-800'
-                                : order.status === 'Processing'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-blue-100 text-blue-800'
-                            }`}
-                          >
-                            {order.status}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </motion.div>
+          <CardContent>
+            <motion.div variants={cardVariants}>
+              <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
+                <CardHeader>
+                  <CardTitle className='text-2xl font-bold text-gray-800'>
+                    Notifications
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Notifications />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </CardContent>
         </motion.div>
       )}
     </AnimatePresence>

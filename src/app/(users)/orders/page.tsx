@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CardContent } from '@/components/ui/card';
 
 const orderStatuses = ['Active', 'Completed', 'Cancelled'];
 
@@ -64,10 +65,8 @@ export default function UserOrders() {
   const tabColors = ['bg-green-500', 'bg-blue-500', 'bg-red-500'];
 
   return (
-    <div>
-      <h1 className='text-2xl md:text-4xl font-bold mb-6'>Your Orders</h1>
-
-      <Tabs defaultValue='Active' className='w-full'>
+    <CardContent>
+      <Tabs defaultValue='Active' className='py-5 w-full'>
         <TabsList>
           {orderStatuses.map((status) => (
             <TabsTrigger key={status} value={status}>
@@ -110,6 +109,6 @@ export default function UserOrders() {
           </TabsContent>
         ))}
       </Tabs>
-    </div>
+    </CardContent>
   );
 }
