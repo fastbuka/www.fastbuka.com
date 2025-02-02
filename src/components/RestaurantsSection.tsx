@@ -35,10 +35,11 @@ export default function RestaurantsSection() {
     const fetchData = async () => {
       try {
         const response = await vendors();
-        setRestaurants(response.data);
+        setRestaurants(response.data.vendors);
       } catch (error) {
         setMessage('Failed to load categories');
       }
+      setLoading(false);
     };
 
     fetchData();
@@ -49,14 +50,14 @@ export default function RestaurantsSection() {
       <div className='container mx-auto px-4'>
         <div className='text-center pb-16'>
           <h2 className='text-2xl md:text-4xl sm:text-5xl lg:text-6xl font-bold text-center text-green-700 leading-tight'>
-            Top Vendors
+            Top Stores
             <br />
             for Every Craving
           </h2>
           <p className='text-center mt-4 text-gray-600 max-w-3xl mx-auto text-md sm:text-xl'>
-            Savor wholesome meals bursting with flavor. We&apos;ve got you
-            covered with our fast and fresh delivery service. Satisfaction
-            guaranteed!
+            Our vendors take pride in crafting dishes that are both healthy,
+            tasty and irresisting. Get yours delivered at your doorstep by
+            placing an order! Fast delivery is guaranteed!
           </p>
         </div>
         <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>

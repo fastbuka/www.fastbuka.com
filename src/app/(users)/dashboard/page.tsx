@@ -3,16 +3,8 @@
 import { useUser } from '@/hooks/users';
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Wallet, AlertCircle, RefreshCcw } from 'lucide-react';
+import { ShoppingBag, Wallet, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Notifications } from '@/components/Notifications';
@@ -113,16 +105,16 @@ export default function UserDashboard() {
           </Alert>
         </motion.div>
       ) : (
-        <motion.div
-          initial='hidden'
-          animate='visible'
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-          }}
-          className='space-y-1 py-2'
-        >
-          <CardContent>
+        <CardContent>
+          <motion.div
+            initial='hidden'
+            animate='visible'
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+            }}
+            className='space-y-3 py-3'
+          >
             <div className='flex justify-end items-center'>
               <Button
                 onClick={fetchProfile}
@@ -130,13 +122,11 @@ export default function UserDashboard() {
                 size='sm'
                 className='bg-white hover:bg-gray-100 transition-colors'
               >
-                <RefreshCcw className='mr-2 h-4 w-4' />
+                <RefreshCw className='mr-2 h-4 w-4' />
                 Refresh
               </Button>
             </div>
-          </CardContent>
 
-          <CardContent>
             <div className='flex flex-1 flex-col gap-4 pt-0'>
               <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
                 <DashboardCard
@@ -162,9 +152,7 @@ export default function UserDashboard() {
                 />
               </div>
             </div>
-          </CardContent>
 
-          <CardContent>
             <motion.div variants={cardVariants}>
               <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
                 <CardHeader>
@@ -177,8 +165,8 @@ export default function UserDashboard() {
                 </CardContent>
               </Card>
             </motion.div>
-          </CardContent>
-        </motion.div>
+          </motion.div>
+        </CardContent>
       )}
     </AnimatePresence>
   );

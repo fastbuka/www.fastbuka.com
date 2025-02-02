@@ -44,8 +44,8 @@ export default function HeroSection() {
             order <span className='text-green-500'>Now</span>
           </h1>
           <p className='text-sm sm:text-base md:text-lg text-gray-600'>
-            We delivers hygienic and nutritious meals from your favorite local
-            restaurants in town.
+            We deliver food and groceries from your favorite local restaurant
+            and malls in townn.
           </p>
           <div className='flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 md:space-x-4 justify-center'>
             <Link href='/'>
@@ -129,10 +129,9 @@ export default function HeroSection() {
           {/* Right Column: Partner Logos */}
           <div className='flex flex-col space-y-6 md:space-y-8 relative z-10 mt-6 md:mt-0'>
             <p className='text-base md:text-xl text-white'>
-              Craving a delicious meal but short on time? We&apos;ve got you
-              covered with our fast and fresh delivery service. Place your order
-              and enjoy hot, freshly-prepared dishes delivered right to your
-              doorstep. Satisfaction guaranteed!
+              Craving a delicious meal but short on time? We’ve got nutritious
+              meal for your vibrant lifestyle. Where every bite is a
+              satisfaction for your taste bud and body.
             </p>
             <Link href='/feeds'>
               <Button className='bg-white text-green-500 px-7 md:px-9 py-7 md:py-9 rounded-full text-base md:text-lg font-semibold w-[180px] md:w-[220px]'>

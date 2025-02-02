@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CardContent } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
+import { RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const orderStatuses = ['Active', 'Completed', 'Cancelled'];
 
@@ -64,51 +67,79 @@ export default function UserOrders() {
 
   const tabColors = ['bg-green-500', 'bg-blue-500', 'bg-red-500'];
 
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const handleUpdate = async () => {};
+
   return (
     <CardContent>
-      <Tabs defaultValue='Active' className='py-5 w-full'>
-        <TabsList>
+      <motion.div
+        initial='hidden'
+        animate='visible'
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+        }}
+        className='space-y-3 py-3'
+      >
+        <div className='flex justify-end items-center'>
+          <Button
+            onClick={handleUpdate}
+            variant='outline'
+            size='sm'
+            className='bg-white hover:bg-gray-100 transition-colors'
+          >
+            <RefreshCw className='mr-2 h-4 w-4' />
+            Refresh
+          </Button>
+        </div>
+        <Tabs defaultValue='Active' className='h-fit w-full'>
+          <TabsList>
+            {orderStatuses.map((status) => (
+              <TabsTrigger key={status} value={status}>
+                {status}
+              </TabsTrigger>
+            ))}
+          </TabsList>
           {orderStatuses.map((status) => (
-            <TabsTrigger key={status} value={status}>
-              {status}
-            </TabsTrigger>
+            <TabsContent key={status} value={status}>
+              <div className='bg-white rounded-lg shadow-md overflow-auto scroll-hidden'>
+                <table className='w-full'>
+                  <thead>
+                    <tr className='bg-gray-100'>
+                      <th className='p-3 text-left'>Order ID</th>
+                      <th className='p-3 text-left'>Restaurant</th>
+                      <th className='p-3 text-left'>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders
+                      .filter((order) => order.status === status)
+                      .map((order) => (
+                        <tr key={order.uuid} className='border-b'>
+                          <td className='p-3'>
+                            {order.uuid.length > 5
+                              ? order.uuid.substring(0, 5)
+                              : order.uuid}
+                          </td>
+                          <td className='p-3'>
+                            {order.restaurant.length > 9
+                              ? order.restaurant.substring(0, 9) + '...'
+                              : order.restaurant}
+                          </td>
+                          <td className='p-3'>{order.total}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </TabsContent>
           ))}
-        </TabsList>
-        {orderStatuses.map((status) => (
-          <TabsContent key={status} value={status}>
-            <div className='bg-white rounded-lg shadow-md overflow-auto scroll-hidden'>
-              <table className='w-full'>
-                <thead>
-                  <tr className='bg-gray-100'>
-                    <th className='p-3 text-left'>Order ID</th>
-                    <th className='p-3 text-left'>Restaurant</th>
-                    <th className='p-3 text-left'>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders
-                    .filter((order) => order.status === status)
-                    .map((order) => (
-                      <tr key={order.uuid} className='border-b'>
-                        <td className='p-3'>
-                          {order.uuid.length > 5
-                            ? order.uuid.substring(0, 5)
-                            : order.uuid}
-                        </td>
-                        <td className='p-3'>
-                          {order.restaurant.length > 9
-                            ? order.restaurant.substring(0, 9) + '...'
-                            : order.restaurant}
-                        </td>
-                        <td className='p-3'>{order.total}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+        </Tabs>
+      </motion.div>
     </CardContent>
   );
 }

@@ -116,7 +116,7 @@ export default function UserSettings() {
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
             }}
-            className='space-y-8 py-5'
+            className='space-y-3 py-3'
           >
             <div className='flex justify-end items-center'>
               <Button
