@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
@@ -8,6 +7,7 @@ interface StoreFeedItemProps {
   store: {
     id: string;
     uuid: string;
+    slug: string;
     name: string;
     image: string;
     category: string;
@@ -19,14 +19,16 @@ interface StoreFeedItemProps {
 
 export function StoreFeedItem({ store }: StoreFeedItemProps) {
   return (
-    <Link href={`/stores/${store.id}`}>
+    <Link href={`/stores/${store.slug}`}>
       <Card className='overflow-hidden hover:shadow-md transition-shadow'>
         <div className='bg-slate-100 relative h-48'>
-          <Image
+          <img
+            className='object-cover'
             src={store.image || '/svg/placeholder.svg'}
+            onError={(e) => {
+              e.currentTarget.src = '/svg/placeholder.svg';
+            }}
             alt={store.name}
-            layout='fill'
-            objectFit='cover'
           />
         </div>
         <CardContent className='p-4'>

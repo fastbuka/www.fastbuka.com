@@ -6,6 +6,7 @@ import { StoreFeedItem } from '@/components/StoreFeedItem';
 interface Vendor {
   id: string;
   uuid: string;
+  slug: string;
   name: string;
   image: string;
   category: string;

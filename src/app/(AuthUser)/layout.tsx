@@ -3,7 +3,7 @@
 import { useUser } from '@/hooks/users';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
