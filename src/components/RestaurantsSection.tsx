@@ -5,7 +5,7 @@ import { useApp } from '@/hooks/app';
 import { Star } from 'lucide-react';
 import { Skeleton } from '@radix-ui/themes';
 
-interface Restaurant {
+interface Store {
   id: number;
   uuid: string;
   slug: string | null;
@@ -25,17 +25,17 @@ interface Restaurant {
   updatedAt: string;
 }
 
-export default function RestaurantsSection() {
+export default function StoreSection() {
   const { vendors } = useApp();
+  const [store, setStore] = useState([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await vendors();
-        setRestaurants(response.data.vendors);
+        setStore(response.data.vendors);
       } catch (error) {
         setMessage('Failed to load categories');
       }
@@ -60,9 +60,9 @@ export default function RestaurantsSection() {
             placing an order! Fast delivery is guaranteed!
           </p>
         </div>
-        <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
           {loading
-            ? Array.from({ length: 4 }).map((_, index) => (
+            ? Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={index}
                   className='group block overflow-hidden rounded-lg border transition-shadow hover:shadow-md'
@@ -83,33 +83,33 @@ export default function RestaurantsSection() {
                   </div>
                 </div>
               ))
-            : restaurants.map((restaurant: Restaurant) => (
+            : store.map((store: Store) => (
                 <Link
-                  key={restaurant.name}
-                  href='#'
+                  key={store.name}
+                  href={`/stores/${store.slug}`}
                   className='group block overflow-hidden rounded-lg border transition-shadow hover:shadow-md'
                 >
                   <div className='bg-slate-100 aspect-video overflow-hidden'>
                     <img
                       className='h-full w-full object-cover transition-transform group-hover:scale-105'
-                      src={restaurant.cover || '/svg/placeholder.svg'}
+                      src={store.cover || '/svg/placeholder.svg'}
                       onError={(e) => {
                         e.currentTarget.src = '/svg/placeholder.svg';
                       }}
-                      alt={restaurant.name}
+                      alt={store.name}
                     />
                   </div>
                   <div className='p-4'>
-                    <h3 className='font-semibold'>{restaurant.name}</h3>
+                    <h3 className='font-semibold'>{store.name}</h3>
                     <div className='mt-1 flex items-center gap-1'>
                       <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
                       <span className='text-sm'>
-                        {restaurant.ratings} ({restaurant.ratings})
+                        {store.ratings} ({store.ratings})
                       </span>
                     </div>
                     {/* <p className='mt-1 text-sm text-gray-600'>
-                      {restaurant.category} • {restaurant.is_online} min •{' '}
-                      {restaurant.is_online} delivery
+                      {store.category} • {store.is_online} min •{' '}
+                      {store.is_online} delivery
                     </p> */}
                   </div>
                 </Link>

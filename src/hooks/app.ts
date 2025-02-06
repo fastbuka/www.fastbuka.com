@@ -54,6 +54,11 @@ export const useApp = () => {
     }
   };
 
+  /**
+   * Show vendor
+   * @param param0 
+   * @returns 
+   */
   const vendor = async ({ vendor_slug }: { vendor_slug: string | null }) => {
     let response;
     try {
@@ -121,9 +126,37 @@ export const useApp = () => {
     }
   };
 
+  /**
+   * Show trending
+   * @returns 
+   */
+  const trending = async () => {
+    try {
+      const response = await axios.get('/api/v1/trending');
+      if (response.data.success) {
+        return {
+          success: true,
+          message: response.data.message || 'Successful',
+          data: response.data.data,
+        };
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Successful',
+        };
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: `Error: ${error.message}`,
+      };
+    }
+  };
+
   return {
     categories,
     products,
+    trending,
     vendors,
     vendor,
   };

@@ -2,23 +2,23 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { useUser } from '@/hooks/users';
+import { useCart } from '@/hooks/Partials/use-cart';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  MapPin,
-  Search,
-  ShoppingBag,
-  MenuIcon,
-  Sidebar,
-  SidebarOpenIcon,
-} from 'lucide-react';
+import { MapPin, Search, ShoppingBag, SidebarOpenIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useAuth } from '@/hooks/auth';
+import { useRouter } from 'next/navigation';
 
 export default function AppNavBar() {
+  const router = useRouter();
+
+  const { cart } = useCart();
+  const { logout } = useAuth();
   const { profile } = useUser();
-  const [location, setLocation] = useState('Lagos, Nigeria');
   const [user, setUser] = useState<any | null>(null);
+  const [location, setLocation] = useState('Lagos, Nigeria');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -32,6 +32,11 @@ export default function AppNavBar() {
 
     fetchProfile();
   }, [profile, setUser]);
+
+  function logOutAccount() {
+    logout();
+    router.push('/login');
+  }
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-white'>
@@ -62,8 +67,13 @@ export default function AppNavBar() {
         {/* Actions */}
         <div className='flex items-center'>
           <Link href='/cart'>
-            <Button variant='ghost' size='icon'>
+            <Button variant='ghost' size='icon' className='relative'>
               <ShoppingBag className='h-5 w-5' />
+              {cart.length > 0 && (
+                <span className='bg-red-500 text-white text-xs px-1.5 rounded-full absolute top-1 right-1'>
+                  {cart.length}
+                </span>
+              )}
             </Button>
           </Link>
           {user ? (
@@ -97,7 +107,10 @@ export default function AppNavBar() {
                       Dashboard
                     </Button>
                   </Link>
-                  <Button className='bg-red-600 hover:bg-red-700 w-full'>
+                  <Button
+                    onClick={logOutAccount}
+                    className='bg-red-600 hover:bg-red-700 w-full'
+                  >
                     Logout
                   </Button>
                 </div>

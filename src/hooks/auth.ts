@@ -77,9 +77,43 @@ export const useAuth = () => {
       };
     }
   };
+  /**
+   * Logout user
+   * @returns
+   */
+  const logout = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.delete('/api/v1/auth/logout', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        localStorage.removeItem('token');
+        return {
+          success: true,
+          message: response.data.message || 'Logout successful',
+        };
+      } else {
+        localStorage.removeItem('token');
+        return {
+          success: false,
+          message: response.data.message || 'Failed to login',
+        };
+      }
+    } catch (error: any) {
+      localStorage.removeItem('token');
+      return {
+        success: false,
+        message: error?.message || 'Invalid credentials, please try again.',
+      };
+    }
+  };
 
   return {
     register,
     login,
+    logout,
   };
 };

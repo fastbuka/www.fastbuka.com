@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCart } from '@/hooks/Partials/use-cart';
 import { Button } from '@/components/ui/button';
 
 interface CartItem {
@@ -9,41 +9,37 @@ interface CartItem {
   uuid: string;
   name: string;
   image: string;
-  price: string;
-  quantity: string;
-}
-
-interface Cart {
-  // CartItem: CartItem[];
+  price: number;
+  quantity: number;
 }
 
 export default function CartPage() {
-  let cart: any = [];
+  const {
+    cart,
+    addToCart,
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+  } = useCart();
 
-  // useEffect(() => {
-  //   cart = localStorage.getItem('cart') ?? [];
-  // }, [cart]);
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
-  function removeFromCart(remove: number) {
-    console.log(remove);
-  }
-  function handleQuantityChange(items: any, increament: number) {
-    console.log(increament);
-  }
+  const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
 
-  // const totalAmount: any = cart.reduce(
-  //   (total, item) => total + item.price * item.quantity,
-  //   0
-  // );
-  // const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
+  const increase = (item: CartItem) => {
+    increaseQuantity(item.uuid);
+  };
 
-  // const handleQuantityChange = (item: CartItem, change: number) => {
-  //   if (item.quantity + change > 0) {
-  //     addToCart({ ...item, quantity: change });
-  //   } else if (item.quantity + change === 0) {
-  //     removeFromCart(item.id);
-  //   }
-  // };
+  const decrease = (item: CartItem) => {
+    decreaseQuantity(item.uuid);
+  };
+
+  const remove = (item: CartItem) => {
+    removeFromCart(item.uuid);
+  };
 
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>
@@ -79,22 +75,22 @@ export default function CartPage() {
       ) : (
         <div className='flex flex-col md:flex-row gap-8'>
           <div className='flex-grow'>
-            {cart.map((item: CartItem) => (
+            {cart.map((item) => (
               <div
                 key={item.id}
                 className='flex items-center mb-6 bg-green-50 p-4 rounded-lg'
               >
                 <div className='w-24 h-24 mr-4 relative flex-shrink-0'>
                   <img
-                    src={item.image ?? 'images/logo.png'}
+                    src={item.image ?? '/svg/placeholder.svg'}
                     alt={item.name}
                     className='h-full w-full rounded-md'
                     onError={(e) => {
-                      e.currentTarget.src = 'images/logo.png';
+                      e.currentTarget.src = '/svg/placeholder.svg';
                     }}
                   />
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => remove(item)}
                     className='absolute -top-2 -left-2 bg-red-500 rounded-full p-1 shadow-md'
                   >
                     <svg
@@ -123,14 +119,14 @@ export default function CartPage() {
                 </div>
                 <div className='flex items-center'>
                   <button
-                    onClick={() => handleQuantityChange(item, -1)}
+                    onClick={() => decrease(item)}
                     className='w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600'
                   >
                     -
                   </button>
                   <span className='mx-3'>{item.quantity}</span>
                   <button
-                    onClick={() => handleQuantityChange(item, 1)}
+                    onClick={() => increase(item)}
                     className='w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600'
                   >
                     +
@@ -145,15 +141,15 @@ export default function CartPage() {
               <h2 className='text-xl font-semibold mb-4'>Subtotal</h2>
               <div className='flex justify-between mb-2'>
                 <span>Summary</span>
-                {/* <span>₦{totalAmount.toLocaleString()}</span> */}
+                <span>₦{totalAmount.toLocaleString()}</span>
               </div>
               <div className='flex justify-between mb-2'>
                 <span>Item count</span>
-                {/* <span>{itemCount}</span> */}
+                <span>{itemCount}</span>
               </div>
               <div className='flex justify-between font-bold mt-4'>
                 <span>Amount to pay</span>
-                {/* <span>₦{totalAmount.toLocaleString()}</span> */}
+                <span>₦{totalAmount.toLocaleString()}</span>
               </div>
               <Button className='w-full mt-6 bg-green-500 text-white py-3 rounded-full text-lg font-semibold'>
                 Checkout

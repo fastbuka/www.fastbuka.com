@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Star, Clock, MapPin, Phone } from 'lucide-react';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { useCart } from '@/hooks/Partials/cart-funtions';
+import { CardContent } from '@/components/ui/card';
+import { ProductsFeedSection } from '@/components/ProductsFeedSection';
 
 interface Vendor {
   id: string;
@@ -20,9 +20,10 @@ interface Vendor {
   address: string;
   description: string;
   quantity: number;
+  contact: string;
 }
 
-interface Food {
+interface Product {
   id: number;
   uuid: string;
   name: string;
@@ -36,11 +37,10 @@ interface Food {
 
 export default function StoreProfilePage() {
   const pathname = usePathname();
-  const { addToCart } = useCart();
   const { vendor, products } = useApp();
   const [message, setMessage] = useState('');
   const [data, setData] = useState<Vendor | null>(null);
-  const [items, setItems] = useState<Food[]>([]);
+  const [items, setItems] = useState<Product[]>([]);
 
   const vendor_slug = pathname.split('/').pop() || null;
 
@@ -74,11 +74,6 @@ export default function StoreProfilePage() {
     fetchData();
   }, [vendor_slug, products]);
 
-  function submitTOCart(item: any) {
-    addToCart(item);
-    setMessage(`${item.name} added to cart!`);
-  }
-
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>
       <CardContent>
@@ -110,54 +105,20 @@ export default function StoreProfilePage() {
           <Button className='mt-4 md:mt-0'>Order Now</Button>
         </div>
         <p className='text-gray-700 mb-5'>{data?.description}</p>
-        <div className='grid md:grid-cols-2 gap-4 mb-5'>
+        <div className='grid justify-start md:grid-cols-2 gap-4 mb-5'>
           <div className='flex items-center'>
             <MapPin className='w-5 h-5 mr-2 text-gray-600' />
             <span>{data?.address}</span>
           </div>
-          {/* <div className='flex items-center'>
+          <div className='flex items-center'>
             <Phone className='w-5 h-5 mr-2 text-gray-600' />
-            <span>{data?.phone}</span>
-          </div> */}
+            <span>{data?.contact}</span>
+          </div>
         </div>
 
         <div className='grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
           {items.map((item) => (
-            <div key={item.uuid}>
-              <Card>
-                <div className='bg-slate-100 relative h-56'>
-                  <img
-                    className='h-full w-full object-cover'
-                    src={item.image || '/svg/placeholder.svg'}
-                    onError={(e) => {
-                      e.currentTarget.src = '/svg/placeholder.svg';
-                    }}
-                    alt={item.name}
-                  />
-                </div>
-                <div className='px-4'>
-                  <h3 className='text-lg font-semibold mb-2'>{item.name}</h3>
-                  <Badge variant='secondary' className='mb-2'>
-                    {item.category}
-                  </Badge>
-                  <div className='flex items-center text-sm text-gray-600'>
-                    <Star className='w-4 h-4 text-yellow-400 mr-1' />
-                    <span>{item.ratings}</span>
-                  </div>
-                </div>
-                <div className='flex justify-between items-center px-4 text-sm text-gray-600'>
-                  <div className='flex flex-cols gap-2'>
-                    <span>{item.processing_time}Min</span>
-                    <span>{/* <span>{data?.distance}</span> */}10KM</span>
-                  </div>
-                  <div className='p-4 flex justify-between text-sm text-gray-600'>
-                    <Button onClick={() => submitTOCart(item)}>
-                      Add to cart
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            </div>
+            <ProductsFeedSection key={item.uuid} item={item} />
           ))}
         </div>
       </CardContent>
