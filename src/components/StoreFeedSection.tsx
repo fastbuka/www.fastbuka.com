@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react';
 import { StoreFeedItem } from '@/components/StoreFeedItem';
 
 interface Vendor {
-  id: string;
+  id: number;
   uuid: string;
+  slug: string;
   name: string;
   image: string;
   category: string;
@@ -32,8 +33,9 @@ export function StoreFeedSection() {
     fetchData();
   }, [vendors]);
 
+
   return (
-    <div className='grid gap-6 md:grid-cols-4'>
+    <div className='grid gap-6 md:grid-cols-3'>
       {data.map((store) => (
         <StoreFeedItem key={store.id} store={store} />
       ))}

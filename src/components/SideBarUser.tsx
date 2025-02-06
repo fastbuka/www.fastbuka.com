@@ -1,14 +1,7 @@
 'use client';
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
-} from 'lucide-react';
-
+import { useAuth } from '@/hooks/auth';
+import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -25,8 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import Link from 'next/link';
 
-export function NavUser({
+export function SideBarUser({
   user,
 }: {
   user: {
@@ -38,7 +32,12 @@ export function NavUser({
     };
   } | null;
 }) {
+  const { logout } = useAuth();
   const { isMobile } = useSidebar();
+
+  function logOutAccount() {
+    logout();
+  }
 
   return (
     <SidebarMenu>
@@ -97,17 +96,22 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
+              <Link href={'settings'}>
+                <DropdownMenuItem>
+                  <BadgeCheck />
+                  Account
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>
                 <Bell />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={logOutAccount}
+              className='cursor-pointer'
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

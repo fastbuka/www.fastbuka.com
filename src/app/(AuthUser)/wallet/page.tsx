@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Wallet,
-  RefreshCcw,
+  RefreshCw,
   Check,
   Copy,
   DollarSign,
@@ -151,7 +151,7 @@ export default function UserWallet() {
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
             }}
-            className='space-y-8 py-5'
+            className='space-y-3 py-3'
           >
             <div className='flex justify-end items-center'>
               <Button
@@ -160,7 +160,7 @@ export default function UserWallet() {
                 size='sm'
                 className='bg-white hover:bg-gray-100 transition-colors'
               >
-                <RefreshCcw className='mr-2 h-4 w-4' />
+                <RefreshCw className='mr-2 h-4 w-4' />
                 Refresh
               </Button>
             </div>
@@ -222,7 +222,7 @@ export default function UserWallet() {
                         onClick={() => handleTopUp('exchange')}
                         className='flex items-center justify-center'
                       >
-                        <RefreshCcw className='h-5 w-5 mr-2' />
+                        <RefreshCw className='h-5 w-5 mr-2' />
                         Top-Up with Exchange
                       </Button>
                     </div>

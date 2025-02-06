@@ -35,7 +35,7 @@ const notifications: Notification[] = [
 
 export function Notifications() {
   return (
-    <div className='flex-1 rounded-xl bg-muted/50'>
+    <div className='flex flex-col gap-3 rounded-xl'>
       {notifications.map((notification) => (
         <div
           key={notification.id}

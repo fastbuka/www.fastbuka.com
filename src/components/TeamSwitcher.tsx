@@ -1,48 +1,25 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown, Plus } from 'lucide-react';
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from '@/components/ui/sidebar';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string;
-    logo: React.ElementType;
-    plan: string;
-  }[];
-}) {
+export function TeamSwitcher() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton
           size='lg'
-          className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+          className='flex justify-center border rounded data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
         >
-          <Link
-            href='/'
-            className='flex items-center justify-center border rounded-lg'
-          >
+          <Link href='/' className='flex justify-center items-center'>
             <Image
-              className='h-9 w-12 object-cover'
+              className='h-12 w-16 object-cover'
               src='/svg/logo.svg'
               alt='logo'
               height={100}

@@ -3,7 +3,7 @@
 import { useUser } from '@/hooks/users';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +19,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface User {
   email: string;
@@ -34,6 +35,7 @@ export default function UserLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
   const { profile } = useUser();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -47,6 +49,7 @@ export default function UserLayout({
           setUser(response.data.user);
         } else {
           setUser(null);
+          router.push('/login');
         }
       } finally {
         setLoading(false);
