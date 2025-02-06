@@ -9,11 +9,8 @@ import { Button } from '@/components/ui/button';
 import { MapPin, Search, ShoppingBag, SidebarOpenIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAuth } from '@/hooks/auth';
-import { useRouter } from 'next/navigation';
 
 export default function AppNavBar() {
-  const router = useRouter();
-
   const { cart } = useCart();
   const { logout } = useAuth();
   const { profile } = useUser();
@@ -35,7 +32,6 @@ export default function AppNavBar() {
 
   function logOutAccount() {
     logout();
-    router.push('/login');
   }
 
   return (
