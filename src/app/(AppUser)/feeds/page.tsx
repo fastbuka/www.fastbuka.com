@@ -7,7 +7,6 @@ import { useApp } from '@/hooks/app';
 import { CardContent } from '@/components/ui/card';
 
 interface Product {
-  id: number;
   uuid: string;
   name: string;
   price: number;
@@ -39,7 +38,6 @@ export default function TrendingPage() {
     fetchData();
   }, [trending]);
 
-  console.log(items);
 
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>

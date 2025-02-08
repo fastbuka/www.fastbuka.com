@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
 type Item = {
-  id: number;
   uuid: string;
   name: string;
   image: string;
