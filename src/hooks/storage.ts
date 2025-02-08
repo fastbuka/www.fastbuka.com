@@ -1,5 +1,5 @@
 import { storage } from '@/lib/axios';
-const env = 'dev';
+const env = process.env.NEXT_PUBLIC_ENV;
 
 export const useStorage = () => {
   /**
