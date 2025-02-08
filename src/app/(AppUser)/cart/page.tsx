@@ -5,7 +5,6 @@ import { useCart } from '@/hooks/Partials/use-cart';
 import { Button } from '@/components/ui/button';
 
 interface CartItem {
-  id: number;
   uuid: string;
   name: string;
   image: string;
@@ -77,7 +76,7 @@ export default function CartPage() {
           <div className='flex-grow'>
             {cart.map((item) => (
               <div
-                key={item.id}
+                key={item.uuid}
                 className='flex items-center mb-6 bg-green-50 p-4 rounded-lg'
               >
                 <div className='w-24 h-24 mr-4 relative flex-shrink-0'>
