@@ -1,62 +1,210 @@
-// "use client";
+'use client';
 
-// import { useCart } from "@/context/CartContext";
-// import { useRouter } from "next/navigation";
-// import { useEffect, useState } from "react";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Progress } from '@/components/ui/progress';
+import CheckoutLayout from './Partials/CheckoutLayout';
 
-// export default function CheckoutPage() {
-//   const { cartItems, clearCart } = useCart();
-//   const router = useRouter();
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+const formSchema = z.object({
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(11, 'Phone number must be at least 11 digits'),
+  address: z.string().min(5, 'Please select a valid address'),
+});
 
-//   // Check if user is authenticated using NuxtJS token or your own logic
-//   useEffect(() => {
-//     const token = localStorage.getItem("nuxt-auth-token");
-//     if (token) {
-//       setIsAuthenticated(true);
-//     } else {
-//       router.push("/auth/login"); // Redirect to login if not authenticated
-//     }
-//   }, [router]);
+const mockAddresses = [
+  '123 Victoria Island, Lagos',
+  '45 Allen Avenue, Ikeja',
+  '78 Admiralty Way, Lekki Phase 1',
+  '90 Adeola Odeku Street, Victoria Island',
+  '321 Herbert Macaulay Way, Yaba',
+];
 
-//   if (!isAuthenticated) {
-//     return <div>Redirecting to login...</div>;
-//   }
+export default function CheckoutPage() {
+  const router = useRouter();
+  const [addressSearch, setAddressSearch] = useState('');
+  const [open, setOpen] = useState(false);
 
-//   return (
-//     <div className="max-w-7xl mx-auto px-4 py-16">
-//       <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-//       <ul>
-//         {cartItems.map((item) => (
-//           <li key={item.id}>
-//             <div className="flex items-center justify-between mb-4">
-//               <span>{item.name}</span>
-//               <span>{item.quantity} x ₦{item.price}</span>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//       <button
-//         onClick={() => {
-//           // Handle checkout logic here
-//           clearCart();
-//           router.push("/thank-you");
-//         }}
-//         className="bg-green-500 text-white px-6 py-3 rounded-lg mt-8"
-//       >
-//         Place Order
-//       </button>
-//     </div>
-//   );
-// }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      address: '',
+    },
+  });
 
-import React from 'react'
+  const filteredAddresses = mockAddresses.filter((address) =>
+    address.toLowerCase().includes(addressSearch.toLowerCase())
+  );
 
-export default function page() {
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Here you would typically save the delivery information
+    console.log(values);
+    router.push('/checkout/payment');
+  }
+
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <CheckoutLayout>
+      <div className='mb-8'>
+        <Progress value={50} className='bg-green-500 h-2' />
+      </div>
+      <div className='space-y-8'>
+        <div>
+          <h1 className='text-2xl font-bold'>Delivery Information</h1>
+          <p className='text-gray-500'>Please enter your delivery details</p>
+        </div>
 
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <FormField
+                control={form.control}
+                name='firstName'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder='John' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='lastName'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder='Doe' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='john@example.com'
+                        type='email'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='phone'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder='08012345678' type='tel' {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name='address'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Delivery Address</FormLabel>
+                  <FormControl>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant='outline'
+                          role='combobox'
+                          className='w-full justify-between'
+                        >
+                          {field.value || 'Search address...'}
+                          <Search className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className='w-full p-0'>
+                        <Command>
+                          <CommandInput
+                            placeholder='Search address...'
+                            value={addressSearch}
+                            onValueChange={setAddressSearch}
+                          />
+                          <CommandList>
+                            <CommandEmpty>No address found.</CommandEmpty>
+                            <CommandGroup>
+                              {filteredAddresses.map((address) => (
+                                <CommandItem
+                                  key={address}
+                                  onSelect={() => {
+                                    form.setValue('address', address);
+                                    setOpen(false);
+                                  }}
+                                >
+                                  {address}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type='submit' className='bg-green-500 w-full'>
+              Continue to Payment
+            </Button>
+          </form>
+        </Form>
+      </div>
+    </CheckoutLayout>
+  );
+}

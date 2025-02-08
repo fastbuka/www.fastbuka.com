@@ -32,7 +32,7 @@ interface User {
   profile: {
     first_name: string;
     last_name: string;
-    avatar: string;
+    profile: string;
   };
 }
 

@@ -1,14 +1,14 @@
-import axios from '@/lib/axios';
+import { backend } from '@/lib/axios';
 
 export const useProduct = () => {
-   /**
+  /**
    * Products
    * @param param0
    * @returns
    */
-   const products = async () => {
+  const products = async () => {
     try {
-      const response = await axios.get('/api/v1/menu');
+      const response = await backend.get('/api/v1/menu');
       if (response.data.success) {
         return {
           success: true,
@@ -28,7 +28,6 @@ export const useProduct = () => {
       };
     }
   };
-
 
   /**
    * Vendors
@@ -37,7 +36,7 @@ export const useProduct = () => {
    */
   const vendors = async () => {
     try {
-      const response = await axios.get('/api/v1/vendor');
+      const response = await backend.get('/api/v1/vendor');
       if (response.data.success) {
         return {
           success: true,
@@ -58,15 +57,14 @@ export const useProduct = () => {
     }
   };
 
-
   /**
    * Vendor
-   * @param param0 
-   * @returns 
+   * @param param0
+   * @returns
    */
   const vendor = async ({ vendor_slug }: { vendor_slug: string }) => {
     try {
-      const response = await axios.get(`/api/v1/food/${vendor_slug}`);
+      const response = await backend.get(`/api/v1/food/${vendor_slug}`);
       if (response.data.success) {
         return {
           success: true,

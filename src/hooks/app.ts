@@ -1,5 +1,4 @@
-import axios from '@/lib/axios';
-import {} from 'react';
+import { backend } from '@/lib/axios';
 
 export const useApp = () => {
   /**
@@ -7,7 +6,7 @@ export const useApp = () => {
    */
   const categories = async () => {
     try {
-      const response = await axios.get('/api/v1/categories');
+      const response = await backend.get('/api/v1/categories');
       if (response.data.success) {
         return {
           success: true,
@@ -33,7 +32,7 @@ export const useApp = () => {
    */
   const vendors = async () => {
     try {
-      const response = await axios.get('/api/v1/vendors');
+      const response = await backend.get('/api/v1/vendors');
       if (response.data.success) {
         return {
           success: true,
@@ -56,14 +55,14 @@ export const useApp = () => {
 
   /**
    * Show vendor
-   * @param param0 
-   * @returns 
+   * @param param0
+   * @returns
    */
   const vendor = async ({ vendor_slug }: { vendor_slug: string | null }) => {
     let response;
     try {
       if (vendor_slug) {
-        response = await axios.get(`/api/v1/vendor/${vendor_slug}`);
+        response = await backend.get(`/api/v1/vendor/${vendor_slug}`);
       } else {
         response = {
           status: 404,
@@ -98,7 +97,7 @@ export const useApp = () => {
     let response;
     try {
       if (vendor_slug) {
-        response = await axios.get(`/api/v1/food/${vendor_slug}`);
+        response = await backend.get(`/api/v1/food/${vendor_slug}`);
       } else {
         response = {
           status: 404,
@@ -128,11 +127,11 @@ export const useApp = () => {
 
   /**
    * Show trending
-   * @returns 
+   * @returns
    */
   const trending = async () => {
     try {
-      const response = await axios.get('/api/v1/trending');
+      const response = await backend.get('/api/v1/trending');
       if (response.data.success) {
         return {
           success: true,

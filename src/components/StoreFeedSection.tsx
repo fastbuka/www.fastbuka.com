@@ -37,7 +37,7 @@ export function StoreFeedSection() {
   return (
     <div className='grid gap-6 md:grid-cols-3'>
       {data.map((store) => (
-        <StoreFeedItem key={store.id} store={store} />
+        <StoreFeedItem key={store.uuid} store={store} />
       ))}
     </div>
   );

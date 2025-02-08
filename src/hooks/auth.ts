@@ -1,4 +1,4 @@
-import axios from '@/lib/axios';
+import { backend } from '@/lib/axios';
 
 export const useAuth = () => {
   /**
@@ -16,7 +16,7 @@ export const useAuth = () => {
     password: string;
   }) => {
     try {
-      const response = await axios.post('/api/v1/auth/register', {
+      const response = await backend.post('/api/v1/auth/register', {
         name,
         email,
         password,
@@ -54,7 +54,7 @@ export const useAuth = () => {
     password: string;
   }) => {
     try {
-      const response = await axios.post('/api/v1/auth/login', {
+      const response = await backend.post('/api/v1/auth/login', {
         email,
         password,
       });
@@ -84,7 +84,7 @@ export const useAuth = () => {
   const logout = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete('/api/v1/auth/logout', {
+      const response = await backend.delete('/api/v1/auth/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

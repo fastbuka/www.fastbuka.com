@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/hooks/Partials/use-cart';
 
 interface Product {
-  id: number;
   uuid: string;
   name: string;
   price: number;
@@ -29,8 +28,7 @@ export function ProductsFeedSection({ item }: { item: Product }) {
     setMessage(`${product.name} added to cart!`);
   }
 
-  // Find the quantity of this product in the cart
-  const productInCart = cart.find((cartItem) => cartItem.id === item.id);
+  const productInCart = cart.find((cartItem) => cartItem.uuid === item.uuid);
   const quantity = productInCart ? productInCart.quantity : 0;
 
   return (
@@ -49,7 +47,7 @@ export function ProductsFeedSection({ item }: { item: Product }) {
         <div className='px-4'>
           <h3 className='text-lg font-semibold mb-2'>{item.name}</h3>
           <Badge variant='secondary' className='mb-2'>
-            {item.category}
+            {/* {item.category} */}
           </Badge>
           <div className='flex items-center text-sm text-gray-600'>
             <Star className='w-4 h-4 text-yellow-400 mr-1' />

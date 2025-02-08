@@ -14,14 +14,15 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, RefreshCw, User } from 'lucide-react';
+import { AvatarUploadModal } from '@/components/AvatarUploadModal';
 
 interface User {
   email: string;
+  contact: string;
   profile: {
     first_name: string;
     last_name: string;
-    avatar: string;
-    phone: string;
+    profile: string;
     address: string;
   };
 }
@@ -32,10 +33,12 @@ const cardVariants = {
 };
 
 export default function UserSettings() {
-  const { profile } = useUser();
+  const { profile, update } = useUser();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   const fetchProfile = useCallback(async () => {
     setError(null);
@@ -44,11 +47,13 @@ export default function UserSettings() {
       const response = await profile();
       if (response.success) {
         setUser(response.data.user);
+        setAvatar(response.data.user?.profile.profile);
       }
     } finally {
       setLoading(false);
     }
   }, [profile]);
+  console.log(user);
 
   useEffect(() => {
     if (!user) {
@@ -60,13 +65,22 @@ export default function UserSettings() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setLoading(false);
-      alert('Profile updated successfully!');
+      const response = await update({
+        email: user?.email ?? '',
+        contact: user?.contact ?? '',
+        first_name: user?.profile.first_name ?? '',
+        last_name: user?.profile.last_name ?? '',
+        profile: avatar ?? '',
+        address: user?.profile.address ?? '',
+      });
+      if (response.success) {
+        fetchProfile();
+        alert('Profile updated successfully!');
+      }
     } catch (err) {
       setError('Failed to update profile. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -75,12 +89,14 @@ export default function UserSettings() {
     const { name, value } = e.target;
     setUser((prevState) => {
       if (!prevState) return null;
+
+      if (name === 'email' || name === 'contact') {
+        return { ...prevState, [name]: value };
+      }
+
       return {
         ...prevState,
-        profile: {
-          ...prevState.profile,
-          [name]: value,
-        },
+        profile: { ...prevState.profile, [name]: value },
       };
     });
   };
@@ -141,7 +157,7 @@ export default function UserSettings() {
                   <div className='flex items-center space-x-4 mb-6'>
                     <div className='relative w-20 h-20'>
                       <img
-                        src={user?.profile.avatar || '/images/profile.png'}
+                        src={avatar || '/images/profile.png'}
                         alt='Profile'
                         className='rounded-full'
                         onError={(e) => {
@@ -149,7 +165,10 @@ export default function UserSettings() {
                         }}
                       />
                     </div>
-                    <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
+                    <Button
+                      onClick={() => setIsAvatarModalOpen(true)}
+                      className='bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    >
                       Change Avatar
                     </Button>
                   </div>
@@ -199,8 +218,8 @@ export default function UserSettings() {
                         </label>
                         <Input
                           type='tel'
-                          name='phone'
-                          value={user?.profile.phone || ''}
+                          name='contact'
+                          value={user?.contact || ''}
                           onChange={handleInputChange}
                           className='w-full'
                         />
@@ -271,6 +290,12 @@ export default function UserSettings() {
           </motion.div>
         </CardContent>
       )}
+      <AvatarUploadModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        avatar={avatar}
+        setAvatar={setAvatar}
+      />
     </AnimatePresence>
   );
 }
