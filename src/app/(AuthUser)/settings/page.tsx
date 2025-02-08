@@ -14,14 +14,15 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, RefreshCw, User } from 'lucide-react';
+import { AvatarUploadModal } from '@/components/AvatarUploadModal';
 
 interface User {
   email: string;
+  contact: string;
   profile: {
     first_name: string;
     last_name: string;
     avatar: string;
-    phone: string;
     address: string;
   };
 }
@@ -32,10 +33,11 @@ const cardVariants = {
 };
 
 export default function UserSettings() {
-  const { profile } = useUser();
+  const { profile, update } = useUser();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
   const fetchProfile = useCallback(async () => {
     setError(null);
@@ -60,13 +62,23 @@ export default function UserSettings() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setLoading(false);
-      alert('Profile updated successfully!');
+      const response = await update({
+        email: user?.email ?? '',
+        contact: user?.contact ?? '',
+        first_name: user?.profile.first_name ?? '',
+        last_name: user?.profile.last_name ?? '',
+        profileUrl: user?.profile.avatar ?? '',
+        address: user?.profile.address ?? '',
+      });
+      if (response.success) {
+        setUser(response.data.user);
+        alert('Profile updated successfully!');
+      }
     } catch (err) {
+      console.log(error);
       setError('Failed to update profile. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -149,7 +161,10 @@ export default function UserSettings() {
                         }}
                       />
                     </div>
-                    <Button className='bg-gray-200 text-gray-700 hover:bg-gray-300'>
+                    <Button
+                      onClick={() => setIsAvatarModalOpen(true)}
+                      className='bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    >
                       Change Avatar
                     </Button>
                   </div>
@@ -200,7 +215,7 @@ export default function UserSettings() {
                         <Input
                           type='tel'
                           name='phone'
-                          value={user?.profile.phone || ''}
+                          value={user?.contact || ''}
                           onChange={handleInputChange}
                           className='w-full'
                         />
@@ -271,6 +286,11 @@ export default function UserSettings() {
           </motion.div>
         </CardContent>
       )}
+      <AvatarUploadModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        currentAvatar={user?.profile.avatar}
+      />
     </AnimatePresence>
   );
 }

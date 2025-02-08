@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const axios = Axios.create({
+const backend = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   maxBodyLength: Infinity,
   headers: {
@@ -9,4 +9,13 @@ const axios = Axios.create({
   },
 });
 
-export default axios;
+const storage = Axios.create({
+  baseURL: process.env.NEXT_PUBLIC_STORAGE_URL,
+  maxBodyLength: Infinity,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+});
+
+export { backend, storage };
