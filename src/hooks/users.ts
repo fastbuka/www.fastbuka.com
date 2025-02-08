@@ -43,33 +43,35 @@ export const useUser = () => {
     contact,
     first_name,
     last_name,
-    profileUrl,
+    profile,
     address,
   }: {
     email: string;
     contact: string;
     first_name: string;
     last_name: string;
-    profileUrl: string;
+    profile: string;
     address: string;
   }) => {
     try {
       const token = localStorage.getItem('token');
-      const formData = new FormData();
 
-      formData.append('email', email);
-      formData.append('contact', contact);
-      formData.append('first_name', first_name);
-      formData.append('last_name', last_name);
-      formData.append('address', address);
-      formData.append('profileUrl', profileUrl);
-
-      const response = await backend.patch('/api/v1/users/profile', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+      const response = await backend.patch(
+        '/api/v1/users/profile',
+        {
+          email,
+          contact,
+          first_name,
+          last_name,
+          profile,
+          address,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.data.success) {
         return {

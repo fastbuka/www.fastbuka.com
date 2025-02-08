@@ -19,7 +19,8 @@ import { useStorage } from '@/hooks/storage';
 interface AvatarUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentAvatar?: string;
+  avatar: any;
+  setAvatar?: any;
 }
 
 const preUploadedAvatars = [
@@ -40,14 +41,14 @@ const preUploadedAvatars = [
 export function AvatarUploadModal({
   isOpen,
   onClose,
-  currentAvatar,
+  avatar,
+  setAvatar,
 }: AvatarUploadModalProps) {
   const { all, store } = useStorage();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [bucket, setBucket] = useState<[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
-  const [avatar, setAvatar] = useState<string | null>(currentAvatar ?? '');
   const [loading, setLoading] = useState(false);
 
   const fetchBucket = useCallback(async () => {
@@ -143,11 +144,29 @@ export function AvatarUploadModal({
           </TabsList>
           <TabsContent value='storage'>
             <ScrollArea className='h-[300px] w-full rounded-md border p-4'>
-              <div className='grid grid-cols-5 gap-4'>
-                {bucket.map((item: any, index) => (
+              <div className='flex flex-wrap gap-4'>
+                {preUploadedAvatars.map((img, index) => (
                   <div
                     key={index}
-                    className='relative aspect-square overflow-hidden rounded-full cursor-pointer'
+                    className={`relative aspect-square w-16 overflow-hidden rounded-full cursor-pointer ${
+                      avatar == img && 'border-green-600 border-2'
+                    }`}
+                    onClick={() => setAvatar(img)}
+                  >
+                    <Image
+                      src={img || '/svg/placeholder.svg'}
+                      alt={`Avatar ${index + 1}`}
+                      className='object-cover'
+                      fill
+                    />
+                  </div>
+                ))}
+                {bucket.map((item: any) => (
+                  <div
+                    key={item.path}
+                    className={`relative aspect-square w-16 overflow-hidden rounded-full cursor-pointer ${
+                      avatar == item && 'border-green-600 border-2'
+                    }`}
                     onClick={() => setAvatar(item.base_url + '/' + item.path)}
                   >
                     <Image
@@ -155,21 +174,7 @@ export function AvatarUploadModal({
                         item.base_url + '/' + item.path ||
                         '/svg/placeholder.svg'
                       }
-                      alt={`Avatar ${index + 1}`}
-                      className='object-cover'
-                      fill
-                    />
-                  </div>
-                ))}
-                {[avatar, ...preUploadedAvatars].map((img, index) => (
-                  <div
-                    key={index}
-                    className='relative aspect-square overflow-hidden rounded-full cursor-pointer'
-                    onClick={() => setAvatar(img)}
-                  >
-                    <Image
-                      src={img || '/svg/placeholder.svg'}
-                      alt={`Avatar ${index + 1}`}
+                      alt={`Avatar`}
                       className='object-cover'
                       fill
                     />

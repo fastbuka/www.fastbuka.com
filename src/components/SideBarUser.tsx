@@ -28,7 +28,7 @@ export function SideBarUser({
     profile: {
       first_name: string;
       last_name: string;
-      avatar: string;
+      profile: string;
     };
   } | null;
 }) {
@@ -50,7 +50,7 @@ export function SideBarUser({
             >
               <Avatar className='h-8 w-8 rounded-lg'>
                 <AvatarImage
-                  src={user?.profile?.avatar}
+                  src={user?.profile?.profile}
                   alt={user?.profile?.first_name}
                 />
                 <AvatarFallback className='rounded-lg'>
@@ -77,7 +77,7 @@ export function SideBarUser({
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
                   <AvatarImage
-                    src={user?.profile?.avatar}
+                    src={user?.profile?.profile}
                     alt={user?.profile?.first_name}
                   />
                   <AvatarFallback className='rounded-lg'>

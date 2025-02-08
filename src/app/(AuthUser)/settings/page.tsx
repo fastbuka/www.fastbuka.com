@@ -22,7 +22,7 @@ interface User {
   profile: {
     first_name: string;
     last_name: string;
-    avatar: string;
+    profile: string;
     address: string;
   };
 }
@@ -38,6 +38,7 @@ export default function UserSettings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
 
   const fetchProfile = useCallback(async () => {
     setError(null);
@@ -46,11 +47,13 @@ export default function UserSettings() {
       const response = await profile();
       if (response.success) {
         setUser(response.data.user);
+        setAvatar(response.data.user?.profile.profile);
       }
     } finally {
       setLoading(false);
     }
   }, [profile]);
+  console.log(user);
 
   useEffect(() => {
     if (!user) {
@@ -68,15 +71,14 @@ export default function UserSettings() {
         contact: user?.contact ?? '',
         first_name: user?.profile.first_name ?? '',
         last_name: user?.profile.last_name ?? '',
-        profileUrl: user?.profile.avatar ?? '',
+        profile: avatar ?? '',
         address: user?.profile.address ?? '',
       });
       if (response.success) {
-        setUser(response.data.user);
+        fetchProfile();
         alert('Profile updated successfully!');
       }
     } catch (err) {
-      console.log(error);
       setError('Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
@@ -87,12 +89,14 @@ export default function UserSettings() {
     const { name, value } = e.target;
     setUser((prevState) => {
       if (!prevState) return null;
+
+      if (name === 'email' || name === 'contact') {
+        return { ...prevState, [name]: value };
+      }
+
       return {
         ...prevState,
-        profile: {
-          ...prevState.profile,
-          [name]: value,
-        },
+        profile: { ...prevState.profile, [name]: value },
       };
     });
   };
@@ -153,7 +157,7 @@ export default function UserSettings() {
                   <div className='flex items-center space-x-4 mb-6'>
                     <div className='relative w-20 h-20'>
                       <img
-                        src={user?.profile.avatar || '/images/profile.png'}
+                        src={avatar || '/images/profile.png'}
                         alt='Profile'
                         className='rounded-full'
                         onError={(e) => {
@@ -214,7 +218,7 @@ export default function UserSettings() {
                         </label>
                         <Input
                           type='tel'
-                          name='phone'
+                          name='contact'
                           value={user?.contact || ''}
                           onChange={handleInputChange}
                           className='w-full'
@@ -289,7 +293,8 @@ export default function UserSettings() {
       <AvatarUploadModal
         isOpen={isAvatarModalOpen}
         onClose={() => setIsAvatarModalOpen(false)}
-        currentAvatar={user?.profile.avatar}
+        avatar={avatar}
+        setAvatar={setAvatar}
       />
     </AnimatePresence>
   );
