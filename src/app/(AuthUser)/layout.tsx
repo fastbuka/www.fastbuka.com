@@ -56,7 +56,7 @@ export default function UserLayout({
       }
     };
     fetchProfile();
-  }, [profile]);
+  }, [profile, router]);
 
   if (loading) {
     return (
