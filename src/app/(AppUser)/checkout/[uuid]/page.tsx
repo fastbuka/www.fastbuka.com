@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useOrder } from '@/hooks/order';
 import { Card } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -11,39 +12,41 @@ import { Wallet, CreditCard, RefreshCw } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-const orderDetails = {
-  items: [
-    {
-      name: 'Fried Fish and Jollof Rice',
-      quantity: 2,
-      price: 1500,
-      extras: 'Water, Salad',
-    },
-    {
-      name: 'Latte and Bread',
-      quantity: 1,
-      price: 1500,
-      extras: 'Water, Salad',
-    },
-    {
-      name: 'Pancake With Sliced Strawberry',
-      quantity: 15,
-      price: 1000,
-      extras: 'Water, Salad',
-    },
-  ],
-  subtotal: 19500,
-  deliveryFee: 1000,
-  total: 20500,
-};
-
 export default function PaymentPage() {
   const router = useRouter();
+  const { order } = useOrder();
+  const pathname = usePathname();
+  const [orderDetails, setOrderDetails] = useState<any | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('wallet');
 
+  const order_uuid = pathname.split('/').pop() || null;
+
+  useEffect(() => {
+    if (!order_uuid) return;
+
+    const fetchOrder = async () => {
+      const response = await order({ order_uuid });
+      if (response.success) {
+        setOrderDetails(response.data.order);
+        console.log(response);
+      }
+    };
+
+    fetchOrder();
+  }, [order, order_uuid]);
+
   const handlePayment = () => {
-    console.log('Processing payment with', paymentMethod);
+    alert(`Processing payment with ${paymentMethod}`);
+    // Implement Koxy payment logic here
   };
+
+  if (!orderDetails) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900'></div>
+      </div>
+    );
+  }
 
   return (
     <CheckoutLayout>
@@ -60,13 +63,13 @@ export default function PaymentPage() {
           <Card className='p-6'>
             <h2 className='text-lg font-semibold mb-4'>Order Summary</h2>
             <div className='space-y-4'>
-              {orderDetails.items.map((item, index) => (
+              {orderDetails.orderItems.map((item: any, index: number) => (
                 <div key={index} className='space-y-2'>
                   <div className='flex justify-between'>
                     <div>
-                      <p className='font-medium'>{item.name}</p>
+                      <p className='font-medium'>{item.food.name}</p>
                       <p className='text-sm text-gray-500'>
-                        Extras: {item.extras}
+                        Extras: {item.extras || 'None'}
                       </p>
                     </div>
                     <div className='text-right'>
@@ -76,7 +79,7 @@ export default function PaymentPage() {
                       <p className='text-sm text-gray-500'>x{item.quantity}</p>
                     </div>
                   </div>
-                  {index < orderDetails.items.length - 1 && (
+                  {index < orderDetails.orderItems.length - 1 && (
                     <Separator className='my-2' />
                   )}
                 </div>
@@ -87,16 +90,16 @@ export default function PaymentPage() {
               <div className='space-y-2'>
                 <div className='flex justify-between text-sm'>
                   <span>Subtotal</span>
-                  <span>₦{orderDetails.subtotal.toLocaleString()}</span>
+                  <span>₦{orderDetails.total_amount.toLocaleString()}</span>
                 </div>
                 <div className='flex justify-between text-sm'>
                   <span>Delivery Fee</span>
-                  <span>₦{orderDetails.deliveryFee.toLocaleString()}</span>
+                  <span>₦{orderDetails.delivery_charges.toLocaleString()}</span>
                 </div>
                 <Separator className='my-2' />
                 <div className='flex justify-between font-semibold'>
                   <span>Total</span>
-                  <span>₦{orderDetails.total.toLocaleString()}</span>
+                  <span>₦{orderDetails.total_amount.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -126,7 +129,6 @@ export default function PaymentPage() {
                     <span>Pay with Link</span>
                   </Label>
                 </div>
-
                 <div className='flex items-center space-x-4 rounded-lg border p-4'>
                   <RadioGroupItem value='exchange' id='exchange' />
                   <Label
@@ -145,7 +147,7 @@ export default function PaymentPage() {
               size='lg'
               onClick={handlePayment}
             >
-              Pay ₦{orderDetails.total.toLocaleString()}
+              Pay ₦{orderDetails.total_amount.toLocaleString()}
             </Button>
           </div>
         </div>

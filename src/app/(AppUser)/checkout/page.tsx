@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useOrder } from '@/hooks/order';
+import { useCart } from '@/hooks/Partials/use-cart';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Search } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -50,8 +52,11 @@ const mockAddresses = [
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const [addressSearch, setAddressSearch] = useState('');
+  const { cart } = useCart();
+  const { create } = useOrder();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [addressSearch, setAddressSearch] = useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,10 +73,28 @@ export default function CheckoutPage() {
     address.toLowerCase().includes(addressSearch.toLowerCase())
   );
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Here you would typically save the delivery information
-    console.log(values);
-    router.push('/checkout/payment');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    const { firstName, lastName, email, phone, address } = values;
+    try {
+      const response = await create({
+        delivery_name: `${firstName} ${lastName}`,
+        delivery_email: email,
+        delivery_contact: phone,
+        delivery_address: address,
+        cartItems: cart,
+      });
+
+      if (response.success) {
+        router.push(`/checkout/${response.data.order.uuid}`);
+      } else {
+        alert('something went wrong');
+      }
+    } catch (error) {
+      alert('something went wrong');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -200,7 +223,13 @@ export default function CheckoutPage() {
             />
 
             <Button type='submit' className='bg-green-500 w-full'>
-              Continue to Payment
+              {loading ? (
+                <span>
+                  <Loader2 className='animate-spin' />
+                </span>
+              ) : (
+                <span>Continue to Payment</span>
+              )}
             </Button>
           </form>
         </Form>

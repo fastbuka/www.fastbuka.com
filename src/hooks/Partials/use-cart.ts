@@ -5,7 +5,7 @@ type Item = {
   name: string;
   image: string;
   vendor_uuid: string;
-  item_uuid: string;
+  food_uuid: string;
   quantity: number;
   price: number;
 };
@@ -58,15 +58,15 @@ export const useCart = () => {
    */
   const addToCart = useCallback((item: Item, quantity: number = 1) => {
     setCart((cart) => {
-      const exists = cart.find((cartItem) => cartItem.item_uuid === item.uuid);
+      const exists = cart.find((cartItem) => cartItem.uuid === item.uuid);
       if (exists) {
         return cart.map((cartItem) =>
-          cartItem.item_uuid === item.uuid
+          cartItem.uuid === item.uuid
             ? { ...cartItem, quantity: cartItem.quantity + quantity }
             : cartItem
         );
       }
-      return [...cart, { ...item, quantity, item_uuid: item.uuid }];
+      return [...cart, { ...item, quantity, food_uuid: item.uuid }];
     });
   }, []);
 
