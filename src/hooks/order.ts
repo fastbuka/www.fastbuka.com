@@ -61,15 +61,27 @@ export const useOrder = () => {
    * @param param0
    * @returns
    */
-  const orders = async () => {
+  const orders = async ({ order_status }: { order_status: string | null }) => {
     try {
       const token = localStorage.getItem('token');
+      let response;
 
-      const response = await backend.get('/api/v1/order', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      if (order_status) {
+        response = await backend.get(
+          `/api/v1/order/?order_status=${order_status}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        response = await backend.get(`/api/v1/order`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
       if (response.data.success) {
         return {
           success: true,
