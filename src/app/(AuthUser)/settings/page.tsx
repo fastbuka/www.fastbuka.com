@@ -15,6 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, RefreshCw, User } from 'lucide-react';
 import { AvatarUploadModal } from '@/components/AvatarUploadModal';
+import Image from 'next/image';
 
 interface User {
   email: string;
@@ -156,10 +157,11 @@ export default function UserSettings() {
                 <CardContent>
                   <div className='flex items-center space-x-4 mb-6'>
                     <div className='relative w-20 h-20'>
-                      <img
+                      <Image
                         src={avatar || '/images/profile.png'}
                         alt='Profile'
                         className='rounded-full'
+                        fill
                         onError={(e) => {
                           e.currentTarget.src = '/images/logo.png';
                         }}

@@ -52,7 +52,7 @@ const mockAddresses = [
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart } = useCart();
+  const { cart, clearAllCartItems } = useCart();
   const { create } = useOrder();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -86,6 +86,7 @@ export default function CheckoutPage() {
       });
 
       if (response.success) {
+        clearAllCartItems();
         router.push(`/checkout/${response.data.order.uuid}`);
       } else {
         alert('something went wrong');
