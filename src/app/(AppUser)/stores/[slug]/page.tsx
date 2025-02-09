@@ -33,7 +33,7 @@ interface Product {
   category: string;
   description: string;
   processing_time: string;
-  item_uuid: string;
+  food_uuid: string;
   quantity: number;
   vendor_uuid: string;
 }
