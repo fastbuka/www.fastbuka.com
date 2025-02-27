@@ -159,58 +159,58 @@ export default function UserWallet() {
 
   return (
     <>
-      {isWalletActive == false ? (
-        <div className="flex flex-col items-center">
-          <p className="text-sm text-gray-600 mb-2 mt-4">
-            Activating your wallet may incur future costs.
-          </p>
-          <Button
-            onClick={enableWallet}
-            variant="outline"
-            className="mt-4 text-lg"
+      <AnimatePresence>
+        {error ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            Activate Wallet
-          </Button>
-        </div>
-      ) : (
-        <AnimatePresence>
-          {error ? (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </motion.div>
+        ) : (
+          <CardContent>
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+              }}
+              className="space-y-3 py-3"
             >
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            </motion.div>
-          ) : (
-            <CardContent>
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-                }}
-                className="space-y-3 py-3"
-              >
-                <div className="flex justify-end items-center">
-                  <Button
-                    onClick={fetchWallet}
-                    variant="outline"
-                    size="sm"
-                    className="bg-white hover:bg-gray-100 transition-colors"
-                  >
-                    <RefreshCw className="mr-2 h-4 w-4" />
-                    Refresh
-                  </Button>
-                </div>
+              <div className="flex justify-end items-center">
+                <Button
+                  onClick={fetchWallet}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white hover:bg-gray-100 transition-colors"
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Refresh
+                </Button>
+              </div>
 
-                <motion.div variants={cardVariants}>
-                  <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <motion.div variants={cardVariants}>
+                <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+                  {isWalletActive == false ? (
+                    <div className="flex flex-col items-center">
+                      <p className="text-sm text-gray-600 mb-2 mt-4">
+                        Activating your wallet may incur future costs.
+                      </p>
+                      <Button
+                        onClick={enableWallet}
+                        variant="outline"
+                        className="mt-4 text-lg"
+                      >
+                        Activate Wallet
+                      </Button>
+                    </div>
+                  ) : (
                     <CardContent className="p-6">
                       <div className="flex items-center mb-4">
                         <Wallet className="h-8 w-8 text-green-500 mr-3" />
@@ -273,53 +273,53 @@ export default function UserWallet() {
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                </motion.div>
-
-                <motion.div variants={cardVariants}>
-                  <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <CardHeader>
-                      <CardTitle className="text-2xl font-bold text-gray-800">
-                        Transaction History
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {/* Add transaction history table or list here */}
-                      <p className="text-gray-600">No recent transactions.</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                  )}
+                </Card>
               </motion.div>
-            </CardContent>
-          )}
 
-          {isModalOpen && (
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Exchange Details</DialogTitle>
-                  <DialogDescription>
-                    <div className="flex items-center justify-between">
-                      <p className="truncate max-w-xs">
-                        Wallet Address: {formattedAddress}
-                      </p>
-                      <Button variant="ghost" onClick={copyToClipboard}>
-                        {isCopied ? (
-                          <Check className="w-5 h-5 text-green-500" />
-                        ) : (
-                          <Copy className="w-5 h-5" />
-                        )}
-                      </Button>
-                    </div>
-                    <p>Network: Stellar</p>
-                  </DialogDescription>
-                </DialogHeader>
-                <Button onClick={() => setIsModalOpen(false)}>Close</Button>
-              </DialogContent>
-            </Dialog>
-          )}
-        </AnimatePresence>
-      )}
+              <motion.div variants={cardVariants}>
+                <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-bold text-gray-800">
+                      Transaction History
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {/* Add transaction history table or list here */}
+                    <p className="text-gray-600">No recent transactions.</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </motion.div>
+          </CardContent>
+        )}
+
+        {isModalOpen && (
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Exchange Details</DialogTitle>
+                <DialogDescription>
+                  <div className="flex items-center justify-between">
+                    <p className="truncate max-w-xs">
+                      Wallet Address: {formattedAddress}
+                    </p>
+                    <Button variant="ghost" onClick={copyToClipboard}>
+                      {isCopied ? (
+                        <Check className="w-5 h-5 text-green-500" />
+                      ) : (
+                        <Copy className="w-5 h-5" />
+                      )}
+                    </Button>
+                  </div>
+                  <p>Network: Stellar</p>
+                </DialogDescription>
+              </DialogHeader>
+              <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </>
   );
 }
