@@ -22,7 +22,7 @@ export default function PartnersSponsors() {
             {partners.map((partner) => (
               <div
                 key={partner.name}
-                className='flex items-center justify-center bg-slate-100 h-24 w-24 rounded-md'
+                className='flex items-center justify-center h-20 w-20 rounded-md'
               >
                 <Image
                   width={120}
@@ -39,12 +39,12 @@ export default function PartnersSponsors() {
           </div>
         </div>
         <div>
-          <h3 className='mb-4 text-center text-xl font-semibold'>Sponsors</h3>
+          <h3 className='mb-4 text-center text-xl font-semibold'>Backed by</h3>
           <div className='flex flex-wrap items-center justify-center gap-8'>
             {sponsors.map((sponsor) => (
               <div
                 key={sponsor.name}
-                className='flex items-center justify-center bg-slate-100 h-24 w-24 rounded-md'
+                className='flex items-center justify-center  h-22 w-22 rounded-md'
               >
                 <Image
                   width={120}

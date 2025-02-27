@@ -57,8 +57,9 @@ export default function UserWallet() {
 
   const fetchWallet = useCallback(async () => {
     setError(null);
-    // setLoading(true);
+  
     try {
+      
       const response = await wallet();
       if (response.success && response.data?.wallet) {
         setUser(response.data.wallet);
@@ -76,10 +77,12 @@ export default function UserWallet() {
 
   const enableWallet = useCallback(async () => {
     setLoading(true);
+    setIsWalletActive(true);
     try {
-      await Promise.all([sendXLM(), addTrustLine()]);
+      await sendXLM();
+      await addTrustLine();
       await fetchWallet();
-      setIsWalletActive(true);
+     
     } catch (err) {
       setError("Failed to enable wallet");
     } finally {
@@ -206,6 +209,7 @@ export default function UserWallet() {
                         onClick={enableWallet}
                         variant="outline"
                         className="mt-4 text-lg"
+                        disabled={loading || isWalletActive}
                       >
                         Activate Wallet
                       </Button>

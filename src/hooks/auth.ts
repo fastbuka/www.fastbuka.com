@@ -21,6 +21,8 @@ export const useAuth = () => {
         email,
         password,
       });
+      // Log the response for debugging
+      console.log("Registration response:", response);
       if (response.data.success) {
         return {
           success: true,

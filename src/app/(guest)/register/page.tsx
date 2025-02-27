@@ -42,7 +42,11 @@ export default function Register() {
     setLoading(true);
     setMessage(null);
     try {
-      const response = await register({ name, email, password });
+      const response = await register({ 
+        name: name.trim(), 
+        email: email.trim(), 
+        password: password.trim() 
+      });
       if (response.success) {
         setSuccess(true);
         router.push('/login');
