@@ -193,9 +193,11 @@ export default function Login() {
 
           {/* Right Side (Image) */}
           <div className='hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden'>
-            <div className='absolute bg-white' />
+
+            <div className='absolute inset-0 bg-gradient-to-br from-emerald-600/20 to-teal-600/20' />
             <Image
-              src='/images/Pattern.png'
+              src='/svg/placeholder.svg'
+
               alt='Login illustration'
               width={600}
               height={600}

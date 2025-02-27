@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useOrder } from '@/hooks/order';
@@ -33,7 +34,6 @@ import {
 } from '@/components/ui/command';
 import { Progress } from '@/components/ui/progress';
 import CheckoutLayout from './Partials/CheckoutLayout';
-import Image from 'next/image';
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -59,12 +59,6 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [addressSearch, setAddressSearch] = useState('');
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login'); // Adjust the route as needed
-    }
-  }, [router]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,6 +87,15 @@ export default function CheckoutPage() {
         cartItems: cart,
       });
 
+      if (response.success) {
+        clearAllCartItems();
+        router.push(`/checkout/${response.data.order.uuid}`);
+      } else {
+        alert('something went wrong');
+      }
+    } catch (error) {
+      alert('something went wrong');
+
       console.log("Full response object:", JSON.stringify(response, null, 2));
       console.log("Order data:", response.data?.order);
       
@@ -115,6 +118,7 @@ export default function CheckoutPage() {
     } catch (error: any) {
       console.error('Checkout error:', error);
       alert(error.message || 'Something went wrong during checkout');
+
     } finally {
       setLoading(false);
     }

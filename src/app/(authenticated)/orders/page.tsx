@@ -23,8 +23,9 @@ interface Order {
   };
   total_amount: number;
   order_status: string;
-  created_at: string;
-}
+
+  payment_status: string;
+
 
 const orderStatuses = ['All', 'Pending', 'Completed', 'Cancelled'];
 
@@ -45,12 +46,14 @@ export default function UserOrders() {
     setOrderFetch(false);
     try {
       const response = await orders({
-        order_status: orderStatus !== 'All' ? orderStatus : null,
-      });
+
+        order_status: orderStatus !== 'All' ? orderStatus.toLowerCase() : null,
       if (response.success) {
         setOrderDetails(response.data.orders);
       }
-      console.log(response);
+
+      // console.log(response);
+
     } catch (error) {
       console.error('Failed to fetch orders:', error);
     } finally {
@@ -106,39 +109,39 @@ export default function UserOrders() {
         }}
         className='space-y-6 py-6'
       >
-        <div className='flex justify-end items-center'>
-          <div className='flex items-center space-x-4'>
-            <Select
-              value={orderStatus}
-              onValueChange={() => {
-                setOrderStatus;
-              }}
-            >
-              <SelectTrigger className='w-[180px]'>
-                <SelectValue placeholder='Filter by status' />
-              </SelectTrigger>
-              <SelectContent>
-                {orderStatuses.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={fetchOrders}
-              variant='outline'
-              size='sm'
-              className='bg-white hover:bg-gray-100 transition-colors'
-            >
-              <RefreshCw className='mr-2 h-4 w-4' />
-              Refresh
-            </Button>
-          </div>
+
+        <div className='flex justify-between items-center space-x-4'>
+          <Select
+            value={orderStatus}
+            onValueChange={(value) => {
+              setOrderStatus(value), setOrderFetch(false);
+            }}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Filter by status' />
+            </SelectTrigger>
+            <SelectContent>
+              {orderStatuses.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            onClick={fetchOrders}
+            variant='outline'
+            size='sm'
+            className='bg-white hover:bg-gray-100 transition-colors'
+          >
+            <RefreshCw className='mr-2 h-4 w-4' />
+            Refresh
+          </Button>
         </div>
 
         {orderDetails.length > 0 ? (
-          <div className='space-y-4'>
+          <div className='flex flex-col space-y-4'>
+
             {orderDetails.map((order) => (
               <Link key={order.uuid} href={`/checkout/${order.uuid}`}>
                 <motion.div
@@ -147,7 +150,9 @@ export default function UserOrders() {
                 >
                   <div className='space-y-2'>
                     <h3 className='text-lg font-semibold'>
-                      {order.vendor.name}
+
+                      {order?.vendor?.name || 'Vendor deleted'}
+
                     </h3>
                     <p className='text-sm text-gray-500'>
                       Order #{order.order_number}
