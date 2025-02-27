@@ -71,6 +71,7 @@ export default function UserDashboard() {
 
   const fetchWallet = useCallback(async () => {
     setError(null);
+    // setLoading(true);
     try {
       const response = await wallet();
       console.log("Wallet: ", response);
@@ -83,6 +84,7 @@ export default function UserDashboard() {
     } catch (error) {
       console.error("Wallet fetch error:", error);
       setWalletEnabled(false);
+      setLoading(false);
     } finally {
       setLoading(false);
     }

@@ -77,9 +77,8 @@ export default function UserWallet() {
   const enableWallet = useCallback(async () => {
     setLoading(true);
     try {
-      await sendXLM();
-      await addTrustLine();
-      await fetchWallet(); // Refetch wallet after activation
+      await Promise.all([sendXLM(), addTrustLine()]);
+      await fetchWallet();
       setIsWalletActive(true);
     } catch (err) {
       setError("Failed to enable wallet");
