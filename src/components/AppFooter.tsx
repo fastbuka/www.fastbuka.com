@@ -8,10 +8,18 @@ import {
   FaLinkedinIn,
   FaInstagram,
   FaTiktok,
+  FaHouse,
+  FaBowlFood,
+  FaWallet,
+  FaCartArrowDown,
 } from 'react-icons/fa6';
 import { useEffect, useState } from 'react';
+import { useCart } from '@/hooks/Partials/use-cart';
+
 
 export default function AppFooter() {
+  const { cart } = useCart();
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -186,29 +194,29 @@ export default function AppFooter() {
       </div>
 
       {/* Mobile and Tablet View */}
-      {/* <div className='fixed md:hidden z-40 inset-x-0 bottom-0 bg-black flex justify-between items-center p-4 shadow-lg'>
+      <div className='fixed md:hidden z-40 inset-x-0 bottom-0 bg-black flex justify-between items-center p-4 shadow-lg'>
         <a href='/' className='text-white text-center'>
-          <FaHome className='w-6 h-6 mx-auto mb-1' />
+          <FaHouse className='w-6 h-6 mx-auto mb-1' />
           <span className='block text-xs font-thin'>Home</span>
         </a>
-        <a href='/menu' className='text-white text-center'>
+        <a href='/feeds' className='text-white text-center'>
           <FaBowlFood className='w-6 h-6 mx-auto mb-1' />
           <span className='block text-xs font-thin'>Menu</span>
         </a>
-        <a href='/user/wallet' className='text-white text-center'>
+        <a href='/wallet' className='text-white text-center'>
           <FaWallet className='w-6 h-6 mx-auto mb-1' />
           <span className='block text-xs font-thin'>Wallet</span>
         </a>
         <a href='/cart' className='relative text-white text-center'>
           <FaCartArrowDown className='w-6 h-6 mx-auto mb-1' />
-          {totalItems > 0 && (
+          {cart.length > 0 && (
             <span className='absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center'>
-              {totalItems}
+              {cart.length}
             </span>
           )}
           <span className='block text-xs font-thin'>Cart</span>
         </a>
-      </div> */}
+      </div>
     </footer>
   );
 }
