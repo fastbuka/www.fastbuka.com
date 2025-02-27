@@ -71,7 +71,7 @@ export default function UserDashboard() {
 
   const fetchWallet = useCallback(async () => {
     setError(null);
-    // setLoading(true);
+   
     try {
       const response = await wallet();
       console.log("Wallet: ", response);
@@ -93,14 +93,16 @@ export default function UserDashboard() {
   // Activate wallet when button is clicked
   const enableWallet = useCallback(async () => {
     setLoading(true);
+    setWalletEnabled(true);
     console.log("Enable Wallet function called");
     try {
       await sendXLM();
       await addTrustLine();
       await fetchWallet(); // Refetch wallet after activation
-      setWalletEnabled(true);
+     
     } catch (err) {
       setError("Failed to enable wallet");
+      setWalletEnabled(false);
     } finally {
       setLoading(false);
     }
@@ -168,6 +170,7 @@ export default function UserDashboard() {
                         onClick={enableWallet}
                         variant="outline"
                         className="mt-4 text-lg"
+                        disabled={loading || walletEnabled}
                       >
                         Activate Wallet
                       </Button>

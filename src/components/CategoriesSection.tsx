@@ -22,6 +22,7 @@ export default function CategoriesSection() {
     const fetchData = async () => {
       try {
         const response = await categories();
+        console.log("Categories response", response);
         setData(response.data.categories);
       } catch (error) {
         setMessage('Failed to load categories');
@@ -39,7 +40,7 @@ export default function CategoriesSection() {
         <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6'>
           {data.map((category) => (
             <Link
-              key={category.id}
+              key={category.uuid}
               href='/'
               className='group flex flex-col items-center gap-3 rounded-lg p-4 transition-colors hover:bg-gray-50'
             >
@@ -48,6 +49,7 @@ export default function CategoriesSection() {
                   className='h-full w-full object-cover transition-transform group-hover:scale-105'
                   src={category.image || '/svg/placeholder.svg'}
                   onError={(e) => {
+                    console.log(`Failed to load image: ${e.currentTarget.src}`);
                     e.currentTarget.src = '/svg/placeholder.svg';
                   }}
                   alt={category.name}
