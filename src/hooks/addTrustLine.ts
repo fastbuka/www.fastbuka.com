@@ -1,7 +1,8 @@
 import { backend } from '@/lib/axios';
 
 export const useAddTrustLine = () => {
-  const addTrustLine = async (userUuid: string) => {
+  const userUuid = localStorage.getItem('userUuid');
+  const addTrustLine = async () => {
     try {
         const response = await backend.post(`/api/auth/addTrustLine/${userUuid}`);
         console.log("Trustline: ", response)

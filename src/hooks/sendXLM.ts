@@ -1,7 +1,8 @@
 import { backend } from '@/lib/axios';
 
 export const useSendXLM = () => {
-  const sendXLM = async (userUuid: string) => {
+  const userUuid = localStorage.getItem('userUuid');
+  const sendXLM = async () => {
     try {
       const response = await backend.post(`/api/auth/sendXLM/${userUuid}`);
       if (response.data.success) {

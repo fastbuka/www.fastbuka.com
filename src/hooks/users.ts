@@ -38,6 +38,36 @@ export const useUser = () => {
     }
   };
 
+  const wallet = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await backend.get('/api/v1/users/wallet', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        return {
+          success: true,
+          message: response.data.message || 'Success',
+          data: response.data.data,
+        };
+      } else {
+        localStorage.removeItem('token');
+        router.push('/login');
+        return {
+          success: false,
+          message: response.data.message || 'Failed to load user',
+        };
+      }
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.message || 'Failed to load user',
+      };
+    }
+  };
+
   const update = async ({
     email,
     contact,
@@ -97,5 +127,6 @@ export const useUser = () => {
   return {
     profile,
     update,
+    wallet,
   };
 };
