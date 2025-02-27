@@ -23,13 +23,14 @@ export const useOrder = () => {
       const token = localStorage.getItem('token');
       const response = await backend.post(
         '/api/v1/order',
-        {
+        JSON.stringify({
           delivery_name,
           delivery_email,
           delivery_contact,
           delivery_address,
+          newOrder: true,
           cartItems,
-        },
+        }),
         {
           headers: {
             Authorization: `Bearer ${token}`,
