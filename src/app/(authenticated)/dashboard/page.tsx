@@ -20,9 +20,7 @@ interface Order {
   id: string;
   date: string;
   total: number;
-
-  order_status: 'completed' | 'processing' | 'pending';
-
+  order_status: 'completed' | 'processing' | 'pending' | 'Delivered';
 }
 
 const cardVariants = {
@@ -140,8 +138,7 @@ export default function UserDashboard() {
                 <DashboardCard
                   title='Active Orders'
                   value={
-
-                    orders.filter((order) => order.status !== 'Delivered')
+                    orders.filter((order) => order.order_status !== 'Delivered')
                       .length
                   }
                   icon={<AlertCircle className='h-6 w-6 text-white' />}
