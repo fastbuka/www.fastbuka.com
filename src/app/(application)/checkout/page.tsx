@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -58,6 +59,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [addressSearch, setAddressSearch] = useState('');
 
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -93,6 +95,30 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       alert('something went wrong');
+
+      console.log("Full response object:", JSON.stringify(response, null, 2));
+      console.log("Order data:", response.data?.order);
+      
+      if (!response.success) {
+        if (response.message === 'Not authenticated') {
+          alert('Please login to continue');
+          router.push('/login');
+          return;
+        }
+        throw new Error(response.message);
+      }
+
+      if (!response.data?.order) {
+        console.error('Order is null despite successful response');
+        throw new Error('Order creation failed - no order details received');
+      }
+
+      clearAllCartItems();
+      router.push(`/checkout/${response.data.order.uuid}`);
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      alert(error.message || 'Something went wrong during checkout');
+
     } finally {
       setLoading(false);
     }

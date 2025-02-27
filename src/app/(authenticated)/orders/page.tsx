@@ -23,9 +23,9 @@ interface Order {
   };
   total_amount: number;
   order_status: string;
+
   payment_status: string;
-  created_at: string;
-}
+
 
 const orderStatuses = ['All', 'Pending', 'Completed', 'Cancelled'];
 
@@ -46,12 +46,14 @@ export default function UserOrders() {
     setOrderFetch(false);
     try {
       const response = await orders({
+
         order_status: orderStatus !== 'All' ? orderStatus.toLowerCase() : null,
-      });
       if (response.success) {
         setOrderDetails(response.data.orders);
       }
+
       // console.log(response);
+
     } catch (error) {
       console.error('Failed to fetch orders:', error);
     } finally {
@@ -107,6 +109,7 @@ export default function UserOrders() {
         }}
         className='space-y-6 py-6'
       >
+
         <div className='flex justify-between items-center space-x-4'>
           <Select
             value={orderStatus}
@@ -138,6 +141,7 @@ export default function UserOrders() {
 
         {orderDetails.length > 0 ? (
           <div className='flex flex-col space-y-4'>
+
             {orderDetails.map((order) => (
               <Link key={order.uuid} href={`/checkout/${order.uuid}`}>
                 <motion.div
@@ -146,7 +150,9 @@ export default function UserOrders() {
                 >
                   <div className='space-y-2'>
                     <h3 className='text-lg font-semibold'>
+
                       {order?.vendor?.name || 'Vendor deleted'}
+
                     </h3>
                     <p className='text-sm text-gray-500'>
                       Order #{order.order_number}
