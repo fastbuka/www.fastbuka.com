@@ -121,16 +121,7 @@ export default function UserDashboard() {
 
   return (
     <>
-      {walletEnabled == false ? (
-        <div className='flex flex-col items-center'>
-          <p className='text-sm text-gray-600 mb-2 mt-4'>
-            Activating your wallet may incur future costs.
-          </p>
-          <Button onClick={enableWallet} variant='outline' className='mt-4 text-lg'>
-            Activate Wallet
-          </Button>
-        </div>
-      ) : (
+      
         <AnimatePresence>
           {error ? (
             <motion.div
@@ -169,12 +160,23 @@ export default function UserDashboard() {
 
                 <div className='flex flex-1 flex-col gap-4 pt-0'>
                   <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
+                  {walletEnabled == false ? (
+        <div className='flex flex-col items-center'>
+          <p className='text-sm text-gray-600 mb-2 mt-4'>
+            Activating your wallet may incur future costs.
+          </p>
+          <Button onClick={enableWallet} variant='outline' className='mt-4 text-lg'>
+            Activate Wallet
+          </Button>
+        </div>
+      ) : (
                     <DashboardCard
                       title='Wallet Balance'
                       value={user?.balance || 0}
                       icon={<Wallet className='h-6 w-6 text-white' />}
                       color='bg-gradient-to-r from-green-400 to-green-600 aspect-video rounded-xl'
                     />
+                    )}
                     <DashboardCard
                       title='Active Orders'
                       value={
@@ -209,7 +211,7 @@ export default function UserDashboard() {
             </CardContent>
           )}
         </AnimatePresence>
-      )}
+      
     </>
   );
 }
