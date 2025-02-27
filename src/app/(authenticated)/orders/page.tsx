@@ -23,6 +23,7 @@ interface Order {
   };
   total_amount: number;
   order_status: string;
+  payment_status: string;
   created_at: string;
 }
 
@@ -45,7 +46,7 @@ export default function UserOrders() {
     setOrderFetch(false);
     try {
       const response = await orders({
-        order_status: orderStatus !== 'All' ? orderStatus : null,
+        order_status: orderStatus !== 'All' ? orderStatus.toLowerCase() : null,
       });
       if (response.success) {
         setOrderDetails(response.data.orders);
