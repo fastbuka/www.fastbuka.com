@@ -107,35 +107,33 @@ export default function UserOrders() {
         }}
         className='space-y-6 py-6'
       >
-        <div className='flex justify-end items-center'>
-          <div className='flex items-center space-x-4'>
-            <Select
-              value={orderStatus}
-              onValueChange={() => {
-                setOrderStatus;
-              }}
-            >
-              <SelectTrigger className='w-[180px]'>
-                <SelectValue placeholder='Filter by status' />
-              </SelectTrigger>
-              <SelectContent>
-                {orderStatuses.map((status) => (
-                  <SelectItem key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={fetchOrders}
-              variant='outline'
-              size='sm'
-              className='bg-white hover:bg-gray-100 transition-colors'
-            >
-              <RefreshCw className='mr-2 h-4 w-4' />
-              Refresh
-            </Button>
-          </div>
+        <div className='flex justify-between items-center space-x-4'>
+          <Select
+            value={orderStatus}
+            onValueChange={(value) => {
+              setOrderStatus(value), setOrderFetch(false);
+            }}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Filter by status' />
+            </SelectTrigger>
+            <SelectContent>
+              {orderStatuses.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            onClick={fetchOrders}
+            variant='outline'
+            size='sm'
+            className='bg-white hover:bg-gray-100 transition-colors'
+          >
+            <RefreshCw className='mr-2 h-4 w-4' />
+            Refresh
+          </Button>
         </div>
 
         {orderDetails.length > 0 ? (
