@@ -199,7 +199,7 @@ export default function UserWallet() {
                 <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
                   {isWalletActive == false ? (
                     <div className="flex flex-col items-center">
-                      <p className="text-sm text-gray-600 mb-2 mt-4">
+                      <p className="text-sm text-gray-600 mb-2 sm:mt-4">
                         Activating your wallet may incur future costs.
                       </p>
                       <Button
