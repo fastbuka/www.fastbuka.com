@@ -58,6 +58,7 @@ export const useAuth = () => {
         email,
         password,
       });
+      console.log("Login response:", response)
       if (response.data.success) {
         localStorage.setItem('token', response.data.data.token);
         return {

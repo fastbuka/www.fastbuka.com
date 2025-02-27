@@ -3,17 +3,11 @@ import Image from 'next/image';
 
 export default function PartnersSponsors() {
   const partners = [
-    { name: 'Partner 1', logo: '/svg/placeholder.svg' },
-    { name: 'Partner 2', logo: '/svg/placeholder.svg' },
-    { name: 'Partner 3', logo: '/svg/placeholder.svg' },
-    { name: 'Partner 4', logo: '/svg/placeholder.svg' },
+    { name: 'LINK', logo: '/images/LINK Logo Black.png' },
   ];
 
   const sponsors = [
-    { name: 'Sponsor 1', logo: '/svg/placeholder.svg' },
-    { name: 'Sponsor 2', logo: '/svg/placeholder.svg' },
-    { name: 'Sponsor 3', logo: '/svg/placeholder.svg' },
-    { name: 'Sponsor 4', logo: '/svg/placeholder.svg' },
+    { name: 'Stellar', logo: '/images/stellar.png' },
   ];
 
   return (

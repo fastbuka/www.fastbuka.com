@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -58,6 +59,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [addressSearch, setAddressSearch] = useState('');
 
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,14 +87,15 @@ export default function CheckoutPage() {
         cartItems: cart,
       });
 
-      if (response.success) {
+      if (response.success && response.data?.order?.uuid) {
         clearAllCartItems();
         router.push(`/checkout/${response.data.order.uuid}`);
       } else {
-        alert('something went wrong');
+        throw new Error(response.message || 'Failed to create order');
       }
-    } catch (error) {
-      alert('something went wrong');
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      alert(error.message || 'Something went wrong during checkout');
     } finally {
       setLoading(false);
     }

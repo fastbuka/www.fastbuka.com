@@ -51,7 +51,6 @@ export default function UserOrders() {
       if (response.success) {
         setOrderDetails(response.data.orders);
       }
-      // console.log(response);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
     } finally {

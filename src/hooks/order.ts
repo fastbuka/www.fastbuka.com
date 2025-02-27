@@ -21,6 +21,23 @@ export const useOrder = () => {
   }) => {
     try {
       const token = localStorage.getItem('token');
+      
+      if (!token) {
+        // console.error('No authentication token found');
+        return {
+          success: false,
+          message: 'Not authenticated',
+        };
+      }
+
+      console.log('Request payload:', {
+        delivery_name,
+        delivery_email,
+        delivery_contact,
+        delivery_address,
+        cartItems,
+      });
+
       const response = await backend.post(
         '/api/v1/order',
         JSON.stringify({
@@ -37,22 +54,39 @@ export const useOrder = () => {
           },
         }
       );
+
+      console.log('Raw API response:', response.data);
+
       if (response.data.success) {
+        // Check if we have the order in the correct location
+        const order = response.data.data?.order;
+        
+        if (!order) {
+          console.error('Order data missing in response:', response.data);
+          return {
+            success: false,
+            message: 'Order creation failed - no order details in response',
+          };
+        }
+
         return {
           success: true,
           message: response.data.message || 'Success',
-          data: response.data.data,
+          data: {
+            order: order
+          }
         };
       } else {
         return {
           success: false,
-          message: response.data.message || 'Failed to load menu',
+          message: response.data.message || 'Failed to create order',
         };
       }
     } catch (error: any) {
+      console.error('Order creation error:', error);
       return {
         success: false,
-        message: error.message || 'Failed to load menu',
+        message: error.message || 'Failed to create order',
       };
     }
   };
@@ -65,6 +99,7 @@ export const useOrder = () => {
   const orders = async ({ order_status }: { order_status: string | null }) => {
     try {
       const token = localStorage.getItem('token');
+      console.log("Token:", token);
       let response;
 
       if (order_status) {
