@@ -28,7 +28,7 @@ export const useOrder = () => {
           delivery_email,
           delivery_contact,
           delivery_address,
-          // newOrder: true,
+          newOrder: true,
           cartItems,
         }),
         {
