@@ -47,7 +47,15 @@ export default function Login() {
         setSuccess(true);
         router.push('/dashboard');
       } else {
-        setMessage(response.message || 'Failed to login');
+       if (response.message === "Invalid credentials") {
+        setMessage("Invalid credentials, please try again.");
+       } else if (response.message === "Request failed with status code 401") {
+        setMessage("Invalid credentials, please try again.");
+       } else if (response.message === "Request failed with status code 400") {
+        setMessage("Something bad happened. Please try again later.");
+       } else {
+        setMessage("Login failed. Please try again later.");
+       }
       }
     } catch (error) {
       setMessage('Invalid credentials, please try again.');

@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <CategoriesSection />
+      {/* <CategoriesSection /> */}
       <RestaurantsSection />
       <StoresMapSection />
       <PartnersSponsors />

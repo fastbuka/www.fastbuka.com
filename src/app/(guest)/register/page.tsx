@@ -19,6 +19,15 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+interface ApiError {
+  response?: {
+    status: number;
+    data: {
+      message?: string;
+    };
+  };
+}
+
 export default function Register() {
   const router = useRouter();
   const { register } = useAuth();
@@ -51,10 +60,17 @@ export default function Register() {
         setSuccess(true);
         router.push('/login');
       } else {
-        setMessage(response.message || 'Failed to register');
+        if (response.message === "Request failed with status code 401") {
+          setMessage("User email already exists");
+        } else if (response.message === "Request failed with status code 400") {
+          setMessage("Invalid credentials. Please try again.");
+        } else {
+          setMessage("Registration failed. Please try again later.");
+        }
       }
     } catch (error) {
-      setMessage('Registration failed. Please try again.');
+      setMessage("Registration failed. Please try again.");
+      console.log("registration error: ", error);
     } finally {
       setLoading(false);
     }
