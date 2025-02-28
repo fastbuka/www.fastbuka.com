@@ -11,8 +11,16 @@ import { Notifications } from "@/components/Notifications";
 import { useSendXLM } from "@/hooks/sendXLM";
 import { useAddTrustLine } from "@/hooks/addTrustLine";
 
+interface Balance {
+  balance: string;
+  limit?: string;
+  buying_liabilities?: string;
+  selling_liabilities?: string;
+  asset_code?: string;
+}
+
 interface UserProfile {
-  balance: number;
+  balances: Balance[];
   address: string;
   profile: {
     first_name: string;
@@ -74,6 +82,7 @@ export default function UserDashboard() {
    
     try {
       const response = await wallet();
+      console.log("Wallet", response)
       console.log("Wallet: ", response);
       if (response?.success && response.data?.wallet) {
         setUser(response.data.wallet);
@@ -178,8 +187,8 @@ export default function UserDashboard() {
                     </div>
                   ) : (
                     <DashboardCard
-                      title="Wallet Balance"
-                      value={user?.balance || 0}
+                      title={`Wallet Balance`}
+                      value={Number(user?.balances?.[0]?.balance || 0)}
                       icon={<Wallet className="h-6 w-6 text-white" />}
                       color="bg-gradient-to-r from-green-400 to-green-600 aspect-video rounded-xl"
                     />

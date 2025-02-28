@@ -29,8 +29,17 @@ import { useSendXLM } from "@/hooks/sendXLM";
 import { useAddTrustLine } from "@/hooks/addTrustLine";
 import { set } from "react-hook-form";
 
+
+interface Balance {
+  balance: string;
+  limit?: string;
+  buying_liabilities?: string;
+  selling_liabilities?: string;
+  asset_code?: string;
+}
+
 interface UserProfile {
-  balance: number;
+  balances: Balance[];
   address: string;
   profile: {
     first_name: string;
@@ -211,7 +220,7 @@ export default function UserWallet() {
                         onClick={enableWallet}
                         variant="outline"
                         className="mt-4 text-lg"
-                        disabled={loading || isWalletActive}
+                        disabled={loading || !isWalletActive}
                       >
                         Activate Wallet
                       </Button>
@@ -221,7 +230,7 @@ export default function UserWallet() {
                       <div className="flex items-center mb-4">
                         <Wallet className="h-8 w-8 text-green-500 mr-3" />
                         <CardTitle className="text-2xl font-semibold">
-                          Balance: ₦{user?.balance || 0}
+                          Balance: ₦{Number(user?.balances?.[0]?.balance || 0)}
                         </CardTitle>
                       </div>
 
@@ -260,14 +269,14 @@ export default function UserWallet() {
                             className="flex items-center justify-center"
                           >
                             <FaNairaSign className="h-5 w-5 mr-2" />
-                            Top-Up with NGN (Links)
+                            Top-Up with NGN 
                           </Button>
                           <Button
                             onClick={() => handleTopUp("usd")}
                             className="flex items-center justify-center"
                           >
                             <DollarSign className="h-5 w-5 mr-2" />
-                            Top-Up with USD (Links)
+                            Top-Up with USD
                           </Button>
                           <Button
                             onClick={() => handleTopUp("exchange")}
