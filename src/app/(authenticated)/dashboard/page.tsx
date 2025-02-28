@@ -78,9 +78,7 @@ export default function UserDashboard() {
       if (response?.success && response.data?.wallet) {
         setUser(response.data.wallet);
         setWalletEnabled(true);
-      } else {
-        setWalletEnabled(false);
-      }
+      } 
     } catch (error) {
       console.error("Wallet fetch error:", error);
       setWalletEnabled(false);
@@ -93,12 +91,13 @@ export default function UserDashboard() {
   // Activate wallet when button is clicked
   const enableWallet = useCallback(async () => {
     setLoading(true);
-    setWalletEnabled(true);
+    setWalletEnabled(false);
     console.log("Enable Wallet function called");
     try {
       await sendXLM();
       await addTrustLine();
       await fetchWallet(); // Refetch wallet after activation
+      setWalletEnabled(true);
      
     } catch (err) {
       setError("Failed to enable wallet");
@@ -110,8 +109,10 @@ export default function UserDashboard() {
 
   // Always fetch wallet on mount
   useEffect(() => {
+    if (walletEnabled == false) {
     fetchWallet();
-  }, [fetchWallet]);
+    }
+  }, [fetchWallet, walletEnabled]);
 
   if (loading) {
     return (

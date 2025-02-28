@@ -77,12 +77,12 @@ export default function UserWallet() {
 
   const enableWallet = useCallback(async () => {
     setLoading(true);
-    setIsWalletActive(true);
+    setIsWalletActive(false);
     try {
       await sendXLM();
       await addTrustLine();
       await fetchWallet();
-     
+      setIsWalletActive(true);
     } catch (err) {
       setError("Failed to enable wallet");
     } finally {
@@ -92,8 +92,10 @@ export default function UserWallet() {
 
   // Always fetch wallet on mount
   useEffect(() => {
+    if (isWalletActive == false) {
     fetchWallet();
-  }, [fetchWallet]);
+    }
+  }, [fetchWallet, isWalletActive]);
 
   const formattedAddress = user?.address
     ? `${user.address.slice(0, 4)}...${user.address.slice(-4)}`
