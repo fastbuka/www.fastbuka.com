@@ -23,20 +23,11 @@ export const useOrder = () => {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        // console.error('No authentication token found');
         return {
           success: false,
           message: 'Not authenticated',
         };
       }
-
-      console.log('Request payload:', {
-        delivery_name,
-        delivery_email,
-        delivery_contact,
-        delivery_address,
-        cartItems,
-      });
 
       const response = await backend.post(
         '/api/v1/order',
@@ -55,17 +46,14 @@ export const useOrder = () => {
         }
       );
 
-      console.log('Raw API response:', response.data);
-
       if (response.data.success) {
-        // Check if we have the order in the correct location
         const order = response.data.data?.order;
         
         if (!order) {
           console.error('Order data missing in response:', response.data);
           return {
             success: false,
-            message: 'Order creation failed - no order details in response',
+            message: response.data.message || 'Order items are out of stock',
           };
         }
 
