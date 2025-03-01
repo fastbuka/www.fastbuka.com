@@ -204,8 +204,7 @@ export default function Login() {
 
             <div className='absolute bg-white' />
             <Image
-              src='/images/Pattern.png'
-
+              src='/svg/illustration.svg'
               alt='Login illustration'
               width={600}
               height={600}
