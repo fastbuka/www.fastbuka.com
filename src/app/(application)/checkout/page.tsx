@@ -78,6 +78,15 @@ export default function CheckoutPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     const { firstName, lastName, email, phone, address } = values;
+
+    // Check for authentication by retrieving the token from local storage
+    const token = localStorage.getItem('token'); // Replace 'authToken' with your actual token key
+    if (!token) {
+      router.push('/login'); // Redirect to the login page
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await create({
         delivery_name: `${firstName} ${lastName}`,
@@ -86,6 +95,7 @@ export default function CheckoutPage() {
         delivery_address: address,
         cartItems: cart,
       });
+      console.log("Response checkout:", response);
 
       if (response.success && response.data?.order?.uuid) {
         clearAllCartItems();

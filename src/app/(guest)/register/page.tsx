@@ -42,7 +42,7 @@ export default function Register() {
   useEffect(() => {
     const user = localStorage.getItem('token');
     if (user) {
-      router.push('/dashboard');
+      router.push('oard');
     }
   }, [router]);
 

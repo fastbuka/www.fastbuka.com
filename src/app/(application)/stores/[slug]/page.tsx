@@ -1,6 +1,6 @@
 'use client';
 import { useApp } from '@/hooks/app';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,7 @@ interface Product {
 
 export default function StoreProfilePage() {
   const pathname = usePathname();
+  const router = useRouter();
   const { vendor, products } = useApp();
   const [message, setMessage] = useState('');
   const [data, setData] = useState<Vendor | null>(null);
@@ -105,7 +106,12 @@ export default function StoreProfilePage() {
               {/* <span>{data?.distance}</span> */}10KM
             </div>
           </div>
-          <Button className='mt-4 md:mt-0'>Order Now</Button>
+          <Button 
+            className='mt-4 md:mt-0' 
+            onClick={() => router.push('/cart')}
+          >
+            Order Now
+          </Button>
         </div>
         <p className='text-gray-700 mb-5'>{data?.description}</p>
         <div className='grid justify-start md:grid-cols-2 gap-4 mb-5'>
