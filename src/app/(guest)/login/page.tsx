@@ -33,7 +33,7 @@ export default function Login() {
   useEffect(() => {
     const user = localStorage.getItem('token');
     if (user) {
-      router.push('/dashboard');
+      router.push('/cart');
     }
   }, [router]);
 
@@ -45,7 +45,7 @@ export default function Login() {
       const response = await login({ email, password });
       if (response.success) {
         setSuccess(true);
-        router.push('/dashboard');
+        router.push('/cart');
       } else {
        if (response.message === "Invalid credentials") {
         setMessage("Invalid credentials, please try again.");

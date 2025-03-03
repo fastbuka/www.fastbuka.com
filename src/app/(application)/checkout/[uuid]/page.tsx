@@ -10,15 +10,18 @@ import { Separator } from '@/components/ui/separator';
 import CheckoutLayout from '../Partials/CheckoutLayout';
 import { Wallet, CreditCard, RefreshCw } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { useOrderPayment } from '@/hooks/payment';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function PaymentPage() {
   const router = useRouter();
   const { order } = useOrder();
+  const { payment } = useOrderPayment();  
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('wallet');
-
+  const [orderUuid, setOrderUuid] = useState<string | null>(null);
   const order_uuid = pathname.split('/').pop() || null;
 
   useEffect(() => {
@@ -28,6 +31,7 @@ export default function PaymentPage() {
       const response = await order({ order_uuid });
       if (response.success) {
         setOrderDetails(response.data.order);
+        setOrderUuid(response.data.order.uuid);
         console.log(response);
       }
     };
@@ -35,12 +39,31 @@ export default function PaymentPage() {
     fetchOrder();
   }, [order, order_uuid]);
 
-  const handlePayment = () => {
-    alert(`Processing payment with ${paymentMethod}`);
-    // Implement Koxy payment logic here
+  const handlePayment = async () => {
+    setIsLoading(true);
+    if (!orderUuid) {
+      alert('Invalid order');
+      return;
+    }
+    console.log("Order UUID:", orderUuid);
+    try {
+      const response = await payment(orderUuid);
+      console.log("Payment response:", response);
+      if (response.success) {
+        alert('Payment successful!');
+        router.push('/'); // Redirect to orders page
+      } else {
+        alert(response.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Payment failed. Please try again later.');
+      setIsLoading(false);
+    }
   };
 
-  if (!orderDetails) {
+  if (!orderDetails || isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
         <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900'></div>
@@ -122,14 +145,14 @@ export default function PaymentPage() {
                     <span>Pay with Wallet</span>
                   </Label>
                 </div>
-                <div className='flex items-center space-x-4 rounded-lg border p-4'>
+                {/* <div className='flex items-center space-x-4 rounded-lg border p-4'>
                   <RadioGroupItem value='link' id='link' />
                   <Label htmlFor='link' className='flex items-center space-x-3'>
                     <CreditCard className='h-5 w-5' />
-                    <span>Pay with Link</span>
+                    <span>Pay4me</span>
                   </Label>
-                </div>
-                <div className='flex items-center space-x-4 rounded-lg border p-4'>
+                </div> */}
+                {/* <div className='flex items-center space-x-4 rounded-lg border p-4'>
                   <RadioGroupItem value='exchange' id='exchange' />
                   <Label
                     htmlFor='exchange'
@@ -138,7 +161,7 @@ export default function PaymentPage() {
                     <RefreshCw className='h-5 w-5' />
                     <span>Pay with Exchange</span>
                   </Label>
-                </div>
+                </div> */}
               </RadioGroup>
             </Card>
 
