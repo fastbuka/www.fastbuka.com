@@ -63,11 +63,11 @@ export default function CheckoutPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: localStorage.getItem('firstName') || '',
-      lastName: localStorage.getItem('lastName') || '',
-      email: localStorage.getItem('email') || '',
-      phone: localStorage.getItem('phone') || '',
-      address: localStorage.getItem('address') || '',
+      firstName: typeof window !== 'undefined' ? localStorage.getItem('firstName') || '' : '',
+      lastName: typeof window !== 'undefined' ? localStorage.getItem('lastName') || '' : '',
+      email: typeof window !== 'undefined' ? localStorage.getItem('email') || '' : '',
+      phone: typeof window !== 'undefined' ? localStorage.getItem('phone') || '' : '',
+      address: typeof window !== 'undefined' ? localStorage.getItem('address') || '' : '',
     },
   });
 
@@ -80,7 +80,7 @@ export default function CheckoutPage() {
     const { firstName, lastName, email, phone, address } = values;
 
     // Check for authentication by retrieving the token from local storage
-    const token = localStorage.getItem('token'); // Replace 'authToken' with your actual token key
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Check if in browser
     if (!token) {
       router.push('/login'); // Redirect to the login page
       setLoading(false);
@@ -97,11 +97,13 @@ export default function CheckoutPage() {
       });
 
       // Save delivery details to local storage
-      localStorage.setItem('firstName', firstName);
-      localStorage.setItem('lastName', lastName);
-      localStorage.setItem('email', email);
-      localStorage.setItem('phone', phone);
-      localStorage.setItem('address', address);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('firstName', firstName);
+        localStorage.setItem('lastName', lastName);
+        localStorage.setItem('email', email);
+        localStorage.setItem('phone', phone);
+        localStorage.setItem('address', address);
+      }
 
       console.log("Response checkout:", response);
 
