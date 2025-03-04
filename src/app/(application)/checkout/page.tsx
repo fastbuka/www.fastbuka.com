@@ -63,11 +63,11 @@ export default function CheckoutPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      address: '',
+      firstName: localStorage.getItem('firstName') || '',
+      lastName: localStorage.getItem('lastName') || '',
+      email: localStorage.getItem('email') || '',
+      phone: localStorage.getItem('phone') || '',
+      address: localStorage.getItem('address') || '',
     },
   });
 
@@ -95,6 +95,14 @@ export default function CheckoutPage() {
         delivery_address: address,
         cartItems: cart,
       });
+
+      // Save delivery details to local storage
+      localStorage.setItem('firstName', firstName);
+      localStorage.setItem('lastName', lastName);
+      localStorage.setItem('email', email);
+      localStorage.setItem('phone', phone);
+      localStorage.setItem('address', address);
+
       console.log("Response checkout:", response);
 
       if (response.success && response.data?.order?.uuid) {

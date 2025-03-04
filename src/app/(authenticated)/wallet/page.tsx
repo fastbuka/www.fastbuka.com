@@ -84,8 +84,7 @@ export default function UserWallet() {
     }
   }, [wallet]);
 
-  const enableWallet = useCallback(async () => {
-    setLoading(true);
+  const callWallet = useCallback(async () => {
     setIsWalletActive(false);
     try {
       await sendXLM();
@@ -94,10 +93,20 @@ export default function UserWallet() {
       setIsWalletActive(true);
     } catch (err) {
       setError("Failed to enable wallet");
-    } finally {
-      setLoading(false);
     }
   }, [fetchWallet, sendXLM, addTrustLine]);
+
+  const enableWallet = useCallback(async () => {
+    setLoading(true);
+    try {
+      await callWallet();
+      setLoading(false);
+    } catch (error) {
+      setError("Failed to enable wallet");
+      setLoading(false);
+    }
+    
+  }, [callWallet]);
 
   // Always fetch wallet on mount
   useEffect(() => {
