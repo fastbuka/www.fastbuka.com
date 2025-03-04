@@ -55,6 +55,7 @@ export default function PaymentPage() {
 
       } else if (response?.message?.data?.error === 'Not Found') {
         alert('Activate your wallet, fund it and try again'); // Ensure message is defined
+        router.push('/wallet');
         setIsLoading(false);
       } else {
         alert(response?.message?.data?.error || 'An error occurred'); // Ensure message is defined
