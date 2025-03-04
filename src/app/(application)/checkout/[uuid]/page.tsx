@@ -49,24 +49,39 @@ export default function PaymentPage() {
     try {
       const response = await payment(orderUuid);
       console.log("Payment response:", response);
-      if (response.success) {
+      if (response?.message?.data?.message === 'Payment order created successfully') {
         alert('Payment successful!');
         router.push('/'); // Redirect to orders page
+
+      } else if (response?.message?.data?.error === 'Not Found') {
+        alert('Activate your wallet, fund it and try again'); // Ensure message is defined
+        setIsLoading(false);
       } else {
-        alert(response.message);
+        alert(response?.message?.data?.error || 'An error occurred'); // Ensure message is defined
         setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Payment error:', error);
-      alert('Payment failed. Please try again later.');
+    } catch (error: any) {
+      console.error('Payment error:', error?.message?.data?.error);
+      alert(error?.message?.data?.error || 'Payment failed. Please try again later.'); // Display error message
       setIsLoading(false);
     }
   };
 
-  if (!orderDetails || isLoading) {
+  if (!orderDetails) {
     return (
       <div className='flex justify-center items-center h-screen'>
         <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900'></div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <div className='grid justify-items-center'>
+          <div className='animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900'></div>
+          <p className='text-gray-500'>Your order is being processed...</p>
+        </div>
       </div>
     );
   }
