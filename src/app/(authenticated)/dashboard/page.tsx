@@ -25,13 +25,8 @@ interface UserProfile {
   profile: {
     first_name: string;
   };
-}
-
-interface Order {
-  id: string;
-  date: string;
-  total: number;
-  order_status: "completed" | "processing" | "pending" | "Delivered";
+  activeOrders: number;
+  completedOrders: number;
 }
 
 const cardVariants = {
@@ -70,7 +65,6 @@ function DashboardCard({
 export default function UserDashboard() {
   const { profile, wallet } = useUser();
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [walletEnabled, setWalletEnabled] = useState(false);
@@ -195,17 +189,13 @@ export default function UserDashboard() {
                   )}
                   <DashboardCard
                     title="Active Orders"
-                    value={
-                      orders.filter(
-                        (order) => order.order_status !== "Delivered"
-                      ).length
-                    }
+                    value={user?.activeOrders || 0}
                     icon={<AlertCircle className="h-6 w-6 text-white" />}
                     color="bg-gradient-to-r from-yellow-400 to-yellow-600 aspect-video rounded-xl"
                   />
                   <DashboardCard
                     title="Total Orders"
-                    value={orders.length}
+                    value={user?.completedOrders || 0}
                     icon={<ShoppingBag className="h-6 w-6 text-white" />}
                     color="bg-gradient-to-r from-blue-400 to-blue-600 aspect-video rounded-xl"
                   />
