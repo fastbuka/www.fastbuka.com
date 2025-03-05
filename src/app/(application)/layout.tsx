@@ -5,16 +5,8 @@ import { useSocket } from '@/hooks/websocket';
 import { useToast } from '@/hooks/Partials/use-toast';
 import AppNavBar from '@/components/AppNavBar';
 import AppFooter from '@/components/AppFooter';
+import { User } from '@/types/user';
 
-interface User {
-  uuid: string;
-  email: string;
-  profile: {
-    first_name: string;
-    last_name: string;
-    profile: string;
-  };
-}
 
 export default function layout({ children }: { children: React.ReactNode }) {
   const socket = useSocket();

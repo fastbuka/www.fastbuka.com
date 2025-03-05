@@ -22,16 +22,8 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '@/hooks/websocket';
 import { useToast } from '@/hooks/Partials/use-toast';
+import { User } from '@/types/user';
 
-interface User {
-  uuid: string;
-  email: string;
-  profile: {
-    first_name: string;
-    last_name: string;
-    profile: string;
-  };
-}
 
 export default function UserLayout({
   children,
