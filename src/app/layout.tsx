@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Theme } from '@radix-ui/themes';
+import { Toaster } from '@/components/ui/toaster';
 
 const satoshiFont = localFont({
   src: './fonts/Satoshi-Regular.woff',
@@ -19,12 +20,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang='en'>
       <body className={`antialiased`}>
         <Theme>
           <main>{children}</main>
         </Theme>
+        <Toaster />
       </body>
     </html>
   );

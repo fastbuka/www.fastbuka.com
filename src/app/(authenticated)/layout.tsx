@@ -20,8 +20,11 @@ import {
 } from '@/components/ui/sidebar';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSocket } from '@/hooks/websocket';
+import { useToast } from '@/hooks/Partials/use-toast';
 
 interface User {
+  uuid: string;
   email: string;
   profile: {
     first_name: string;
@@ -36,11 +39,23 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const socket = useSocket();
+  const { toast } = useToast()
   const { profile } = useUser();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    if(!socket) return;
+    socket.on(`user.${user?.uuid}`, (data) => {
+      toast({ variant: data.variant, title: data.title, description: data.message });
+    });
+    return () => {
+      socket.off('message');
+    };  
+  }, [socket]);
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
