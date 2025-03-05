@@ -61,16 +61,16 @@ export default function CheckoutPage() {
     },
   });
 
-  useEffect(() => {
-    if (user) {
-      form.reset({
-        firstName: user.profile?.first_name || '',
-        lastName: user.profile?.last_name || '',
-        email: user.email || '',
-        phone: user.contact || '',
-      });
-    }
-  }, [user, form]);
+  // useEffect(() => {
+  //   if (user) {
+  //     form.reset({
+  //       firstName: user.profile?.first_name || '',
+  //       lastName: user.profile?.last_name || '',
+  //       email: user.email || '',
+  //       phone: user.contact || '',
+  //     });
+  //   }
+  // }, [user, form]);
   
 
   const handlePlaceSelect = () => {
