@@ -30,7 +30,8 @@ export function StoreFeedItem({ store }: StoreFeedItemProps) {
               e.currentTarget.src = '/svg/placeholder.svg';
             }}
             alt={store.name}
-            fill
+            width={200}
+            height={200}
           />
         </div>
         <div className='h-26 p-4'>
