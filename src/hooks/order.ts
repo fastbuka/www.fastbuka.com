@@ -1,4 +1,5 @@
 import { backend } from '@/lib/axios';
+import { number } from 'zod';
 
 export const useOrder = () => {
   /**
@@ -11,12 +12,16 @@ export const useOrder = () => {
     delivery_email,
     delivery_contact,
     delivery_address,
+    latitude,
+    longitude,
     cartItems,
   }: {
     delivery_name: string;
     delivery_email: string;
     delivery_contact: string;
     delivery_address: string;
+    latitude: number,
+    longitude: number,
     cartItems: any;
   }) => {
     try {
@@ -36,6 +41,8 @@ export const useOrder = () => {
           delivery_email,
           delivery_contact,
           delivery_address,
+          latitude,
+          longitude,
           newOrder: true,
           cartItems,
         }),
@@ -48,20 +55,13 @@ export const useOrder = () => {
 
       if (response.data.success) {
         const order = response.data.data?.order;
-        
-        if (!order) {
-          console.error('Order data missing in response:', response.data);
-          return {
-            success: false,
-            message: response.data.message || 'Order items are out of stock',
-          };
-        }
-
+        const outOfStockItems = response.data.data?.outOfStockItems;
         return {
           success: true,
           message: response.data.message || 'Success',
           data: {
-            order: order
+            order: order,
+            outOfStockItems: outOfStockItems
           }
         };
       } else {
@@ -71,7 +71,6 @@ export const useOrder = () => {
         };
       }
     } catch (error: any) {
-      console.error('Order creation error:', error);
       return {
         success: false,
         message: error.message || 'Failed to create order',
