@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Star } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/Partials/use-cart";
+import { useToast } from "@/hooks/Partials/use-toast";
 
 interface Product {
   uuid: string;
@@ -20,16 +20,37 @@ interface Product {
 }
 
 export function ProductsFeedSection({ item }: { item: Product }) {
-  const { cart, addToCart } = useCart();
-  const [message, setMessage] = useState("");
-
-  function submitToCart(product: Product) {
-    addToCart(product);
-    setMessage(`${product.name} added to cart!`);
-  }
+  const { toast } = useToast();
+  const { cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
 
   const productInCart = cart.find((cartItem) => cartItem.uuid === item.uuid);
   const quantity = productInCart ? productInCart.quantity : 0;
+
+  function handleDecrease() {
+    if (quantity === 1) {
+      removeFromCart(item.uuid);
+      toast({
+        variant: "destructive",
+        title: "Removed from cart",
+        description: `${item.name} has been removed from the cart`,
+      });
+    }else{
+      decreaseQuantity(item.uuid);
+    }
+  }
+
+  function handleIncrease() {
+    if (quantity === 0) {
+      addToCart(item, 1);
+      toast({
+        variant: "success",
+        title: "Added to cart",
+        description: `${item.name} added to cart`,
+      });
+    }else{
+      increaseQuantity(item.uuid);
+    }
+  }
 
   return (
     <div key={item.uuid}>
@@ -61,14 +82,21 @@ export function ProductsFeedSection({ item }: { item: Product }) {
             <span>10KM</span>
           </div>
           <div className="p-4">
-            <Button onClick={() => submitToCart(item)} className="relative">
-              <span>Add to cart</span>
-              {quantity > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                  {quantity}
-                </span>
-              )}
-            </Button>
+            <div className='flex items-center'>
+              <button
+                onClick={handleDecrease}
+                className='w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600'
+              >
+                -
+              </button>
+              <span className='mx-3'>{quantity}</span>
+              <button
+                onClick={handleIncrease}
+                className='w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full text-gray-600'
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
       </Card>
