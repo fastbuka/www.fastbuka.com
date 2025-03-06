@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 interface StoreFeedItemProps {
   store: {
@@ -22,13 +23,14 @@ export function StoreFeedItem({ store }: StoreFeedItemProps) {
     <Link href={`/stores/${store.slug}`} aria-label={`View ${store.name}`}>
       <Card className='overflow-hidden hover:shadow-md transition-shadow'>
         <div className='bg-slate-100 h-48'>
-          <img
+          <Image
             className='object-cover h-full w-full'
             src={store.image || '/svg/placeholder.svg'}
             onError={(e) => {
               e.currentTarget.src = '/svg/placeholder.svg';
             }}
             alt={store.name}
+            fill
           />
         </div>
         <div className='h-26 p-4'>
