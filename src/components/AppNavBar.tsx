@@ -72,58 +72,47 @@ export default function AppNavBar() {
               )}
             </Button>
           </Link>
-          {user ? (
-            <Link href='/dashboard'>
-              <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
-                Dashboard
-              </Button>
-            </Link>
-          ) : (
-            <Link href='/login'>
-              <Button className='hidden bg-emerald-600 hover:bg-emerald-700 md:inline-flex'>
-                Get Started
-              </Button>
-            </Link>
-          )}
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 variant='ghost'
                 size='icon'
-                className='flex items-center md:hidden'
+                className='flex items-center'
               >
                 <SidebarOpenIcon className='h-9 w-6' />
               </Button>
             </SheetTrigger>
             <SheetContent side='left'>
               {user ? (
-                <div className='space-y-3 py-3'>
+                <div className='flex flex-col gap-3 py-3'>
                   <Link href='/dashboard'>
-                    <Button className='bg-emerald-600 hover:bg-emerald-700 w-full'>
                       Dashboard
-                    </Button>
                   </Link>
-                  <Button
+                  <span
                     onClick={logOutAccount}
-                    className='bg-red-600 hover:bg-red-700 w-full'
+                    className='text-red-600 hover:text-red-700 w-full'
                   >
                     Logout
-                  </Button>
+                  </span>
                 </div>
               ) : (
                 <div className='flex flex-col gap-3 py-3'>
                   <Link href='/register'>
-                    <Button className='bg-slate-600 hover:bg-slate-700 w-full'>
                       Register
-                    </Button>
                   </Link>
                   <Link href='/login'>
-                    <Button className='bg-slate-600 hover:bg-slate-700 w-full'>
                       Login
-                    </Button>
                   </Link>
                 </div>
               )}
+              <div className='flex flex-col gap-3 py-3'>
+                <Link href='/register'>
+                    Become a vendor
+                </Link>
+                <Link href='/login'>
+                    Become a rider
+                </Link>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

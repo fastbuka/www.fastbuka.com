@@ -40,6 +40,8 @@ export default function CartPage() {
     removeFromCart(item.uuid);
   };
 
+  console.log(cart);
+
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>
       <Link href='/feeds' className='flex items-center text-gray-600 mb-6'>
@@ -110,8 +112,8 @@ export default function CartPage() {
                 </div>
                 <div className='flex-grow'>
                   <h3 className='font-semibold text-lg'>{item.name}</h3>
-                  <p className='text-gray-600 text-sm'> Chicken Republic</p>
-                  <p className='text-gray-500 text-sm'>Extras: Water, Salad</p>
+                  {/* <p className='text-gray-600 text-sm'> Chicken Republic</p>
+                  <p className='text-gray-500 text-sm'>Extras: Water, Salad</p> */}
                   <p className='font-bold mt-1'>
                     ₦{item.price.toLocaleString()}
                   </p>

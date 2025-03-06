@@ -33,22 +33,23 @@ export function StoreCategoriesSection() {
 
   return (
     <ScrollArea className='w-full whitespace-nowrap rounded-md border'>
-      <div className='flex w-max space-x-4 p-4'>
-        <Button variant='outline' className='flex-shrink-0'>
-          All
-        </Button>
-        {data.map((category) => (
-          <Button
-            key={category.uuid}
-            variant='outline'
-            className='flex-shrink-0'
-          >
-            {category.name}
+      {message ? ( <p className='text-red-500 p-4'>{message}</p>):(
+        <div className='flex w-max space-x-4 p-4'>
+          <Button variant='outline' className='flex-shrink-0'>
+            All
           </Button>
-        ))}
-      </div>
+          {data.map((category) => (
+            <Button
+              key={category.uuid}
+              variant='outline'
+              className='flex-shrink-0'
+            >
+              {category.name}
+            </Button>
+          ))}
+        </div>
+      )}
       <ScrollBar orientation='horizontal' />
-      {message && <p className='text-red-500 p-2'>{message}</p>}
     </ScrollArea>
   );
 }
