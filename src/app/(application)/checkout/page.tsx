@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useOrder } from '@/hooks/order';
@@ -15,8 +15,10 @@ import CheckoutLayout from './Partials/CheckoutLayout';
 import { LoadScript, Autocomplete } from '@react-google-maps/api';
 import { User } from '@/types/user';
 import { useUser } from '@/hooks/users';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const libraries: ('places')[] = ['places'];
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -27,7 +29,6 @@ const formSchema = z.object({
 });
 
 export default function CheckoutPage() {
-  
   const router = useRouter();
   const { profile } = useUser();
   const { cart, clearAllCartItems } = useCart();
@@ -38,6 +39,10 @@ export default function CheckoutPage() {
   const [longitude, setLongitude] = useState<number | null>(null);
   const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
+  const [outOfStockItems, setOutOfStockItems] = useState<string[]>([]);
+  const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
+  const [orderUuid, setOrderUuid] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchProfile = async () => {
       const response = await profile();
@@ -46,7 +51,7 @@ export default function CheckoutPage() {
       } else {
         setUser(null);
       }
-    }
+    };
     fetchProfile();
   }, [profile]);
 
@@ -54,24 +59,26 @@ export default function CheckoutPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: user?.profile.first_name || '',
-      lastName:  user?.profile.last_name || '',
-      email:  user?.email || '',
-      phone:  user?.contact || '',
+      lastName: user?.profile.last_name || '',
+      email: user?.email || '',
+      phone: user?.contact || '',
       address: '',
     },
   });
 
-  // useEffect(() => {
-  //   if (user) {
-  //     form.reset({
-  //       firstName: user.profile?.first_name || '',
-  //       lastName: user.profile?.last_name || '',
-  //       email: user.email || '',
-  //       phone: user.contact || '',
-  //     });
-  //   }
-  // }, [user, form]);
-  
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    if (user && isFirstLoad.current) {
+      form.reset({
+        firstName: user.profile?.first_name || '',
+        lastName: user.profile?.last_name || '',
+        email: user.email || '',
+        phone: user.contact || '',
+      });
+      isFirstLoad.current = false;
+    }
+  }, [user, form]);
 
   const handlePlaceSelect = () => {
     if (autocomplete) {
@@ -86,7 +93,8 @@ export default function CheckoutPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    const { firstName, lastName, email, phone, address } = values;
+    setOutOfStockItems([]);
+    setShowOutOfStockModal(false);
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (!token) {
@@ -97,20 +105,25 @@ export default function CheckoutPage() {
 
     try {
       const response = await create({
-        delivery_name: `${firstName} ${lastName}`,
-        delivery_email: email,
-        delivery_contact: phone,
-        delivery_address: address,
-        // latitude: latitude,
-        // longitude: longitude,
+        delivery_name: `${values.firstName} ${values.lastName}`,
+        delivery_email: values.email,
+        delivery_contact: values.phone,
+        delivery_address: values.address,
+        latitude: latitude || 0,
+        longitude: longitude || 0,
         cartItems: cart,
       });
 
-      if (response.success && response.data?.order?.uuid) {
-        clearAllCartItems();
-        router.push(`/checkout/${response.data.order.uuid}`);
-      } else {
-        throw new Error(response.message || 'Failed to create order');
+      
+      if (response.success && response.data) {
+        if (!response.data?.outOfStockItems || response.data?.outOfStockItems.length === 0) {
+          clearAllCartItems();
+          router.push(`/checkout/${response.data.order.uuid}`);
+        } else {
+          setOrderUuid(response.data.order?.uuid || null);
+          setOutOfStockItems(response.data?.outOfStockItems);
+          setShowOutOfStockModal(true);
+        }
       }
     } catch (error: any) {
       console.error('Checkout error:', error);
@@ -120,32 +133,66 @@ export default function CheckoutPage() {
     }
   }
 
+  function handleContinueOrder() {
+    setShowOutOfStockModal(false);
+    if (orderUuid) {
+      router.push(`/checkout/${orderUuid}`);
+    }
+  }
+
   return (
-    <CheckoutLayout>
-      <div className='mb-8'>
-        <Progress value={50} className='bg-green-500 h-2' />
-      </div>
-      <div className='space-y-8'>
-        <div>
-          <h1 className='text-2xl font-bold'>Delivery Information</h1>
-          <p className='text-gray-500'>Please enter your delivery details</p>
+    <>
+      {/* Out-of-Stock Items Modal */}
+      <Dialog open={showOutOfStockModal} onOpenChange={setShowOutOfStockModal}>
+        <DialogContent>
+          {orderUuid ? (
+            <DialogTitle>Some Items Are Out of Stock</DialogTitle>
+          ): (
+            <DialogTitle>All Items Are Out of Stock</DialogTitle>
+          )}
+          <DialogDescription>
+            The following items are out of stock. You can proceed with the available items or cancel the order.
+          </DialogDescription>
+          <ul className="mt-4 list-disc list-inside text-red-600">
+            {outOfStockItems.map((item: any, index) => (
+              <li key={index}>{item.name}</li>
+            ))}
+          </ul>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowOutOfStockModal(false)}>Cancel Order</Button>
+            {orderUuid && (
+              <Button onClick={handleContinueOrder}>Continue with Available Items</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Checkout Form */}
+      <CheckoutLayout>
+        <div className="mb-8">
+          <Progress value={50} className="bg-green-500 h-2" />
         </div>
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold">Delivery Information</h1>
+            <p className="text-gray-500">Please enter your delivery details</p>
+          </div>
 
-        {GOOGLE_MAPS_API_KEY && (
-          <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={['places']}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div>
-                  <label className='block text-sm font-medium'>First Name</label>
-                  <Input placeholder='John' {...form.register('firstName')} />
+          {GOOGLE_MAPS_API_KEY && (
+            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium">First Name</label>
+                    <Input placeholder="John" {...form.register('firstName')} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Last Name</label>
+                    <Input placeholder="Doe" {...form.register('lastName')} />
+                  </div>
                 </div>
-                <div>
-                  <label className='block text-sm font-medium'>Last Name</label>
-                  <Input placeholder='Doe' {...form.register('lastName')} />
-                </div>
-              </div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
                   <label className='block text-sm font-medium'>Email</label>
                   <Input placeholder='john@example.com' type='email' {...form.register('email')} />
@@ -156,24 +203,21 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div>
-                <label className='block text-sm font-medium'>Delivery Address</label>
-                <Autocomplete
-                  onLoad={(auto) => setAutocomplete(auto)}
-                  onPlaceChanged={handlePlaceSelect}
-                >
-                  <Input placeholder='Search address...' {...form.register('address')} />
-                </Autocomplete>
-              </div>
+                <div>
+                  <label className="block text-sm font-medium">Delivery Address</label>
+                  <Autocomplete onLoad={(auto) => setAutocomplete(auto)} onPlaceChanged={handlePlaceSelect}>
+                    <Input placeholder="Search address..." {...form.register('address')} />
+                  </Autocomplete>
+                </div>
 
-              <Button type='submit' className='bg-green-500 w-full'>
-                {loading ? <Loader2 className='animate-spin' /> : 'Continue to Payment'}
-              </Button>
-            </form>
-          </LoadScript>
-        )}
-
-      </div>
-    </CheckoutLayout>
+                <Button type="submit" className="bg-green-500 w-full">
+                  {loading ? <Loader2 className="animate-spin" /> : 'Continue to Payment'}
+                </Button>
+              </form>
+            </LoadScript>
+          )}
+        </div>
+      </CheckoutLayout>
+    </>
   );
 }
