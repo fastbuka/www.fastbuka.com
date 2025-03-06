@@ -1,5 +1,6 @@
 'use client';
 import { useApp } from '@/hooks/app';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -45,7 +46,7 @@ export default function CategoriesSection() {
               className='group flex flex-col items-center gap-3 rounded-lg p-4 transition-colors hover:bg-gray-50'
             >
               <div className='bg-slate-100 aspect-square w-full overflow-hidden rounded-lg'>
-                <img
+                <Image
                   className='h-full w-full object-cover transition-transform group-hover:scale-105'
                   src={category.image || '/svg/placeholder.svg'}
                   onError={(e) => {
@@ -53,6 +54,7 @@ export default function CategoriesSection() {
                     e.currentTarget.src = '/svg/placeholder.svg';
                   }}
                   alt={category.name}
+                  fill
                 />
               </div>
               <span className='text-sm font-medium'>{category.name}</span>

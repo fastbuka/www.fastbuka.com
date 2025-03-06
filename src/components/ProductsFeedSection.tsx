@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/Partials/use-cart";
 import { useToast } from "@/hooks/Partials/use-toast";
+import Image from "next/image";
 
 interface Product {
   uuid: string;
@@ -56,13 +57,14 @@ export function ProductsFeedSection({ item }: { item: Product }) {
     <div key={item.uuid}>
       <Card>
         <div className="bg-slate-100 relative h-56">
-          <img
+          <Image
             className="h-full w-full object-cover"
             src={item.image || "/svg/placeholder.svg"}
             onError={(e) => {
               e.currentTarget.src = "/svg/placeholder.svg";
             }}
             alt={item.name}
+            fill
           />
         </div>
         <div className="px-4">
