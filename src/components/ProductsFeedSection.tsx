@@ -64,13 +64,14 @@ export function ProductsFeedSection({ item }: { item: Product }) {
               e.currentTarget.src = "/svg/placeholder.svg";
             }}
             alt={item.name}
-            fill
+            width={200}
+            height={200}
           />
         </div>
         <div className="px-4">
           <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
           <Badge variant="secondary" className="mb-2">
-            {/* {item.category} */}
+            {/* {item?.category} */}
           </Badge>
           <p className="font-bold mt-1">₦{item.price.toLocaleString()}</p>
           <div className="flex items-center text-sm text-gray-600">
