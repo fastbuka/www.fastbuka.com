@@ -126,29 +126,31 @@ export default function AppNavBar() {
               </Button>
             </SheetTrigger>
             <SheetContent side='left'>
-              <div className='flex flex-col gap-3 py-3'>
-                <Link href='/feeds'>Browse feeds</Link>
-                <Link href='/stores'>Browse stores</Link>
-              </div>
-              {user ? (
+              <div className='grid justify-between gap-3 h-full py-3'>
                 <div className='flex flex-col gap-3 py-3'>
-                  <Link href='/dashboard'>Dashboard</Link>
-                  <span
-                    onClick={logOutAccount}
-                    className='text-red-600 hover:text-red-700 cursor-pointer'
-                  >
-                    Logout
-                  </span>
+                  <Link href='/feeds'>Browse feeds</Link>
+                  <Link href='/stores'>Browse stores</Link>
+                  {user ? (
+                    <div className='flex flex-col gap-3'>
+                      <Link href='/dashboard'>Dashboard</Link>
+                      <span
+                        onClick={logOutAccount}
+                        className='text-red-600 hover:text-red-700 cursor-pointer'
+                      >
+                        Logout
+                      </span>
+                    </div>
+                  ) : (
+                    <div className='flex flex-col gap-3'>
+                      <Link href='/register'>Register</Link>
+                      <Link href='/login'>Login</Link>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className='flex flex-col gap-3 py-3'>
-                  <Link href='/register'>Register</Link>
-                  <Link href='/login'>Login</Link>
+                <div className='flex flex-col gap-3 pb-3'>
+                  <a href='https://vendor.fastbuka.com'>Become a vendor</a>
+                  <a href='https://rider.fastbuka.com'>Become a rider</a>
                 </div>
-              )}
-              <div className='flex flex-col gap-3 py-3'>
-                <a href='https://vendor.fastbuka.com'>Become a vendor</a>
-                <a href='https://rider.fastbuka.com'>Become a rider</a>
               </div>
             </SheetContent>
           </Sheet>
