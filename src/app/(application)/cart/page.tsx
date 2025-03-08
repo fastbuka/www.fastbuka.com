@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCart } from '@/hooks/Partials/use-cart';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 interface CartItem {
   uuid: string;
@@ -39,6 +40,8 @@ export default function CartPage() {
   const remove = (item: CartItem) => {
     removeFromCart(item.uuid);
   };
+
+  console.log(cart);
 
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>
@@ -80,13 +83,14 @@ export default function CartPage() {
                 className='flex items-center mb-6 bg-green-50 p-4 rounded-lg'
               >
                 <div className='w-24 h-24 mr-4 relative flex-shrink-0'>
-                  <img
+                  <Image
                     src={item.image ?? '/svg/placeholder.svg'}
                     alt={item.name}
                     className='h-full w-full rounded-md'
                     onError={(e) => {
                       e.currentTarget.src = '/svg/placeholder.svg';
                     }}
+                    fill
                   />
                   <button
                     onClick={() => remove(item)}
@@ -110,8 +114,8 @@ export default function CartPage() {
                 </div>
                 <div className='flex-grow'>
                   <h3 className='font-semibold text-lg'>{item.name}</h3>
-                  <p className='text-gray-600 text-sm'> Chicken Republic</p>
-                  <p className='text-gray-500 text-sm'>Extras: Water, Salad</p>
+                  {/* <p className='text-gray-600 text-sm'> Chicken Republic</p>
+                  <p className='text-gray-500 text-sm'>Extras: Water, Salad</p> */}
                   <p className='font-bold mt-1'>
                     ₦{item.price.toLocaleString()}
                   </p>
@@ -150,11 +154,11 @@ export default function CartPage() {
                 <span>Amount to pay</span>
                 <span>₦{totalAmount.toLocaleString()}</span>
               </div>
-              <Link href='/checkout'>
+              <a href='/checkout'>
                 <Button className='w-full mt-6 bg-green-500 text-white rounded-full text-lg font-semibold'>
                   Checkout
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

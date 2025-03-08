@@ -194,7 +194,7 @@ export default function AppFooter() {
       </div>
 
       {/* Mobile and Tablet View */}
-      <div className='fixed md:hidden z-40 inset-x-0 bottom-0 bg-black flex justify-between items-center p-3 shadow-lg'>
+      <div className='fixed hidden z-40 inset-x-0 bottom-0 bg-black justify-between items-center p-3 shadow-lg'>
         <a href='/' className='text-white text-center'>
           <FaHouse className='w-6 h-6 mx-auto mb-1' />
           <span className='block text-xs font-thin'>Home</span>

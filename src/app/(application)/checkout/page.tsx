@@ -1,39 +1,24 @@
 'use client';
 
-
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useOrder } from '@/hooks/order';
 import { useCart } from '@/hooks/Partials/use-cart';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
 import { Progress } from '@/components/ui/progress';
 import CheckoutLayout from './Partials/CheckoutLayout';
+import { LoadScript, Autocomplete } from '@react-google-maps/api';
+import { User } from '@/types/user';
+import { useUser } from '@/hooks/users';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const libraries: ('places')[] = ['places'];
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -43,75 +28,101 @@ const formSchema = z.object({
   address: z.string().min(5, 'Please select a valid address'),
 });
 
-const mockAddresses = [
-  '123 Victoria Island, Lagos',
-  '45 Allen Avenue, Ikeja',
-  '78 Admiralty Way, Lekki Phase 1',
-  '90 Adeola Odeku Street, Victoria Island',
-  '321 Herbert Macaulay Way, Yaba',
-];
-
 export default function CheckoutPage() {
   const router = useRouter();
+  const { profile } = useUser();
   const { cart, clearAllCartItems } = useCart();
   const { create } = useOrder();
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [addressSearch, setAddressSearch] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
 
+  const [outOfStockItems, setOutOfStockItems] = useState<string[]>([]);
+  const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
+  const [orderUuid, setOrderUuid] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await profile();
+      if (response.success) {
+        setUser(response.data.user);
+      } else {
+        setUser(null);
+      }
+    };
+    fetchProfile();
+  }, [profile]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: typeof window !== 'undefined' ? localStorage.getItem('firstName') || '' : '',
-      lastName: typeof window !== 'undefined' ? localStorage.getItem('lastName') || '' : '',
-      email: typeof window !== 'undefined' ? localStorage.getItem('email') || '' : '',
-      phone: typeof window !== 'undefined' ? localStorage.getItem('phone') || '' : '',
-      address: typeof window !== 'undefined' ? localStorage.getItem('address') || '' : '',
+      firstName: user?.profile.first_name || '',
+      lastName: user?.profile.last_name || '',
+      email: user?.email || '',
+      phone: user?.contact || '',
+      address: '',
     },
   });
 
-  const filteredAddresses = mockAddresses.filter((address) =>
-    address.toLowerCase().includes(addressSearch.toLowerCase())
-  );
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    if (user && isFirstLoad.current) {
+      form.reset({
+        firstName: user.profile?.first_name || '',
+        lastName: user.profile?.last_name || '',
+        email: user.email || '',
+        phone: user.contact || '',
+      });
+      isFirstLoad.current = false;
+    }
+  }, [user, form]);
+
+  const handlePlaceSelect = () => {
+    if (autocomplete) {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        setLatitude(place.geometry.location?.lat() || null);
+        setLongitude(place.geometry.location?.lng() || null);
+        form.setValue('address', place.formatted_address || '');
+      }
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    const { firstName, lastName, email, phone, address } = values;
+    setOutOfStockItems([]);
+    setShowOutOfStockModal(false);
 
-    // Check for authentication by retrieving the token from local storage
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null; // Check if in browser
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (!token) {
-      router.push('/login'); // Redirect to the login page
-      setLoading(false);
+      router.push('/login');
       return;
     }
 
     try {
       const response = await create({
-        delivery_name: `${firstName} ${lastName}`,
-        delivery_email: email,
-        delivery_contact: phone,
-        delivery_address: address,
+        delivery_name: `${values.firstName} ${values.lastName}`,
+        delivery_email: values.email,
+        delivery_contact: values.phone,
+        delivery_address: values.address,
+        latitude: latitude || 0,
+        longitude: longitude || 0,
         cartItems: cart,
       });
 
-      // Save delivery details to local storage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('lastName', lastName);
-        localStorage.setItem('email', email);
-        localStorage.setItem('phone', phone);
-        localStorage.setItem('address', address);
-      }
-
-      console.log("Response checkout:", response);
-
-      if (response.success && response.data?.order?.uuid) {
-        clearAllCartItems();
-        router.push(`/checkout/${response.data.order.uuid}`);
-      } else {
-        throw new Error(response.message || 'Failed to create order');
+      
+      if (response.success && response.data) {
+        if (!response.data?.outOfStockItems || response.data?.outOfStockItems.length === 0) {
+          clearAllCartItems();
+          router.push(`/checkout/${response.data.order.uuid}`);
+        } else {
+          setOrderUuid(response.data.order?.uuid || null);
+          setOutOfStockItems(response.data?.outOfStockItems);
+          setShowOutOfStockModal(true);
+        }
       }
     } catch (error: any) {
       console.error('Checkout error:', error);
@@ -121,143 +132,91 @@ export default function CheckoutPage() {
     }
   }
 
+  function handleContinueOrder() {
+    setShowOutOfStockModal(false);
+    if (orderUuid) {
+      router.push(`/checkout/${orderUuid}`);
+    }
+  }
+
   return (
-    <CheckoutLayout>
-      <div className='mb-8'>
-        <Progress value={50} className='bg-green-500 h-2' />
-      </div>
-      <div className='space-y-8'>
-        <div>
-          <h1 className='text-2xl font-bold'>Delivery Information</h1>
-          <p className='text-gray-500'>Please enter your delivery details</p>
+    <>
+      {/* Out-of-Stock Items Modal */}
+      <Dialog open={showOutOfStockModal} onOpenChange={setShowOutOfStockModal}>
+        <DialogContent>
+          {orderUuid ? (
+            <DialogTitle>Some Items Are Out of Stock</DialogTitle>
+          ): (
+            <DialogTitle>All Items Are Out of Stock</DialogTitle>
+          )}
+          <DialogDescription>
+            The following items are out of stock. You can proceed with the available items or cancel the order.
+          </DialogDescription>
+          <ul className="mt-4 list-disc list-inside text-red-600">
+            {outOfStockItems.map((item: any, index) => (
+              <li key={index}>{item.name}</li>
+            ))}
+          </ul>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowOutOfStockModal(false)}>Cancel Order</Button>
+            {orderUuid && (
+              <Button onClick={handleContinueOrder}>Continue with Available Items</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Checkout Form */}
+      <CheckoutLayout>
+        <div className="mb-8">
+          <Progress value={50} className="bg-green-500 h-2" />
         </div>
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-2xl font-bold">Delivery Information</h1>
+            <p className="text-gray-500">Please enter your delivery details</p>
+          </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <FormField
-                control={form.control}
-                name='firstName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder='John' {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='lastName'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder='Doe' {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          {GOOGLE_MAPS_API_KEY && (
+            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium">First Name</label>
+                    <Input placeholder="John" {...form.register('firstName')} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">Last Name</label>
+                    <Input placeholder="Doe" {...form.register('lastName')} />
+                  </div>
+                </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='john@example.com'
-                        type='email'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='phone'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input placeholder='08012345678' type='tel' {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div>
+                  <label className='block text-sm font-medium'>Email</label>
+                  <Input placeholder='john@example.com' type='email' {...form.register('email')} />
+                </div>
+                <div>
+                  <label className='block text-sm font-medium'>Phone Number</label>
+                  <Input placeholder='08012345678' type='tel' {...form.register('phone')} />
+                </div>
+              </div>
 
-            <FormField
-              control={form.control}
-              name='address'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Delivery Address</FormLabel>
-                  <FormControl>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant='outline'
-                          role='combobox'
-                          className='w-full justify-between'
-                        >
-                          {field.value || 'Search address...'}
-                          <Search className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className='w-full p-0'>
-                        <Command>
-                          <CommandInput
-                            placeholder='Search address...'
-                            value={addressSearch}
-                            onValueChange={setAddressSearch}
-                          />
-                          <CommandList>
-                            <CommandEmpty>No address found.</CommandEmpty>
-                            <CommandGroup>
-                              {filteredAddresses.map((address) => (
-                                <CommandItem
-                                  key={address}
-                                  onSelect={() => {
-                                    form.setValue('address', address);
-                                    setOpen(false);
-                                  }}
-                                >
-                                  {address}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <div>
+                  <label className="block text-sm font-medium">Delivery Address</label>
+                  <Autocomplete onLoad={(auto) => setAutocomplete(auto)} onPlaceChanged={handlePlaceSelect}>
+                    <Input placeholder="Search address..." {...form.register('address')} />
+                  </Autocomplete>
+                </div>
 
-            <Button type='submit' className='bg-green-500 w-full'>
-              {loading ? (
-                <span>
-                  <Loader2 className='animate-spin' />
-                </span>
-              ) : (
-                <span>Continue to Payment</span>
-              )}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </CheckoutLayout>
+                <Button type="submit" className="bg-green-500 w-full">
+                  {loading ? <Loader2 className="animate-spin" /> : 'Continue to Payment'}
+                </Button>
+              </form>
+            </LoadScript>
+          )}
+        </div>
+      </CheckoutLayout>
+    </>
   );
 }

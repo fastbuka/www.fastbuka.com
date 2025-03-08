@@ -201,16 +201,15 @@ export default function Login() {
 
           {/* Right Side (Image) */}
           <div className='hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden'>
-
             <div className='absolute bg-white' />
-            <Image
-              src='/svg/illustration.svg'
-              alt='Login illustration'
-              width={600}
-              height={600}
-              className='w-full h-full object-cover'
-              priority
-            />
+              <Image
+                src='/svg/illustration.svg'
+                alt='Login illustration'
+                width={600}
+                height={600}
+                className='w-full h-full object-cover'
+                priority
+              />
           </div>
         </div>
       </Card>
