@@ -99,7 +99,6 @@ export default function CheckoutPage() {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (!token) {
       router.push('/login');
-      setLoading(false);
       return;
     }
 
