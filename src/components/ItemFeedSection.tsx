@@ -20,7 +20,7 @@ interface Product {
   quantity: number;
 }
 
-export function ProductsFeedSection({ item }: { item: Product }) {
+export function ItemFeedSection({ item }: { item: Product }) {
   const { toast } = useToast();
   const { cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity } = useCart();
 
@@ -57,7 +57,7 @@ export function ProductsFeedSection({ item }: { item: Product }) {
     <div key={item.uuid}>
       <Card>
         <div className="bg-slate-100 relative h-56">
-          <Image
+          <img
             className="h-full w-full object-cover"
             src={item.image || "/svg/placeholder.svg"}
             onError={(e) => {
