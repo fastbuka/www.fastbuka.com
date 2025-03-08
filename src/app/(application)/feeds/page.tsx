@@ -1,7 +1,7 @@
 'use client';
 import { Suspense, useEffect, useState } from 'react';
 import { StoreFeedSection } from '@/components/StoreFeedSection';
-import { ProductsFeedSection } from '@/components/ProductsFeedSection';
+import { ItemFeedSection } from '@/components/ItemFeedSection';
 import { StoreCategoriesSection } from '@/components/StoreCategoriesSection';
 import { useApp } from '@/hooks/app';
 import { CardContent } from '@/components/ui/card';
@@ -77,7 +77,7 @@ export default function TrendingPage() {
             <Suspense fallback={<div>Loading trending products...</div>}>
               <div className='grid gap-6 md:grid-cols-2 xl:grid-cols-3'>
                 {items.map((item) => (
-                  <ProductsFeedSection key={item.uuid} item={item} />
+                  <ItemFeedSection key={item.uuid} item={item} />
                 ))}
               </div>
             </Suspense>

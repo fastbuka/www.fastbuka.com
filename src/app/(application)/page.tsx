@@ -1,6 +1,6 @@
 import HeroSection from '@/components/HeroSection';
 import CategoriesSection from '@/components/CategoriesSection';
-import RestaurantsSection from '@/components/RestaurantsSection';
+import RestaurantsSection from '@/components/ServicesIntro';
 import PartnersSponsors from '@/components/PartnersSponsors';
 import StoresMapSection from '@/components/StoresMapSection';
 
