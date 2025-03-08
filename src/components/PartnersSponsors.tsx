@@ -3,11 +3,11 @@ import Image from 'next/image';
 
 export default function PartnersSponsors() {
   const partners = [
-    { name: 'LINK', logo: '/images/LINK Logo Black.png' },
+    { name: 'LINK', logo: '/images/LINK Logo Black.png', url: 'https://www.linkio.world' },
   ];
 
   const sponsors = [
-    { name: 'Stellar', logo: '/images/stellar.png' },
+    { name: 'Stellar', logo: '/images/stellar.png', url: 'https://stellar.org' },
   ];
 
   return (
@@ -20,8 +20,11 @@ export default function PartnersSponsors() {
           <h3 className='mb-4 text-center text-xl font-semibold'>Partners</h3>
           <div className='flex flex-wrap items-center justify-center gap-8'>
             {partners.map((partner) => (
-              <div
+              <a
                 key={partner.name}
+                href={partner.url}
+                target='_blank'
+                rel='noopener noreferrer'
                 className='flex items-center justify-center h-20 w-20 rounded-md'
               >
                 <Image
@@ -34,7 +37,7 @@ export default function PartnersSponsors() {
                   }}
                   alt={partner.name}
                 />
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -42,8 +45,11 @@ export default function PartnersSponsors() {
           <h3 className='mb-4 text-center text-xl font-semibold'>Backed by</h3>
           <div className='flex flex-wrap items-center justify-center gap-8'>
             {sponsors.map((sponsor) => (
-              <div
+              <a
                 key={sponsor.name}
+                href={sponsor.url}
+                target='_blank'
+                rel='noopener noreferrer'
                 className='flex items-center justify-center  h-22 w-22 rounded-md'
               >
                 <Image
@@ -56,7 +62,7 @@ export default function PartnersSponsors() {
                   }}
                   alt={sponsor.name}
                 />
-              </div>
+              </a>
             ))}
           </div>
         </div>
