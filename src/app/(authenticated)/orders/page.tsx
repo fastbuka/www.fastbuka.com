@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useOrder } from '@/hooks/order';
-import { RefreshCw, MoreVertical } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
@@ -13,12 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 
 interface Order {
@@ -146,49 +140,36 @@ export default function UserOrders() {
         {orderDetails.length > 0 ? (
           <div className='flex flex-col space-y-4'>
             {orderDetails.map((order) => (
-              <motion.div
-                key={order.uuid}
-                variants={cardVariants}
-                className='bg-white rounded-lg shadow-md p-6 flex justify-between items-center'
-              >
-                <div className='space-y-2'>
-                  <h3 className='text-lg font-semibold'>
-                    {order?.vendor?.name || 'Vendor deleted'}
-                  </h3>
-                  <p className='text-sm text-gray-500'>
-                    Order #{order.order_number}
-                  </p>
-                  <p className='text-sm text-gray-500'>
-                    {formatDate(order.created_at)}
-                  </p>
-                </div>
-                <div className='flex gap-3'>
+              <Link key={order.uuid} href={`/checkout/${order.uuid}`}>
+                <motion.div
+                  variants={cardVariants}
+                  className='bg-white rounded-lg shadow-md p-6 flex justify-between items-center'
+                >
+                  <div className='space-y-2'>
+                    <h3 className='text-lg font-semibold'>
+                      {order?.vendor?.name || 'Vendor deleted'}
+                    </h3>
+                    <p className='text-sm text-gray-500'>
+                      Order #{order.order_number}
+                    </p>
+                    <p className='text-sm text-gray-500'>
+                      {formatDate(order.created_at)}
+                    </p>
+                  </div>
                   <div className='text-right space-y-2'>
                     <p className='text-lg font-bold'>
                       ₦{order.total_amount.toFixed(2)}
                     </p>
-                    <div className='flex items-center space-x-2'>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.order_status)}`}>
-                        Order: {order.order_status}
-                      </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.payment_status)}`}>
-                        Payment: {order.payment_status}
-                      </span>
-                    </div>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                        order.order_status
+                      )}`}
+                    >
+                      {order.order_status}
+                    </span>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <MoreVertical className='cursor-pointer' />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link href={`/checkout/${order.uuid}`}>View Details</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>Cancel Order</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         ) : (

@@ -150,6 +150,7 @@ export default function AppNavBar() {
                 <div className='flex flex-col gap-3 pb-3'>
                   <a href='https://vendor.fastbuka.com'>Become a vendor</a>
                   <a href='https://rider.fastbuka.com'>Become a rider</a>
+                  <Link href='/partner'>Partner with us</Link>
                 </div>
               </div>
             </SheetContent>

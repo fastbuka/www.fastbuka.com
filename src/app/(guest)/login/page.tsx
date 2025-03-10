@@ -45,7 +45,7 @@ export default function Login() {
       const response = await login({ email, password });
       if (response.success) {
         setSuccess(true);
-        router.push('/cart');
+        router.push('/feeds');
       } else {
        if (response.message === "Invalid credentials") {
         setMessage("Invalid credentials, please try again.");
@@ -203,7 +203,7 @@ export default function Login() {
           <div className='hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden'>
             <div className='absolute bg-white' />
               <Image
-                src='/svg/illustration.svg'
+                src='/svg/Group.svg'
                 alt='Login illustration'
                 width={600}
                 height={600}

@@ -280,20 +280,20 @@ export default function UserWallet() {
                             <FaNairaSign className="h-5 w-5 mr-2" />
                             Top-Up with NGN 
                           </Button>
-                          <Button
+                          {/* <Button
                             onClick={() => handleTopUp("usd")}
                             className="flex items-center justify-center"
                           >
                             <DollarSign className="h-5 w-5 mr-2" />
                             Top-Up with USD
-                          </Button>
-                          <Button
+                          </Button> */}
+                          {/* <Button
                             onClick={() => handleTopUp("exchange")}
                             className="flex items-center justify-center"
                           >
                             <RefreshCw className="h-5 w-5 mr-2" />
                             Top-Up with Exchange
-                          </Button>
+                          </Button> */}
                         </div>
                       </div>
                     </CardContent>
