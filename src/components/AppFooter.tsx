@@ -107,7 +107,7 @@ export default function AppFooter() {
             </li>
             <li>
               <a
-                href='https://afamfest.com'
+                href='https://asabafoodfestival.com'
                 className='hover:underline hover:text-[#0faf62]'
                 target='_blank'
               >
