@@ -203,7 +203,7 @@ export default function Login() {
           <div className='hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden'>
             <div className='absolute bg-white' />
               <Image
-                src='/svg/Group.svg'
+                src='/images/Pattern.png'
                 alt='Login illustration'
                 width={600}
                 height={600}
