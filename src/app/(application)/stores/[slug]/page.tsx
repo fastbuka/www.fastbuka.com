@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Star, Clock, MapPin, Phone } from 'lucide-react';
 import { CardContent } from '@/components/ui/card';
 import { ItemFeedSection } from '@/components/ItemFeedSection';
+import Image from 'next/image';
 
 interface Vendor {
   id: string;
   uuid: string;
   slug: string;
   name: string;
-  image: string;
+  profile: string;
   category: string;
   ratings: number;
   deliveryTime: string;
@@ -29,6 +30,7 @@ interface Product {
   name: string;
   price: number;
   image: string;
+  profile: string;
   ratings: number;
   category: string;
   description: string;
@@ -45,6 +47,7 @@ export default function StoreProfilePage() {
   const [message, setMessage] = useState('');
   const [data, setData] = useState<Vendor | null>(null);
   const [items, setItems] = useState<Product[]>([]);
+  const [imageLoading, setImageLoading] = useState(true);
 
   const vendor_slug = pathname.split('/').pop() || null;
 
@@ -54,7 +57,8 @@ export default function StoreProfilePage() {
         const response = await vendor({
           vendor_slug,
         });
-        setData(response.data.vendor);
+        console.log("vendor slug:", response);
+        setData(response?.data?.vendor);
       } catch (error) {
         setMessage('Failed to load categories');
       }
@@ -69,7 +73,7 @@ export default function StoreProfilePage() {
         const response = await products({
           vendor_slug,
         });
-        setItems(response.data.foods);
+        setItems(response?.data?.foods);
       } catch (error) {
         setMessage('Failed to load categories');
       }
@@ -81,14 +85,25 @@ export default function StoreProfilePage() {
   return (
     <div className='container mx-auto px-4 py-8 min-h-screen'>
       <CardContent>
-        <div className='bg-slate-100 relative h-64 mb-5 rounded-lg overflow-hidden'>
-          <img
+        <div className='bg-slate-100 relative h-48 md:h-64 mb-5 rounded-lg overflow-hidden'>
+          {imageLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-200 animate-pulse">
+              <div className="w-10 h-10 border-4 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          <Image
             className='object-cover'
-            src={data?.image || '/svg/placeholder.svg'}
-            onError={(e) => {
-              e.currentTarget.src = '/svg/placeholder.svg';
+            src={data?.profile || '/svg/placeholder.svg'}
+            alt={data?.name || 'Store profile'}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority
+            onLoadingComplete={() => setImageLoading(false)}
+            onError={() => {
+              setImageLoading(false);
+              const img = document.querySelector('img');
+              if (img) img.src = '/svg/placeholder.svg';
             }}
-            alt={data?.name}
           />
         </div>
         <div className='flex flex-col md:flex-row md:justify-between md:items-center mb-5'>

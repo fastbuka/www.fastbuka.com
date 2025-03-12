@@ -3,14 +3,40 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { useApp } from '@/hooks/app';
-import { Vendor } from '@/types/vendor';
 import { Skeleton } from '@radix-ui/themes';
 import { Badge } from '@/components/ui/badge';
 import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 
-
-
+interface Vendor {
+  id: string;
+  uuid: string;
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  opening_time: string;
+  closing_time: string;
+  profile: string | null;
+  cover: string | null;
+  email: string | null;
+  contact: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  location: string | null;
+  featured: number;
+  ratings: number;
+  balance: number;
+  is_online: boolean;
+  status: string;
+  category: string | null;
+  slug: string;
+  user_uuid: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export function StoreFeedSection() {
   const { vendors } = useApp();
@@ -22,10 +48,12 @@ export function StoreFeedSection() {
   const fetched = useRef(false);
 
   useEffect(() => {
+
     const fetchData = async () => {
       setLoading(true);
       try {
         const response = await vendors();
+        console.log("vendors:", response.data.vendors);
         setData(response.data.vendors);
       } catch (error) {
         setMessage('Failed to load categories');
@@ -71,7 +99,7 @@ export function StoreFeedSection() {
         <div className='bg-slate-100 h-48'>
           <Image
             className='object-cover h-full w-full'
-            src={store.image || '/svg/placeholder.svg'}
+            src={store.profile || '/svg/placeholder.svg'}
             onError={(e) => {
               e.currentTarget.src = '/svg/placeholder.svg';
             }}
@@ -91,10 +119,10 @@ export function StoreFeedSection() {
               <span>{store.ratings}</span>
             </div>
           </CardContent>
-          <CardFooter className='flex justify-between text-sm text-gray-600 p-0'>
+          {/* <CardFooter className='flex justify-between text-sm text-gray-600 p-0'>
             <span>{store.deliveryTime}</span>
             <span>{store.distance}</span>
-          </CardFooter>
+          </CardFooter> */}
         </div>
       </Card>
     </Link>
