@@ -59,11 +59,11 @@ export function ItemFeedSection({ item }: { item: Product }) {
         <div className="bg-slate-100 relative h-56">
           <img
             className="h-full w-full object-cover"
-            src={item.image || "/svg/placeholder.svg"}
+            src={item?.image || "/svg/placeholder.svg"}
             onError={(e) => {
               e.currentTarget.src = "/svg/placeholder.svg";
             }}
-            alt={item.name}
+            alt={item?.name}
             width={200}
             height={200}
           />
@@ -73,15 +73,15 @@ export function ItemFeedSection({ item }: { item: Product }) {
           <Badge variant="secondary" className="mb-2">
             {/* {item?.category} */}
           </Badge>
-          <p className="font-bold mt-1">₦{item.price.toLocaleString()}</p>
+          <p className="font-bold mt-1">₦{item?.price.toLocaleString()}</p>
           <div className="flex items-center text-sm text-gray-600">
             <Star className="w-4 h-4 text-yellow-400 mr-1" />
-            <span>{item.ratings}</span>
+            <span>{item?.ratings}</span>
           </div>
         </div>
         <div className="flex justify-between items-center px-4 text-sm text-gray-600">
           <div className="flex flex-cols gap-2">
-            <span>{item.processing_time} Min</span>
+            <span>{item?.processing_time} Min</span>
             <span>10KM</span>
           </div>
           <div className="p-4">
