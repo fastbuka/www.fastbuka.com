@@ -57,7 +57,7 @@ export function ItemFeedSection({ item }: { item: Product }) {
     <div key={item.uuid}>
       <Card>
         <div className="bg-slate-100 relative h-56">
-          <img
+          <Image
             className="h-full w-full object-cover"
             src={item?.image || "/svg/placeholder.svg"}
             onError={(e) => {
@@ -66,6 +66,7 @@ export function ItemFeedSection({ item }: { item: Product }) {
             alt={item?.name}
             width={200}
             height={200}
+            priority
           />
         </div>
         <div className="px-4">
