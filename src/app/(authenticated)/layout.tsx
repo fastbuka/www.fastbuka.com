@@ -46,7 +46,7 @@ export default function UserLayout({
     return () => {
       socket.off('message');
     };  
-  }, [socket]);
+  }, [socket, toast, user]);
   
   useEffect(() => {
     const fetchProfile = async () => {

@@ -205,7 +205,7 @@ export default function CheckoutPage() {
                 <div>
                   <label className="block text-sm font-medium">Delivery Address</label>
                   <Autocomplete onLoad={(auto) => setAutocomplete(auto)} onPlaceChanged={handlePlaceSelect}>
-                    <Input placeholder="Search address..." {...form.register('address')} />
+                    <Input placeholder="Search address..." autoComplete="off" {...form.register('address')} />
                   </Autocomplete>
                 </div>
 
