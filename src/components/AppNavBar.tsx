@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { MapPin, Search, ShoppingBag, SidebarOpenIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAuth } from '@/hooks/auth';
+import { useFastBukaContext } from '@/context';
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -16,8 +17,9 @@ export default function AppNavBar() {
   const { cart } = useCart();
   const { logout } = useAuth();
   const { profile } = useUser();
+  const { location, setLocation } = useFastBukaContext();
   const [user, setUser] = useState<any | null>(null);
-  const [location, setLocation] = useState('Fetching location...');
+  // const [location, setLocation] = useState('Fetching location...');
 
   // Fetch user profile once
   useEffect(() => {
@@ -49,7 +51,9 @@ export default function AppNavBar() {
         const city = addressComponents.find((comp: any) => comp.types.includes('locality'))?.long_name;
         const country = addressComponents.find((comp: any) => comp.types.includes('country'))?.long_name;
 
-        setLocation(city && country ? `${city}, ${country}` : 'Location unavailable');
+        const locationString = city && country ? `${city}, ${country}` : 'Location unavailable';
+        setLocation(locationString);
+        console.log('Location updated:', locationString);
       } else {
         setLocation('Location unavailable');
       }
@@ -57,7 +61,7 @@ export default function AppNavBar() {
       console.error('Error fetching location:', error);
       setLocation('Unable to fetch location');
     }
-  }, []);
+  }, [setLocation]);
 
   // Get user coordinates
   useEffect(() => {

@@ -53,6 +53,8 @@ export const useOrder = () => {
         }
       );
 
+      // console.log("creare respone", response);
+
       if (response.data.success) {
         const order = response.data.data?.order;
         const outOfStockItems = response.data.data?.outOfStockItems;
