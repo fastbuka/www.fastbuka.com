@@ -5,8 +5,6 @@ import { useFastBukaContext } from '@/context';
 import { Button } from '@/components/ui/button';
 import { MapPin } from 'lucide-react';
 
-
-// still yet to fix the allow location button
 export default function LocationCheck() {
   const { location, setLocation } = useFastBukaContext();
   const [isLocationDenied, setIsLocationDenied] = useState(false);
@@ -14,7 +12,7 @@ export default function LocationCheck() {
 
   useEffect(() => {
     // Check if location is denied
-    if (location === 'Location access denied') {
+    if (location.address === 'Location access denied') {
       setIsLocationDenied(true);
     } else {
       setIsLocationDenied(false);
@@ -27,52 +25,47 @@ export default function LocationCheck() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // Location permission granted
-          const { latitude, longitude } = position.coords;
-          
-          // Fetch address from coordinates
-          fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-          )
-            .then(response => response.json())
-            .then(data => {
-              if (data.status === 'OK' && data.results.length > 0) {
-                const addressComponents = data.results[0].address_components;
-                const city = addressComponents.find((comp: any) => comp.types.includes('locality'))?.long_name;
-                const country = addressComponents.find((comp: any) => comp.types.includes('country'))?.long_name;
-                
-                const locationString = city && country ? `${city}, ${country}` : 'Location available';
-                setLocation(locationString);
-                setIsLocationDenied(false);
-              } else {
-                setLocation('Location available');
-                setIsLocationDenied(false);
-              }
-              setIsLoading(false);
-            })
-            .catch(error => {
-              console.error('Error fetching address:', error);
-              setLocation('Location available');
-              setIsLocationDenied(false);
-              setIsLoading(false);
-            });
+          // Location permission granted, but we don't need to fetch the address here
+          // The AppNavBar component will handle that
+          setLocation({
+            address: 'Fetching location...',
+            coordinates: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }
+          });
+          setIsLocationDenied(false);
+          setIsLoading(false);
         },
         (error) => {
           // Location permission denied
           console.error('Geolocation error:', error);
-          setLocation('Location access denied');
+          setLocation({
+            address: 'Location access denied',
+            coordinates: {
+              latitude: null,
+              longitude: null
+            }
+          });
           setIsLocationDenied(true);
           setIsLoading(false);
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
-      setLocation('Geolocation not supported');
+      setLocation({
+        address: 'Geolocation not supported',
+        coordinates: {
+          latitude: null,
+          longitude: null
+        }
+      });
       setIsLocationDenied(true);
       setIsLoading(false);
     }
   };
 
+  // Only show the location check UI if location is denied
   if (!isLocationDenied) {
     return null;
   }

@@ -19,7 +19,6 @@ export default function AppNavBar() {
   const { profile } = useUser();
   const { location, setLocation } = useFastBukaContext();
   const [user, setUser] = useState<any | null>(null);
-  // const [location, setLocation] = useState('Fetching location...');
 
   // Fetch user profile once
   useEffect(() => {
@@ -52,14 +51,32 @@ export default function AppNavBar() {
         const country = addressComponents.find((comp: any) => comp.types.includes('country'))?.long_name;
 
         const locationString = city && country ? `${city}, ${country}` : 'Location unavailable';
-        setLocation(locationString);
+        setLocation({
+          address: locationString,
+          coordinates: {
+            latitude,
+            longitude
+          }
+        });
         console.log('Location updated:', locationString);
       } else {
-        setLocation('Location unavailable');
+        setLocation({
+          address: 'Location unavailable',
+          coordinates: {
+            latitude: null,
+            longitude: null
+          }
+        });
       }
     } catch (error) {
       console.error('Error fetching location:', error);
-      setLocation('Unable to fetch location');
+      setLocation({
+        address: 'Unable to fetch location',
+        coordinates: {
+          latitude: null,
+          longitude: null
+        }
+      });
     }
   }, [setLocation]);
 
@@ -70,11 +87,23 @@ export default function AppNavBar() {
         ({ coords }) => fetchLocation(coords.latitude, coords.longitude),
         (error) => {
           console.warn('Geolocation error:', error.message);
-          setLocation('Location access denied');
+          setLocation({
+            address: 'Location access denied',
+            coordinates: {
+              latitude: null,
+              longitude: null
+            }
+          });
         }
       );
     } else {
-      setLocation('Geolocation not supported');
+      setLocation({
+        address: 'Geolocation not supported',
+        coordinates: {
+          latitude: null,
+          longitude: null
+        }
+      });
     }
   }, [fetchLocation]);
 
@@ -97,7 +126,7 @@ export default function AppNavBar() {
         <div className='hidden flex-1 items-center gap-4 px-6 md:flex'>
           <Button variant='ghost' className='flex items-center gap-2'>
             <MapPin className='h-4 w-4 text-emerald-600' />
-            <span className='text-sm'>{location}</span>
+            <span className='text-sm'>{location.address}</span>
           </Button>
           <div className='flex flex-1 items-center gap-2 rounded-full border bg-gray-50 px-4 py-2'>
             <Search className='h-4 w-4 text-gray-400' />

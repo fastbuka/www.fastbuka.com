@@ -16,6 +16,7 @@ import { LoadScript, Autocomplete } from '@react-google-maps/api';
 import { User } from '@/types/user';
 import { useUser } from '@/hooks/users';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { useFastBukaContext } from '@/context';
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 const libraries: ('places')[] = ['places'];
@@ -33,6 +34,7 @@ export default function CheckoutPage() {
   const { profile } = useUser();
   const { cart, clearAllCartItems } = useCart();
   const { create } = useOrder();
+  const { location } = useFastBukaContext();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -80,6 +82,14 @@ export default function CheckoutPage() {
     }
   }, [user, form]);
 
+  // Set initial coordinates from shared state
+  useEffect(() => {
+    if (location.coordinates.latitude && location.coordinates.longitude) {
+      setLatitude(location.coordinates.latitude);
+      setLongitude(location.coordinates.longitude);
+    }
+  }, [location.coordinates]);
+
   const handlePlaceSelect = () => {
     if (autocomplete) {
       const place = autocomplete.getPlace();
@@ -89,6 +99,13 @@ export default function CheckoutPage() {
         form.setValue('address', place.formatted_address || '');
       }
     }
+  };
+
+  // Set up autocomplete options based on shared location
+  const autocompleteOptions = {
+    fields: ['address_components', 'geometry', 'formatted_address'],
+    strictBounds: false,
+    types: ['address'],
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -204,8 +221,15 @@ export default function CheckoutPage() {
 
                 <div>
                   <label className="block text-sm font-medium">Delivery Address</label>
-                  <Autocomplete onLoad={(auto) => setAutocomplete(auto)} onPlaceChanged={handlePlaceSelect}>
-                    <Input placeholder="Search address..." {...form.register('address')} />
+                  <Autocomplete 
+                    onLoad={(auto) => setAutocomplete(auto)} 
+                    onPlaceChanged={handlePlaceSelect}
+                    options={autocompleteOptions}
+                  >
+                    <Input 
+                      placeholder={location.address !== 'Fetching location...' ? `Search address in ${location.address}...` : "Search address..."} 
+                      {...form.register('address')} 
+                    />
                   </Autocomplete>
                 </div>
 
