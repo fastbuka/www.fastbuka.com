@@ -22,7 +22,6 @@ export const useAuth = () => {
         password,
       });
       // Log the response for debugging
-      console.log("Registration response:", response);
       if (response.data.success) {
         return {
           success: true,
@@ -60,7 +59,6 @@ export const useAuth = () => {
         email,
         password,
       });
-      console.log("Login response:", response)
       if (response.data.success) {
         localStorage.setItem('token', response.data.data.token);
         localStorage.setItem('userUuid', response.data.data.user.uuid);

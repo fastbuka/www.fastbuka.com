@@ -16,7 +16,6 @@ export default function UserTickets() {
 
   const handleSubmitTicket = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Ticket submitted:', { subject, message });
   };
   const handleUpdate = async () => {};
 

@@ -58,7 +58,6 @@ export default function AppNavBar() {
             longitude
           }
         });
-        console.log('Location updated:', locationString);
       } else {
         setLocation({
           address: 'Location unavailable',
@@ -158,14 +157,14 @@ export default function AppNavBar() {
                 <SidebarOpenIcon className='h-9 w-6' />
               </Button>
             </SheetTrigger>
-            <SheetContent side='left'>
+            <SheetContent side='right'>
               <div className='grid justify-between gap-3 h-full py-3'>
                 <div className='flex flex-col gap-3 py-3'>
-                  <Link href='/feeds'>Browse feeds</Link>
-                  <Link href='/stores'>Browse stores</Link>
+                  <Link href='/feeds' className="hover:text-green-600">Browse feeds</Link>
+                  <Link href='/stores' className="hover:text-green-600">Browse stores</Link>
                   {user ? (
                     <div className='flex flex-col gap-3'>
-                      <Link href='/dashboard'>Dashboard</Link>
+                      <Link className="hover:text-green-600" href='/dashboard'>Dashboard</Link>
                       <span
                         onClick={logOutAccount}
                         className='text-red-600 hover:text-red-700 cursor-pointer'
@@ -175,15 +174,15 @@ export default function AppNavBar() {
                     </div>
                   ) : (
                     <div className='flex flex-col gap-3'>
-                      <Link href='/register'>Register</Link>
-                      <Link href='/login'>Login</Link>
+                      <Link className="hover:text-green-600" href='/register'>Register</Link>
+                      <Link className="hover:text-green-600" href='/login'>Login</Link>
                     </div>
                   )}
                 </div>
                 <div className='flex flex-col gap-3 pb-3'>
-                  <a href='https://vendor.fastbuka.com'>Become a vendor</a>
-                  <a href='https://rider.fastbuka.com'>Become a rider</a>
-                  <Link href='/partner'>Partner with us</Link>
+                  <a className="hover:text-green-600" href='https://vendor.fastbuka.com'>Become a vendor</a>
+                  <a className="hover:text-green-600" href='https://rider.fastbuka.com'>Become a rider</a>
+                  <Link className="hover:text-green-600"href='/partner'>Partner with us</Link>
                 </div>
               </div>
             </SheetContent>

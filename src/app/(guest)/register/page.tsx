@@ -70,7 +70,6 @@ export default function Register() {
       }
     } catch (error) {
       setMessage("Registration failed. Please try again.");
-      console.log("registration error: ", error);
     } finally {
       setLoading(false);
     }

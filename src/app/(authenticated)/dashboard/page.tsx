@@ -76,8 +76,6 @@ export default function UserDashboard() {
    
     try {
       const response = await wallet();
-      console.log("Wallet", response)
-      console.log("Wallet: ", response);
       if (response?.success && response.data?.wallet) {
         setUser(response.data.wallet);
         setWalletEnabled(true);
@@ -95,7 +93,6 @@ export default function UserDashboard() {
   const enableWallet = useCallback(async () => {
     setLoading(true);
     setWalletEnabled(false);
-    console.log("Enable Wallet function called");
     try {
       await sendXLM();
       await addTrustLine();

@@ -57,7 +57,6 @@ export default function StoreProfilePage() {
         const response = await vendor({
           vendor_slug,
         });
-        console.log("vendor slug:", response);
         setData(response?.data?.vendor);
       } catch (error) {
         setMessage('Failed to load categories');

@@ -146,7 +146,7 @@ export default function CheckoutPage() {
         }
       }
     } catch (error: any) {
-      console.error('Checkout error:', error);
+      // console.error('Checkout error:', error);
       toast({
         variant: "destructive",
         title: "Checkout Error",

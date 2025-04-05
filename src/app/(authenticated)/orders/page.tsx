@@ -24,16 +24,16 @@ interface Order {
   total_amount: number;
   order_status: string;
   payment_status: string;
-  created_at: string;
+  createdAt: string;
 }
 
-const orderStatuses = ['All', 'Pending', 'Completed', 'Cancelled'];
+const orderStatuses = ['pending', 'paid', 'ReadyForPickup', 'PickedUp', 'Delivered'];
 
 export default function UserOrders() {
   const { orders } = useOrder();
   const [loading, setLoading] = useState(true);
   const [orderFetch, setOrderFetch] = useState(false);
-  const [orderStatus, setOrderStatus] = useState('All');
+  const [orderStatus, setOrderStatus] = useState('pending');
   const [orderDetails, setOrderDetails] = useState<Order[]>([]);
 
   const cardVariants = {
@@ -41,12 +41,27 @@ export default function UserOrders() {
     visible: { opacity: 1, y: 0 },
   };
 
+  function formatDate(dateString: string) {
+    if (!dateString) return 'Invalid date';
+    const date = new Date(dateString.trim());
+    if (isNaN(date.getTime())) {
+      return 'Invalid date';
+    }
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return date.toLocaleDateString(undefined, options);
+  }
+
+
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     setOrderFetch(false);
     try {
       const response = await orders({
-        order_status: orderStatus !== 'All' ? orderStatus.toLowerCase() : null,
+        order_status: orderStatus !== 'pending' ? orderStatus.toLowerCase() : null,
       });
       if (response.success) {
         setOrderDetails(response.data.orders);
@@ -65,14 +80,7 @@ export default function UserOrders() {
     }
   }, [fetchOrders, orderFetch]);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
+  
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -153,7 +161,7 @@ export default function UserOrders() {
                       Order #{order.order_number}
                     </p>
                     <p className='text-sm text-gray-500'>
-                      {formatDate(order.created_at)}
+                      {formatDate(order.createdAt)}
                     </p>
                   </div>
                   <div className='text-right space-y-2'>

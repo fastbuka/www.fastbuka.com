@@ -55,7 +55,6 @@ export default function UserSettings() {
       setLoading(false);
     }
   }, [profile]);
-  console.log(user);
 
   useEffect(() => {
     if (!user) {

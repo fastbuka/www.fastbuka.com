@@ -53,8 +53,6 @@ export const useOrder = () => {
         }
       );
 
-      // console.log("creare respone", response);
-
       if (response.data.success) {
         const order = response.data.data?.order;
         const outOfStockItems = response.data.data?.outOfStockItems;
@@ -88,7 +86,6 @@ export const useOrder = () => {
   const orders = async ({ order_status }: { order_status: string | null }) => {
     try {
       const token = localStorage.getItem('token');
-      console.log("Token:", token);
       let response;
 
       if (order_status) {
