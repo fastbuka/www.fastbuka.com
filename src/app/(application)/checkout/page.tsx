@@ -17,6 +17,8 @@ import { User } from '@/types/user';
 import { useUser } from '@/hooks/users';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { useFastBukaContext } from '@/context';
+import { useToast } from '@/hooks/Partials/use-toast';
+
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 const libraries: ('places')[] = ['places'];
@@ -35,6 +37,7 @@ export default function CheckoutPage() {
   const { cart, clearAllCartItems } = useCart();
   const { create } = useOrder();
   const { location } = useFastBukaContext();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -120,6 +123,7 @@ export default function CheckoutPage() {
     }
 
     try {
+  
       const response = await create({
         delivery_name: `${values.firstName} ${values.lastName}`,
         delivery_email: values.email,
@@ -143,7 +147,11 @@ export default function CheckoutPage() {
       }
     } catch (error: any) {
       console.error('Checkout error:', error);
-      alert(error.message || 'Something went wrong during checkout');
+      toast({
+        variant: "destructive",
+        title: "Checkout Error",
+        description: error.message || 'Something went wrong during checkout',
+      });
     } finally {
       setLoading(false);
     }
@@ -233,7 +241,7 @@ export default function CheckoutPage() {
                   </Autocomplete>
                 </div>
 
-                <Button type="submit" className="bg-green-500 w-full">
+                <Button disabled={loading} type="submit" className="bg-green-500 w-full">
                   {loading ? <Loader2 className="animate-spin" /> : 'Continue to Payment'}
                 </Button>
               </form>

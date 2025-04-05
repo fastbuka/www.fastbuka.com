@@ -28,6 +28,7 @@ import {
 import { useSendXLM } from "@/hooks/sendXLM";
 import { useAddTrustLine } from "@/hooks/addTrustLine";
 import { set } from "react-hook-form";
+import { useToast } from "@/hooks/Partials/use-toast";
 
 
 interface Balance {
@@ -53,6 +54,7 @@ const cardVariants = {
 
 export default function UserWallet() {
   const router = useRouter();
+  const { toast } = useToast();
   const { profile, wallet } = useUser();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [amount, setAmount] = useState(0);
@@ -123,13 +125,26 @@ export default function UserWallet() {
     console.log(`Top up ${amount} via ${method}`);
 
     if (method === "ngn" && amount < 5000) {
-      alert("Amount must be at least 5000 NGN");
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Amount must be at least 5000 NGN',
+      });
       return;
     } else if (method === "usd" && amount < 5) {
-      alert("Amount must be at least 5 USD");
+      // 
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Amount must be at least 5 USD',
+      });
       return;
     } else if (method !== "ngn" && method !== "usd" && method !== "exchange") {
-      alert("Invalid method");
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Invalid method',
+      });
       return;
     }
 

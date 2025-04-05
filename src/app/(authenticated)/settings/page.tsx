@@ -11,7 +11,7 @@ import { useUser } from '@/hooks/users';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useToast } from '@/hooks/Partials/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, RefreshCw, User } from 'lucide-react';
 import { AvatarUploadModal } from '@/components/AvatarUploadModal';
@@ -35,6 +35,7 @@ const cardVariants = {
 
 export default function UserSettings() {
   const { profile, update } = useUser();
+  const { toast } = useToast();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +78,11 @@ export default function UserSettings() {
       });
       if (response.success) {
         fetchProfile();
-        alert('Profile updated successfully!');
+        toast({
+          variant: 'default',
+          title: 'Success',
+          description: 'Profile updated successfully!',
+        });
       }
     } catch (err) {
       setError('Failed to update profile. Please try again.');
@@ -110,6 +115,17 @@ export default function UserSettings() {
     );
   }
 
+  // Show error toast if there's an error
+  useEffect(() => {
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error || 'Something went wrong',
+      });
+    }
+  }, [error, toast]);
+
   return (
     <AnimatePresence>
       {error ? (
@@ -118,11 +134,8 @@ export default function UserSettings() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <Alert variant='destructive'>
-            <AlertCircle className='h-4 w-4' />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+          <AlertCircle className="h-6 w-6 text-red-500" />
+          <p className="text-red-500">{error}</p>
         </motion.div>
       ) : (
         <CardContent>
