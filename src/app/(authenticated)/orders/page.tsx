@@ -61,7 +61,7 @@ export default function UserOrders() {
     setOrderFetch(false);
     try {
       const response = await orders({
-        order_status: orderStatus !== 'pending' ? orderStatus.toLowerCase() : null,
+        order_status: orderStatus !== 'pending' ? orderStatus : null,
       });
       if (response.success) {
         setOrderDetails(response.data.orders);
