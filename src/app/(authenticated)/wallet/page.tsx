@@ -122,7 +122,6 @@ export default function UserWallet() {
     : "";
 
   const handleTopUp = (method: string) => {
-    console.log(`Top up ${amount} via ${method}`);
 
     if (method === "ngn" && amount < 5000) {
       toast({
@@ -163,8 +162,7 @@ export default function UserWallet() {
         wallet_address: user?.address,
         type: "buy",
       },
-      onSuccess: (response: {}) => alert("Transaction successful"),
-      onLoad: () => console.log("Bridge widget loaded successfully"),
+      onSuccess: (response: {}) => alert("Transaction successful")
     });
     widget.setup();
     widget.open();
@@ -183,7 +181,6 @@ export default function UserWallet() {
   };
 
   const activateWallet = () => {
-    console.log("Wallet activated");
     setIsWalletActive(true);
   };
 

@@ -53,7 +53,6 @@ export function StoreFeedSection() {
       setLoading(true);
       try {
         const response = await vendors();
-        console.log("vendors:", response.data.vendors);
         setData(response.data.vendors);
       } catch (error) {
         setMessage('Failed to load categories');

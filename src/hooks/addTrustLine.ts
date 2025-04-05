@@ -5,7 +5,6 @@ export const useAddTrustLine = () => {
   const addTrustLine = async () => {
     try {
         const response = await backend.post(`/api/auth/addTrustLine/${userUuid}`);
-        console.log("Trustline: ", response)
         if (response.data.success) {
             return {
                 success: true,
@@ -19,7 +18,6 @@ export const useAddTrustLine = () => {
             };
         }
     } catch (error: any) {
-        console.log("errror adding trustline:", error);
         return {
             success: false,
             message: error?.message || 'Failed to add trustline',

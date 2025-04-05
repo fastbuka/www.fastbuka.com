@@ -7,7 +7,6 @@ export const useApp = () => {
   const categories = async () => {
     try {
       const response = await backend.get('/api/v1/categories');
-      console.log("Get categories response", response);
       if (response.data.success) {
         return {
           success: true,

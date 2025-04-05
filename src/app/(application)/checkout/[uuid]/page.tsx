@@ -34,7 +34,6 @@ export default function PaymentPage() {
       if (response.success) {
         setOrderDetails(response.data.order);
         setOrderUuid(response.data.order.uuid);
-        console.log(response);
       }
     };
 
@@ -52,10 +51,8 @@ export default function PaymentPage() {
       setIsLoading(false);
       return;
     }
-    console.log("Order UUID:", orderUuid);
     try {
       const response = await payment(orderUuid);
-      console.log("Payment response:", response);
       if (response?.message?.data?.message === 'Payment order created successfully') {
         toast({
           variant: "success",
