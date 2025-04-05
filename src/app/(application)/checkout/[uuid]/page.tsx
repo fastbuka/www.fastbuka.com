@@ -12,12 +12,14 @@ import { Wallet, CreditCard, RefreshCw } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { useOrderPayment } from '@/hooks/payment';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useToast } from '@/hooks/Partials/use-toast';
 
 export default function PaymentPage() {
   const router = useRouter();
   const { order } = useOrder();
   const { payment } = useOrderPayment();  
   const pathname = usePathname();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('wallet');
@@ -42,7 +44,12 @@ export default function PaymentPage() {
   const handlePayment = async () => {
     setIsLoading(true);
     if (!orderUuid) {
-      alert('Invalid order');
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Invalid order",
+      });
+      setIsLoading(false);
       return;
     }
     console.log("Order UUID:", orderUuid);
@@ -50,20 +57,36 @@ export default function PaymentPage() {
       const response = await payment(orderUuid);
       console.log("Payment response:", response);
       if (response?.message?.data?.message === 'Payment order created successfully') {
-        alert('Payment successful!');
+        toast({
+          variant: "success",
+          title: "Payment successful!",
+          description: "Your payment has been successful!",
+        });
+        setIsLoading(false);
         router.push('/'); // Redirect to orders page
-
       } else if (response?.message?.data?.error === 'Not Found') {
-        alert('Activate your wallet, fund it and try again'); // Ensure message is defined
+        toast({
+          variant: "destructive",
+          title: "Wallet Error",
+          description: "Activate your wallet, fund it and try again",
+        });
         router.push('/wallet');
         setIsLoading(false);
       } else {
-        alert(response?.message?.data?.error || 'An error occurred'); // Ensure message is defined
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: response?.message?.data?.error || 'An error occurred',
+        });
         setIsLoading(false);
       }
     } catch (error: any) {
       console.error('Payment error:', error?.message?.data?.error);
-      alert(error?.message?.data?.error || 'Payment failed. Please try again later.'); // Display error message
+      toast({
+        variant: "destructive",
+        title: "Payment Failed",
+        description: error?.message?.data?.error || 'Payment failed. Please try again later.',
+      });
       setIsLoading(false);
     }
   };

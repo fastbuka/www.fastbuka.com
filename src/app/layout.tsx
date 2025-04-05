@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Theme } from '@radix-ui/themes';
 import { Toaster } from '@/components/ui/toaster';
+import ClientProviders from '@/components/providers/ClientProviders';
 
 const satoshiFont = localFont({
   src: './fonts/Satoshi-Regular.woff',
@@ -25,7 +26,9 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`antialiased`}>
         <Theme>
-          <main>{children}</main>
+          <ClientProviders>
+            <main>{children}</main>
+          </ClientProviders>
         </Theme>
         <Toaster />
       </body>

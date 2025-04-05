@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useStorage } from '@/hooks/storage';
-
+import { Alert, AlertDescription } from '@/components/ui/alert';
 interface AvatarUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -89,8 +89,14 @@ export function AvatarUploadModal({
   const handleFile = (file: File) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      alert('Invalid file type. Allowed: JPEG, PNG, JPG, GIF.');
-      return;
+
+      return (
+        <Alert variant="destructive">
+          <AlertDescription>
+            Invalid file type. Allowed: JPEG, PNG, JPG, GIF.
+          </AlertDescription>
+        </Alert>
+      );
     }
 
     setFile(file);
@@ -104,8 +110,13 @@ export function AvatarUploadModal({
 
   const handleFileUpload = async () => {
     if (!file) {
-      alert('No file selected');
-      return;
+      return (
+        <Alert variant="destructive">
+          <AlertDescription>
+            No file selected
+          </AlertDescription>
+        </Alert>
+      );
     }
 
     setLoading(true);
@@ -115,14 +126,32 @@ export function AvatarUploadModal({
       const response = await store({ file });
 
       if (response.success) {
-        alert('Upload successful');
         setFile(null);
+        return (
+          <Alert variant="success">
+            <AlertDescription>
+              Upload successful
+            </AlertDescription>
+          </Alert>
+        );
       } else {
-        alert(response.message);
+        return (
+          <Alert variant="destructive">
+            <AlertDescription>
+              {response.message}
+            </AlertDescription>
+          </Alert>
+        );
       }
     } catch (error) {
-      console.error('Upload failed', error);
-      alert('Upload failed');
+      // console.error('Upload failed', error);
+      return (
+        <Alert variant="destructive">
+          <AlertDescription>
+            Upload failed
+          </AlertDescription>
+        </Alert>
+      );
     } finally {
       setLoading(false);
     }
