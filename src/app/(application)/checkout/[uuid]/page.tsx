@@ -69,6 +69,14 @@ export default function PaymentPage() {
         });
         router.push('/wallet');
         setIsLoading(false);
+      } else if (response?.message?.data?.error === 'Insufficient balance') {
+        toast({
+          variant: "destructive",
+          title: "Insufficient balance",
+          description: "Insufficient balance in your wallet",
+        });
+        router.push('/wallet');
+        setIsLoading(false);
       } else {
         toast({
           variant: "destructive",

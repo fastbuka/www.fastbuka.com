@@ -14,6 +14,10 @@ const satoshiFont = localFont({
 export const metadata: Metadata = {
   title: 'Fast Buka',
   description: 'FastBuka – Order meals and pay with tokens',
+  icons: {
+    icon: '/favicon.ico',
+    
+  },
 };
 
 export default function RootLayout({

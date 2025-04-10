@@ -167,7 +167,7 @@ export default function AppNavBar() {
                       <Link className="hover:text-green-600" href='/dashboard'>Dashboard</Link>
                       <span
                         onClick={logOutAccount}
-                        className='text-red-600 hover:text-red-700 cursor-pointer'
+                        className='!text-red-600 hover:text-red-700 cursor-pointer'
                       >
                         Logout
                       </span>

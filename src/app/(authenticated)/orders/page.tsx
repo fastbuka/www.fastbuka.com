@@ -33,7 +33,7 @@ export default function UserOrders() {
   const { orders } = useOrder();
   const [loading, setLoading] = useState(true);
   const [orderFetch, setOrderFetch] = useState(false);
-  const [orderStatus, setOrderStatus] = useState('pending');
+  const [orderStatus, setOrderStatus] = useState<string>('pending');
   const [orderDetails, setOrderDetails] = useState<Order[]>([]);
 
   const cardVariants = {
@@ -60,11 +60,21 @@ export default function UserOrders() {
     setLoading(true);
     setOrderFetch(false);
     try {
+      console.log('Fetching orders with status:', orderStatus);
+      
+      // Make sure we're passing the exact status string
       const response = await orders({
-        order_status: orderStatus !== 'pending' ? orderStatus : null,
+        order_status: orderStatus,
       });
+      
+      console.log('API response:', response);
+      
       if (response.success) {
-        setOrderDetails(response.data.orders);
+        console.log('Orders data:', response.data);
+        console.log('Orders array:', response.data.orders);
+        setOrderDetails(response.data.orders || []);
+      } else {
+        console.error('API returned error:', response.message);
       }
     } catch (error) {
       console.error('Failed to fetch orders:', error);
