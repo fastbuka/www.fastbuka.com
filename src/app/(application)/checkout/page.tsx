@@ -134,7 +134,7 @@ export default function CheckoutPage() {
         cartItems: cart,
       });
 
-      console.log("Checkout response:", response);
+    
 
       
       if (response.success && response.data) {

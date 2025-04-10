@@ -60,18 +60,17 @@ export default function UserOrders() {
     setLoading(true);
     setOrderFetch(false);
     try {
-      console.log('Fetching orders with status:', orderStatus);
+      
       
       // Make sure we're passing the exact status string
       const response = await orders({
         order_status: orderStatus,
       });
       
-      console.log('API response:', response);
+     
       
       if (response.success) {
-        console.log('Orders data:', response.data);
-        console.log('Orders array:', response.data.orders);
+       
         setOrderDetails(response.data.orders || []);
       } else {
         console.error('API returned error:', response.message);
