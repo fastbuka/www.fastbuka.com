@@ -134,6 +134,8 @@ export default function CheckoutPage() {
         cartItems: cart,
       });
 
+    
+
       
       if (response.success && response.data) {
         if (!response.data?.outOfStockItems || response.data?.outOfStockItems.length === 0) {

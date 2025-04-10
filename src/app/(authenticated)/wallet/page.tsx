@@ -3,6 +3,7 @@
 import Bridge from "@ngnc/bridge";
 import { useUser } from "@/hooks/users";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -271,27 +272,40 @@ export default function UserWallet() {
                         </button>
                       </div>
 
-                      <p className="text-gray-600 mb-4">
+                      {/* <p className="text-gray-600 mb-4">
                         Top up your wallet to order from your favorite
                         restaurants.
+                      </p> */}
+                      <p className="text-gray-600 mb-4">
+                        Copy your address  and top up your wallet to order food.
                       </p>
 
                       <div className="mb-4">
-                        <Input
+                        {/* <Input
                           type="number"
                           placeholder="Enter amount"
                           value={amount}
                           onChange={(e) => setAmount(Number(e.target.value))}
                           className="mb-2"
-                        />
+                        /> */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <Button
+                          {/* <Button
                             onClick={() => handleTopUp("ngn")}
                             className="flex items-center justify-center"
                           >
                             <FaNairaSign className="h-5 w-5 mr-2" />
                             Top-Up with NGN 
-                          </Button>
+                          </Button> */}
+
+                          <Link 
+                            href="https://faucet.circle.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center mt-2 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                          >
+                            Get Test Tokens
+                          </Link>
+
                           {/* <Button
                             onClick={() => handleTopUp("usd")}
                             className="flex items-center justify-center"
@@ -306,6 +320,7 @@ export default function UserWallet() {
                             <RefreshCw className="h-5 w-5 mr-2" />
                             Top-Up with Exchange
                           </Button> */}
+                         
                         </div>
                       </div>
                     </CardContent>

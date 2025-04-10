@@ -87,10 +87,14 @@ export const useOrder = () => {
     try {
       const token = localStorage.getItem('token');
       let response;
-
+      
+      
+      
       if (order_status) {
+        const url = `/api/v1/order/?order_status=${order_status}`;
+        
         response = await backend.get(
-          `/api/v1/order/?order_status=${order_status}`,
+          url,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -98,12 +102,15 @@ export const useOrder = () => {
           }
         );
       } else {
+       
         response = await backend.get(`/api/v1/order`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       }
+      
+      
       if (response.data.success) {
         return {
           success: true,
@@ -117,6 +124,7 @@ export const useOrder = () => {
         };
       }
     } catch (error: any) {
+      console.error('Error in orders hook:', error);
       return {
         success: false,
         message: error.message || 'Failed to load menu',
