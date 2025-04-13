@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/auth';
 import { useUser } from '@/hooks/users';
+import { useLocation } from '@/hooks/location';
+import { useFastBukaContext } from '@/context';
 import { useCart } from '@/hooks/Partials/use-cart';
 import { useEffect, useState, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
 import { MapPin, Search, ShoppingBag, SidebarOpenIcon } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useAuth } from '@/hooks/auth';
-import { useFastBukaContext } from '@/context';
+import { Button } from '@/components/ui/button';
 
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -17,6 +18,7 @@ export default function AppNavBar() {
   const { cart } = useCart();
   const { logout } = useAuth();
   const { profile } = useUser();
+  const { addAddress, getAddress } = useLocation();
   const { location, setLocation } = useFastBukaContext();
   const [user, setUser] = useState<any | null>(null);
 
@@ -51,12 +53,23 @@ export default function AppNavBar() {
         const country = addressComponents.find((comp: any) => comp.types.includes('country'))?.long_name;
 
         const locationString = city && country ? `${city}, ${country}` : 'Location unavailable';
+        
         setLocation({
           address: locationString,
           coordinates: {
             latitude,
             longitude
           }
+        });
+
+        addAddress({
+          name: 'Current Location',
+          address: locationString,
+          city: city || 'Unknown',
+          state: city || 'Unknown',
+          country: country || 'Nigeria',
+          longitude,
+          latitude
         });
       } else {
         setLocation({
