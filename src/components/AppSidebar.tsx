@@ -17,9 +17,11 @@ import {
   Ticket,
   Wallet,
   PieChartIcon,
+  Home,
 } from 'lucide-react';
 
 const sideBarMain = [
+  { title: 'Browse Feeds', url: '/feeds', icon: Home },
   { title: 'Dashboard', url: '/dashboard', icon: PieChartIcon },
   { title: 'Orders', url: '/orders', icon: ShoppingBag },
   { title: 'Wallet', url: '/wallet', icon: Wallet },
@@ -44,10 +46,10 @@ export function AppSidebar({
   pathname: string;
 }) {
   return (
-    <Sidebar collapsible='icon'>
-      <SidebarHeader>
+    <Sidebar collapsible="icon">
+      {/* <SidebarHeader>
         <TeamSwitcher />
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent>
         <SideBarMain items={sideBarMain} pathname={pathname} />
       </SidebarContent>
