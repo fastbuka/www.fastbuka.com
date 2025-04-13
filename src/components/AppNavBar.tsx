@@ -83,7 +83,9 @@ export default function AppNavBar() {
           const locationStringShort =
             city && country ? `${city}, ${country}` : 'Location unavailable';
 
-          const locationStringLong = `${streetNumber} ${route}, ${subLocality}, ${city}, ${state}, ${country}.`;
+          const locationStringLong = streetNumber
+            ? `${streetNumber} ${route}, ${subLocality}, ${city}, ${state}, ${country}.`
+            : `${subLocality}, ${city}, ${state}, ${country}.`;
 
           setLocation({
             address: locationStringShort,
