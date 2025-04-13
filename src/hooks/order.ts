@@ -1,5 +1,5 @@
+import Cookies from 'js-cookie';
 import { backend } from '@/lib/axios';
-import { number } from 'zod';
 
 export const useOrder = () => {
   /**
@@ -20,13 +20,13 @@ export const useOrder = () => {
     delivery_email: string;
     delivery_contact: string;
     delivery_address: string;
-    latitude: number,
-    longitude: number,
+    latitude: number;
+    longitude: number;
     cartItems: any;
   }) => {
     try {
-      const token = localStorage.getItem('token');
-      
+      const token = Cookies.get('token');
+
       if (!token) {
         return {
           success: false,
@@ -61,8 +61,8 @@ export const useOrder = () => {
           message: response.data.message || 'Success',
           data: {
             order: order,
-            outOfStockItems: outOfStockItems
-          }
+            outOfStockItems: outOfStockItems,
+          },
         };
       } else {
         return {
@@ -85,32 +85,25 @@ export const useOrder = () => {
    */
   const orders = async ({ order_status }: { order_status: string | null }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       let response;
-      
-      
-      
+
       if (order_status) {
         const url = `/api/v1/order/?order_status=${order_status}`;
-        
-        response = await backend.get(
-          url,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+
+        response = await backend.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else {
-       
         response = await backend.get(`/api/v1/order`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       }
-      
-      
+
       if (response.data.success) {
         return {
           success: true,
@@ -140,7 +133,7 @@ export const useOrder = () => {
   const order = async ({ order_uuid }: { order_uuid: string | null }) => {
     let response;
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
 
       if (order_uuid) {
         response = await backend.get(`/api/v1/order/${order_uuid}`, {

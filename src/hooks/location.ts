@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 export const useLocation = () => {
   /**
    * Add address
@@ -33,7 +35,7 @@ export const useLocation = () => {
       latitude,
     };
 
-    localStorage.setItem('address', JSON.stringify(addressData));
+    Cookies.set('address', JSON.stringify(addressData));
     return addressData;
   };
 
@@ -44,7 +46,7 @@ export const useLocation = () => {
    * @example Address()
    */
   const getAddress = () => {
-    const address = localStorage.getItem('address');
+    const address = Cookies.get('address');
     if (address) {
       return JSON.parse(address);
     }
@@ -58,7 +60,7 @@ export const useLocation = () => {
    * @example removeAddress()
    */
   const removeAddress = () => {
-    localStorage.removeItem('address');
+    Cookies.remove('address');
   };
 
   return {

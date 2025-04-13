@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import Cookies from 'js-cookie';
 import { useAuth } from '@/hooks/auth';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -31,7 +32,7 @@ export default function Login() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem('token');
+    const user = Cookies.get('token');
     if (user) {
       router.push('/cart');
     }
@@ -47,15 +48,15 @@ export default function Login() {
         setSuccess(true);
         router.push('/feeds');
       } else {
-       if (response.message === "Invalid credentials") {
-        setMessage("Invalid credentials, please try again.");
-       } else if (response.message === "Request failed with status code 401") {
-        setMessage("Invalid credentials, please try again.");
-       } else if (response.message === "Request failed with status code 400") {
-        setMessage("Something bad happened. Please try again later.");
-       } else {
-        setMessage("Login failed. Please try again later.");
-       }
+        if (response.message === 'Invalid credentials') {
+          setMessage('Invalid credentials, please try again.');
+        } else if (response.message === 'Request failed with status code 401') {
+          setMessage('Invalid credentials, please try again.');
+        } else if (response.message === 'Request failed with status code 400') {
+          setMessage('Something bad happened. Please try again later.');
+        } else {
+          setMessage('Login failed. Please try again later.');
+        }
       }
     } catch (error) {
       setMessage('Invalid credentials, please try again.');
@@ -65,16 +66,16 @@ export default function Login() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50 p-4 sm:p-6 lg:p-8'>
-      <Card className='max-w-4xl w-full shadow-lg'>
-        <div className='grid md:grid-cols-2 gap-0'>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50 p-4 sm:p-6 lg:p-8">
+      <Card className="max-w-4xl w-full shadow-lg">
+        <div className="grid md:grid-cols-2 gap-0">
           {/* Left Side (Form) */}
-          <CardContent className='p-6 sm:p-8'>
-            <CardHeader className='p-0 mb-6'>
-              <CardTitle className='text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent'>
+          <CardContent className="p-6 sm:p-8">
+            <CardHeader className="p-0 mb-6">
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Welcome Back!
               </CardTitle>
-              <CardDescription className='text-gray-600'>
+              <CardDescription className="text-gray-600">
                 Enter your login details below
               </CardDescription>
             </CardHeader>
@@ -85,8 +86,8 @@ export default function Login() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Alert variant='destructive' className='mb-4'>
-                  <ExclamationTriangleIcon className='h-4 w-4' />
+                <Alert variant="destructive" className="mb-4">
+                  <ExclamationTriangleIcon className="h-4 w-4" />
                   <AlertDescription>{message}</AlertDescription>
                 </Alert>
               </motion.div>
@@ -98,8 +99,8 @@ export default function Login() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Alert className='mb-4 border-emerald-600 text-emerald-600'>
-                  <CheckCircle className='h-4 w-4' />
+                <Alert className="mb-4 border-emerald-600 text-emerald-600">
+                  <CheckCircle className="h-4 w-4" />
                   <AlertDescription>
                     Login successful! Welcome back.
                   </AlertDescription>
@@ -107,68 +108,68 @@ export default function Login() {
               </motion.div>
             )}
 
-            <form onSubmit={handleLogin} className='space-y-6'>
-              <div className='space-y-2'>
-                <Label htmlFor='email'>Email</Label>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
                 <Input
-                  id='email'
-                  type='email'
-                  placeholder='name@example.com'
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className='h-12'
+                  className="h-12"
                   disabled={loading}
                   required
                 />
               </div>
 
-              <div className='space-y-2'>
-                <Label htmlFor='password'>Password</Label>
-                <div className='relative'>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
                   <Input
-                    id='password'
+                    id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder='Enter your password'
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className='h-12 pr-10'
+                    className="h-12 pr-10"
                     disabled={loading}
                     required
                   />
                   <Button
-                    type='button'
-                    variant='ghost'
-                    size='sm'
-                    className='absolute right-0 top-0 h-12 px-3 hover:bg-transparent'
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-12 px-3 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={loading}
                   >
                     {showPassword ? (
-                      <EyeOff className='h-4 w-4 text-gray-400' />
+                      <EyeOff className="h-4 w-4 text-gray-400" />
                     ) : (
-                      <Eye className='h-4 w-4 text-gray-400' />
+                      <Eye className="h-4 w-4 text-gray-400" />
                     )}
                   </Button>
                 </div>
-                <div className='flex justify-end'>
+                <div className="flex justify-end">
                   <Button
-                    variant='link'
-                    className='px-0 text-emerald-600 hover:text-emerald-700'
+                    variant="link"
+                    className="px-0 text-emerald-600 hover:text-emerald-700"
                     asChild
                   >
-                    <a href='/forgot-password'>Forgot password?</a>
+                    <a href="/forgot-password">Forgot password?</a>
                   </Button>
                 </div>
               </div>
 
               <Button
-                type='submit'
-                className='w-full h-12 bg-emerald-600 hover:bg-emerald-700'
+                type="submit"
+                className="w-full h-12 bg-emerald-600 hover:bg-emerald-700"
                 disabled={loading}
               >
                 {loading ? (
                   <motion.div
-                    className='h-5 w-5 border-2 border-white border-t-transparent rounded-full'
+                    className="h-5 w-5 border-2 border-white border-t-transparent rounded-full"
                     animate={{ rotate: 360 }}
                     transition={{
                       duration: 1,
@@ -179,20 +180,20 @@ export default function Login() {
                 ) : (
                   <>
                     Sign In
-                    <ArrowRight className='ml-2 h-4 w-4' />
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </>
                 )}
               </Button>
 
-              <div className='text-center space-y-2'>
-                <p className='text-gray-600'>
+              <div className="text-center space-y-2">
+                <p className="text-gray-600">
                   Don&apos;t have an account?{' '}
                   <Button
-                    variant='link'
-                    className='text-emerald-600 hover:text-emerald-700 p-0'
+                    variant="link"
+                    className="text-emerald-600 hover:text-emerald-700 p-0"
                     asChild
                   >
-                    <Link href='/register'>Create an account</Link>
+                    <Link href="/register">Create an account</Link>
                   </Button>
                 </p>
               </div>
@@ -200,16 +201,16 @@ export default function Login() {
           </CardContent>
 
           {/* Right Side (Image) */}
-          <div className='hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden'>
-            <div className='absolute bg-white' />
-              <Image
-                src='/svg/illustration.svg'
-                alt='Login illustration'
-                width={600}
-                height={600}
-                className='w-full h-full object-cover'
-                priority
-              />
+          <div className="hidden md:block relative bg-emerald-50 rounded-r-lg overflow-hidden">
+            <div className="absolute bg-white" />
+            <Image
+              src="/svg/illustration.svg"
+              alt="Login illustration"
+              width={600}
+              height={600}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
         </div>
       </Card>

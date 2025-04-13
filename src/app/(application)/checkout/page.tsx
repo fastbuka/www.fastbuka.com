@@ -1,6 +1,7 @@
 'use client';
 
 import * as z from 'zod';
+import Cookies from 'js-cookie';
 import { User } from '@/types/user';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -127,8 +128,7 @@ export default function CheckoutPage() {
     setOutOfStockItems([]);
     setShowOutOfStockModal(false);
 
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
     if (!token) {
       router.push('/login');
       return;
