@@ -19,7 +19,7 @@ export default function AppNavBar() {
   const { cart } = useCart();
   const { logout } = useAuth();
   const { profile } = useUser();
-  const { addAddress, getAddress } = useLocation();
+  const { addAddress } = useLocation();
   const { location, setLocation } = useFastBukaContext();
   const [user, setUser] = useState<any | null>(null);
 
@@ -51,18 +51,38 @@ export default function AppNavBar() {
 
         if (data.status === 'OK' && data.results.length > 0) {
           const addressComponents = data.results[0].address_components;
+
+          const streetNumber = addressComponents.find((comp: any) =>
+            comp.types.includes('street_number')
+          )?.long_name;
+          const route = addressComponents.find((comp: any) =>
+            comp.types.includes('route')
+          )?.long_name;
+          const subLocality = addressComponents.find((comp: any) =>
+            comp.types.includes('sublocality')
+          )?.long_name;
           const city = addressComponents.find((comp: any) =>
             comp.types.includes('locality')
+          )?.long_name;
+          const state = addressComponents.find((comp: any) =>
+            comp.types.includes('administrative_area_level_1')
           )?.long_name;
           const country = addressComponents.find((comp: any) =>
             comp.types.includes('country')
           )?.long_name;
+          const postalCode = addressComponents.find((comp: any) =>
+            comp.types.includes('postal_code')
+          )?.long_name;
 
-          const locationString =
+          const locationStringShow =
             city && country ? `${city}, ${country}` : 'Location unavailable';
 
+          const locationStringLong = streetNumber
+            ? `${streetNumber} ${route}, ${subLocality}, ${city}, ${state}, ${country}`
+            : `${route}, ${subLocality}, ${city}, ${state}, ${country}`;
+
           setLocation({
-            address: locationString,
+            address: locationStringShow,
             coordinates: {
               latitude,
               longitude,
@@ -71,7 +91,7 @@ export default function AppNavBar() {
 
           addAddress({
             name: 'Current Location',
-            address: locationString,
+            address: locationStringLong,
             city: city || 'Unknown',
             state: city || 'Unknown',
             country: country || 'Nigeria',
