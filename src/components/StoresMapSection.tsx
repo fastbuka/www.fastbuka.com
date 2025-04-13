@@ -8,8 +8,8 @@ import {
   useLoadScript,
 } from '@react-google-maps/api';
 import { MapPin } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from './ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 const libraries: ('places' | 'drawing' | 'geometry' | 'visualization')[] = [
   'places',
@@ -87,24 +87,27 @@ const StoresMapSection: React.FC = () => {
     locateUser();
   }, [locateUser]);
 
-  const defaultCenter = { lat: 6.5244, lng: 3.3792 }; // Lagos coordinates
+  const defaultCenter = {
+    lat: userLocation?.lat || 6.5244,
+    lng: userLocation?.lng || 3.3792,
+  };
 
   return (
-    <section className='py-12'>
-      <div className='container mx-auto px-4'>
-        <div className='mb-6 flex items-center justify-between'>
-          <h2 className='text-2xl font-bold'>Restaurants near you</h2>
+    <section className="py-12">
+      <div className="container mx-auto px-4">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Restaurants near you</h2>
           <Button
             onClick={locateUser}
-            variant='outline'
-            className='flex items-center gap-2'
+            variant="outline"
+            className="flex items-center gap-2"
             disabled={isLocating}
           >
-            <MapPin className='h-4 w-4' />
+            <MapPin className="h-4 w-4" />
             {isLocating ? 'Locating...' : 'Find my location'}
           </Button>
         </div>
-        <div className='relative h-[400px] overflow-hidden rounded-xl border'>
+        <div className="relative h-[400px] overflow-hidden rounded-xl border">
           {!isLoaded ? (
             <Skeleton />
           ) : (
@@ -139,22 +142,22 @@ const StoresMapSection: React.FC = () => {
                   position={selectedStore.position}
                   onCloseClick={() => setSelectedStore(null)}
                 >
-                  <div className='max-w-[200px] p-2'>
-                    <h3 className='font-semibold'>{selectedStore.name}</h3>
-                    <p className='mt-1 text-sm text-gray-600'>
+                  <div className="max-w-[200px] p-2">
+                    <h3 className="font-semibold">{selectedStore.name}</h3>
+                    <p className="mt-1 text-sm text-gray-600">
                       {selectedStore.address}
                     </p>
-                    <div className='mt-2 flex items-center justify-between text-sm'>
-                      <span className='text-yellow-500'>
+                    <div className="mt-2 flex items-center justify-between text-sm">
+                      <span className="text-yellow-500">
                         ★ {selectedStore.rating}
                       </span>
-                      <span className='text-gray-500'>
+                      <span className="text-gray-500">
                         {selectedStore.distance}
                       </span>
                     </div>
                     <Button
-                      className='mt-3 w-full bg-emerald-600 hover:bg-emerald-700'
-                      size='sm'
+                      className="mt-3 w-full bg-emerald-600 hover:bg-emerald-700"
+                      size="sm"
                     >
                       Order Now
                     </Button>

@@ -1,4 +1,6 @@
+import Cookies from 'js-cookie';
 import { storage } from '@/lib/axios';
+
 const env = process.env.NEXT_PUBLIC_ENV;
 
 export const useStorage = () => {
@@ -9,7 +11,7 @@ export const useStorage = () => {
    */
   const all = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await storage.get(
         `/api/v1/storage/${token}/?env=${env}`
       );
@@ -39,7 +41,7 @@ export const useStorage = () => {
    */
   const store = async ({ file }: { file: File }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const formData = new FormData();
       formData.append('file', file);
 
@@ -81,7 +83,7 @@ export const useStorage = () => {
    */
   const destroy = async ({ uuid }: { uuid: string }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await storage.delete(`/api/v1/storage/${token}/${uuid}`);
       if (response.data.success) {
         return {

@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { backend } from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 
@@ -10,7 +11,7 @@ export const useUser = () => {
   const router = useRouter();
   const profile = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await backend.get('/api/v1/users/profile', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -23,7 +24,7 @@ export const useUser = () => {
           data: response.data.data,
         };
       } else {
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         router.push('/login');
         return {
           success: false,
@@ -40,7 +41,7 @@ export const useUser = () => {
 
   const wallet = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await backend.get('/api/v1/users/wallet', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -53,7 +54,7 @@ export const useUser = () => {
           data: response.data.data,
         };
       } else {
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         router.push('/login');
         return {
           success: false,
@@ -84,8 +85,7 @@ export const useUser = () => {
     address: string;
   }) => {
     try {
-      const token = localStorage.getItem('token');
-
+      const token = Cookies.get('token');
       const response = await backend.patch(
         '/api/v1/users/profile',
         {

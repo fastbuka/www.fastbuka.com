@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { backend } from '@/lib/axios';
 
 export const useAuth = () => {
@@ -60,8 +61,12 @@ export const useAuth = () => {
         password,
       });
       if (response.data.success) {
-        localStorage.setItem('token', response.data.data.token);
-        localStorage.setItem('userUuid', response.data.data.user.uuid);
+        Cookies.set('token', response.data.data.token, {
+          expires: 7,
+        });
+        Cookies.set('userUuid', response.data.data.user.uuid, {
+          expires: 7,
+        });
         return {
           success: true,
           message: response.data.message || 'Login successful',
@@ -85,27 +90,27 @@ export const useAuth = () => {
    */
   const logout = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = Cookies.get('token');
       const response = await backend.delete('/api/v1/auth/logout', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.data.success) {
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         return {
           success: true,
           message: response.data.message || 'Logout successful',
         };
       } else {
-        localStorage.removeItem('token');
+        Cookies.remove('token');
         return {
           success: false,
           message: response.data.message || 'Failed to login',
         };
       }
     } catch (error: any) {
-      localStorage.removeItem('token');
+      Cookies.remove('token');
       return {
         success: false,
         message: error?.message || 'Invalid credentials, please try again.',

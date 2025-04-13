@@ -1,27 +1,34 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { useOrder } from '@/hooks/order';
-import { useCart } from '@/hooks/Partials/use-cart';
-import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import Cookies from 'js-cookie';
+import { User } from '@/types/user';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCart } from '@/hooks/Partials/use-cart';
+import { useLocation } from '@/hooks/location';
+import { useOrder } from '@/hooks/order';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import CheckoutLayout from './Partials/CheckoutLayout';
 import { LoadScript, Autocomplete } from '@react-google-maps/api';
-import { User } from '@/types/user';
 import { useUser } from '@/hooks/users';
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { useFastBukaContext } from '@/context';
 import { useToast } from '@/hooks/Partials/use-toast';
-
+import CheckoutLayout from './Partials/CheckoutLayout';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-const libraries: ('places')[] = ['places'];
+const libraries: 'places'[] = ['places'];
 
 const formSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -34,19 +41,21 @@ const formSchema = z.object({
 export default function CheckoutPage() {
   const router = useRouter();
   const { profile } = useUser();
-  const { cart, clearAllCartItems } = useCart();
   const { create } = useOrder();
+  const { getAddress } = useLocation();
   const { location } = useFastBukaContext();
+  const { cart, clearAllCartItems } = useCart();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
 
+  const [orderUuid, setOrderUuid] = useState<string | null>(null);
   const [outOfStockItems, setOutOfStockItems] = useState<string[]>([]);
   const [showOutOfStockModal, setShowOutOfStockModal] = useState(false);
-  const [orderUuid, setOrderUuid] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -72,7 +81,6 @@ export default function CheckoutPage() {
   });
 
   const isFirstLoad = useRef(true);
-
   useEffect(() => {
     if (user && isFirstLoad.current) {
       form.reset({
@@ -87,11 +95,15 @@ export default function CheckoutPage() {
 
   // Set initial coordinates from shared state
   useEffect(() => {
-    if (location.coordinates.latitude && location.coordinates.longitude) {
+    if (location.coordinates) {
       setLatitude(location.coordinates.latitude);
       setLongitude(location.coordinates.longitude);
     }
-  }, [location.coordinates]);
+    const address = getAddress();
+    if (address) {
+      form.setValue('address', address.address);
+    }
+  }, [location, getAddress]);
 
   const handlePlaceSelect = () => {
     if (autocomplete) {
@@ -116,14 +128,13 @@ export default function CheckoutPage() {
     setOutOfStockItems([]);
     setShowOutOfStockModal(false);
 
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? Cookies.get('token') : null;
     if (!token) {
       router.push('/login');
       return;
     }
 
     try {
-  
       const response = await create({
         delivery_name: `${values.firstName} ${values.lastName}`,
         delivery_email: values.email,
@@ -134,11 +145,11 @@ export default function CheckoutPage() {
         cartItems: cart,
       });
 
-    
-
-      
       if (response.success && response.data) {
-        if (!response.data?.outOfStockItems || response.data?.outOfStockItems.length === 0) {
+        if (
+          !response.data?.outOfStockItems ||
+          response.data?.outOfStockItems.length === 0
+        ) {
           clearAllCartItems();
           router.push(`/checkout/${response.data.order.uuid}`);
         } else {
@@ -150,8 +161,8 @@ export default function CheckoutPage() {
     } catch (error: any) {
       // console.error('Checkout error:', error);
       toast({
-        variant: "destructive",
-        title: "Checkout Error",
+        variant: 'destructive',
+        title: 'Checkout Error',
         description: error.message || 'Something went wrong during checkout',
       });
     } finally {
@@ -173,11 +184,12 @@ export default function CheckoutPage() {
         <DialogContent>
           {orderUuid ? (
             <DialogTitle>Some Items Are Out of Stock</DialogTitle>
-          ): (
+          ) : (
             <DialogTitle>All Items Are Out of Stock</DialogTitle>
           )}
           <DialogDescription>
-            The following items are out of stock. You can proceed with the available items or cancel the order.
+            The following items are out of stock. You can proceed with the
+            available items or cancel the order.
           </DialogDescription>
           <ul className="mt-4 list-disc list-inside text-red-600">
             {outOfStockItems.map((item: any, index) => (
@@ -185,9 +197,16 @@ export default function CheckoutPage() {
             ))}
           </ul>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowOutOfStockModal(false)}>Cancel Order</Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowOutOfStockModal(false)}
+            >
+              Cancel Order
+            </Button>
             {orderUuid && (
-              <Button onClick={handleContinueOrder}>Continue with Available Items</Button>
+              <Button onClick={handleContinueOrder}>
+                Continue with Available Items
+              </Button>
             )}
           </DialogFooter>
         </DialogContent>
@@ -205,46 +224,80 @@ export default function CheckoutPage() {
           </div>
 
           {GOOGLE_MAPS_API_KEY && (
-            <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={libraries}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <LoadScript
+              googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+              libraries={libraries}
+            >
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium">First Name</label>
+                    <label className="block text-sm font-medium">
+                      First Name
+                    </label>
                     <Input placeholder="John" {...form.register('firstName')} />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium">Last Name</label>
+                    <label className="block text-sm font-medium">
+                      Last Name
+                    </label>
                     <Input placeholder="Doe" {...form.register('lastName')} />
                   </div>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                <div>
-                  <label className='block text-sm font-medium'>Email</label>
-                  <Input placeholder='john@example.com' type='email' {...form.register('email')} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium">Email</label>
+                    <Input
+                      placeholder="john@example.com"
+                      type="email"
+                      {...form.register('email')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium">
+                      Phone Number
+                    </label>
+                    <Input
+                      placeholder="08012345678"
+                      type="tel"
+                      {...form.register('phone')}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className='block text-sm font-medium'>Phone Number</label>
-                  <Input placeholder='08012345678' type='tel' {...form.register('phone')} />
-                </div>
-              </div>
 
                 <div>
-                  <label className="block text-sm font-medium">Delivery Address</label>
-                  <Autocomplete 
-                    onLoad={(auto) => setAutocomplete(auto)} 
+                  <label className="block text-sm font-medium">
+                    Delivery Address
+                  </label>
+                  <Autocomplete
+                    onLoad={(auto) => setAutocomplete(auto)}
                     onPlaceChanged={handlePlaceSelect}
                     options={autocompleteOptions}
                   >
-                    <Input 
-                      placeholder={location.address !== 'Fetching location...' ? `Search address in ${location.address}...` : "Search address..."} 
-                      {...form.register('address')} 
+                    <Input
+                      placeholder={
+                        location.address !== 'Fetching location...'
+                          ? `Search address in ${location.address}...`
+                          : 'Search address...'
+                      }
+                      {...form.register('address')}
                     />
                   </Autocomplete>
                 </div>
 
-                <Button disabled={loading} type="submit" className="bg-green-500 w-full">
-                  {loading ? <Loader2 className="animate-spin" /> : 'Continue to Payment'}
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  className="bg-green-500 w-full"
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    'Continue to Payment'
+                  )}
                 </Button>
               </form>
             </LoadScript>
