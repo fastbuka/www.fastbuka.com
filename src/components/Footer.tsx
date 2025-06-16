@@ -5,7 +5,7 @@ import React from "react";
 export default function Footer() {
   return (
     <footer className="w-full pb-8 px-5 2xl:pb-10 flex justify-center">
-      <div className="w-full max-w-[1312px] bg-[#EFFEF7] rounded-[32px] flex justify-between items-start px-16 py-16">
+      <div className="w-full max-w-[1312px] bg-[#EFFEF7] rounded-[32px] flex justify-between items-start px- py-16">
         <div className="w-max flex flex-col">
           <Link href="/">
             <Image

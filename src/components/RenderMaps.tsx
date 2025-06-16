@@ -6,8 +6,6 @@ import {
   useJsApiLoader,
   InfoWindow,
 } from "@react-google-maps/api";
-import { X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type MarkerType = {
