@@ -14,14 +14,14 @@ export default function Home() {
       <div className="w-full pb-[71px] 2xl:pb-[91px] h-max flex flex-col items-center">
         <div className="w-full max-w-[1250px] px-5 h-max">
           <SectionGridList data={whyChooseUs} />
-          <div className="w-full py-4 2xl:py-6 my-[62px] 2xl:my-[72px]">
+          <div className="w-full py-4 @max-4xl:py-0 2xl:py-6 @max-4xl:my-10 my-[62px] 2xl:my-[72px]">
             <TapbarServices />
           </div>
-          <div className="w-full mb-[62px] 2xl:mb-[72px]">
+          <div className="w-full @max-4xl:mb-10 mb-[62px] @max-4xl:pt-6 2xl:mb-[72px]">
             <TryAppCard />
           </div>
           <SectionGridList data={stories} />
-          <div className="my-[62px] 2xl:my-[72px] w-full">
+          <div className="my-[62px] @max-4xl:my-10 2xl:my-[72px] w-full">
             <NearbyRestaurants />
           </div>
           <FAQs />

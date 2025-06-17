@@ -5,8 +5,8 @@ import RenderMap from "../RenderMaps";
 
 export default function NearbyRestaurants() {
   return (
-    <div className="w-full flex justify-between py-4 2xl:py-6 gap-[88px] items-center">
-      <div className="w-[619px] min-w-[619px] rounded-[12px] overflow-hidden h-[478px]">
+    <div className="w-full flex justify-between @max-4xl:flex-col @max-4xl:gap-6  py-4 2xl:py-6 gap-[88px] items-center">
+      <div className="w-[619px] min-w-[619px] @max-4xl:w-full @max-2xl:h-[266px]  @max-6xl:min-w-[50%] rounded-[12px] overflow-hidden h-[478px]">
         <RenderMap />
       </div>
       <div className="w-full flex flex-col">

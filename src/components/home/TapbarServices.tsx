@@ -6,9 +6,9 @@ import Link from "next/link";
 export default function TapbarServices() {
   const RenderTabSection = () => {
     return (
-      <div className="w-full flex justify-between gap-[88px] items-center">
+      <div className="w-full @max-3xl:flex-col @max-4xl:gap-6 flex justify-between gap-[88px] items-center">
         <Image
-          className="w-6/12 min-w-[50%]"
+          className="w-6/12 min-w-[50%] max-w-full @max-4xl:w-full @max-4xl:min-w-0"
           src="/images/phone-frame.svg"
           alt=""
           width={619}
@@ -22,7 +22,7 @@ export default function TapbarServices() {
             Get your favorite African and continental dishes delivered fast -
             hot, fresh, and straight to your door!
           </p>
-          <div className="w-full max-w-[444px] 2xl:max-w-[494px] grid grid-cols-2 gap-2.5">
+          <div className="w-full @max-2xl:w-[242px] @max-2xl:grid-cols-1 max-w-[444px] 2xl:max-w-[494px] grid grid-cols-2 gap-2.5">
             <Link href="#" className="col-span-1">
               <Image
                 alt=""
@@ -50,7 +50,7 @@ export default function TapbarServices() {
   return (
     <div className="w-full">
       <Tabs defaultValue="customer" className="w-full">
-        <TabsList className="w-[744px] bg-[#FFF2C5]">
+        <TabsList className="w-[744px] max-w-full bg-[#FFF2C5]">
           <TabsTrigger value="customer">Customer</TabsTrigger>
           <TabsTrigger value="vendor">Vendor</TabsTrigger>
           <TabsTrigger value="rider">Rider</TabsTrigger>

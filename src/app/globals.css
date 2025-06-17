@@ -103,6 +103,8 @@
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  --hero-bg: url("/images/hero/hero-bg.png");
+  --jollof-rice-bg: url("/images/jollof-rice.svg");
 }
 
 .dark {

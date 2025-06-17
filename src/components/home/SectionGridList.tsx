@@ -6,7 +6,7 @@ interface Props {
     title: string;
     description: string;
     list: {
-      tag: string;
+      tag?: string;
       title: string;
       description: string;
       image: string;
@@ -24,7 +24,7 @@ export default function SectionGridList(props: Props) {
       <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base mb-[30px] 2xl:mb-[34px]">
         {description}
       </p>
-      <div className="w-full grid grid-cols-3 gap-6">
+      <div className="w-full grid grid-cols-3 @max-2xl:grid-cols-1 @max-5xl:grid-cols-2 gap-6">
         {list.map((service, index) => (
           <div
             key={index}
@@ -40,9 +40,11 @@ export default function SectionGridList(props: Props) {
               />
             </div>
             <div className="w-full px-3 2xl:px-4 flex flex-col gap-2 2xl:gap-2.5">
-              <p className="font-normal text-[#19CE7C] text-sm 2xl:text-base">
-                {service.tag}
-              </p>
+              {service?.tag && (
+                <p className="font-normal text-[#19CE7C] text-sm 2xl:text-base">
+                  {service.tag}
+                </p>
+              )}
               <p className="text-[#111111] font-semibold text-lg 2xl:text-xl">
                 {service.title}
               </p>

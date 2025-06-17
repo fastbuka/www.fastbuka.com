@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - hotfix/app
 name: 🚀 Deploy on push
 jobs:
   web-deploy:

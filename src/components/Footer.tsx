@@ -4,9 +4,9 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="w-full pb-8 px-5 2xl:pb-10 flex justify-center">
-      <div className="w-full max-w-[1312px] bg-[#EFFEF7] rounded-[32px] flex justify-between items-start px- py-16">
-        <div className="w-max flex flex-col">
+    <footer className="w-full  pb-8 px-5 2xl:pb-10 flex justify-center">
+      <div className="w-full @max-4xl:flex-col @max-4xl:gap-[100px] @max-5xl:px-8 @max-4xl:py-8 @max-4xl:px-5 max-w-[1312px] bg-[#EFFEF7] rounded-[32px] flex justify-between items-start p-16">
+        <div className="w-max flex flex-col max-w-full">
           <Link href="/">
             <Image
               className="2xl:w-[169px] w-[149px] mb-[18px]"
@@ -19,7 +19,7 @@ export default function Footer() {
           <p className="font-normal text-[#3D3D3D] text-base 2xl:text-xl mb-8">
             Delicious Diversity, Delivered
           </p>
-          <div className="w-max flex items-center gap-4 2xl:mb-8 mb-5">
+          <div className="w-max flex items-center gap-4 mb-8">
             {socials.map((item, index) => (
               <Link key={index} href={item.path}>
                 <Image
@@ -36,11 +36,11 @@ export default function Footer() {
             ©{new Date().getFullYear()}. All Rights Reversed
           </p>
         </div>
-        <div className="w-max flex items-start gap-[100px]">
+        <div className="w-max flex @max-4xl:flex-col @max-4xl:mx-auto items-start @max-5xl:gap-[50px] gap-[100px]">
           {links.map((item, index) => {
             return (
               <div key={index} className="w-max flex flex-col gap-2.5">
-                <h3 className="text-[#0EAD65] font-medium text-base 2xl:text-xl">
+                <h3 className="text-[#0EAD65] py-1.5 font-medium text-base 2xl:text-xl">
                   {item.title}
                 </h3>
                 {item.links.map((link, linkIndex) => {
@@ -48,7 +48,7 @@ export default function Footer() {
                     <Link
                       href={link.href}
                       key={linkIndex}
-                      className="text-[#3D3D3D] font-normal text-base 2xl:text-xl"
+                      className="text-[#3D3D3D] py-1.5 font-normal text-base 2xl:text-xl"
                     >
                       {link.name}
                     </Link>
