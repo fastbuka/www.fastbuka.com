@@ -1,7 +1,7 @@
 [
   {
     "name": "Browse Stores",
-    "path": "#"
+    "path": "/browse-stores"
   },
   {
     "name": "About",
@@ -9,10 +9,10 @@
   },
   {
     "name": "Contact",
-    "path": "#"
+    "path": "/contact-us"
   },
   {
     "name": "Partner with us",
-    "path": "#"
+    "path": "/partner-with-us"
   }
 ]

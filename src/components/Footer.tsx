@@ -90,9 +90,9 @@ const links = [
   {
     title: "Company",
     links: [
-      { name: "Browse Stores", href: "#" },
-      { name: "About", href: "#" },
-      { name: "Contact", href: "#" },
+      { name: "Browse Stores", href: "/browse-stores" },
+      { name: "About", href: "/about" },
+      { name: "Contact", href: "/contact-us" },
     ],
   },
   {
