@@ -8,12 +8,12 @@ export default function Page() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
       <Hero />
-      <div className="w-full mt-7 2xl:mt-10 h-max flex flex-col items-center">
-        <div className="w-full max-w-[1210px] flex flex-col gap-7 2xl:gap-10">
+      <div className="w-full mt-7 @max-4xl:mt-10 px-6 2xl:mt-10 h-max flex flex-col items-center">
+        <div className="max-w-full w-[1210px] flex flex-col @max-4xl:gap-10 gap-7 2xl:gap-10">
           {vendorsByCategory.map((category, index) => {
             return <VendorsHorizontalList key={index} item={category} />;
           })}
-          <div className="w-full flex flex-col py-[30px] 2xl:py-[38px]">
+          <div className="w-full flex flex-col @max-4xl:py-[28px] py-[30px] 2xl:py-[38px]">
             <div className="flex mb-2.5 items-center gap-2.5">
               <h2 className="text-[#111111] font-medium text-[28px] 2xl:text-[32px]">
                 All Vendors
@@ -52,7 +52,7 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="w-full flex 2xl:mb-[111px] mb-[81px] justify-center mt-16 2xl:mt-20">
+        <div className="w-full flex 2xl:mb-[111px] @max-4xl:mb-10 @max-4xl:mt-8 @max-4xl:justify-start mb-[81px] justify-center mt-16 2xl:mt-20">
           <button
             type="button"
             className="border-[#0EAD65] bg-transparent w-max border hover:opacity-80 duration-200 text-[#0EAD65] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"

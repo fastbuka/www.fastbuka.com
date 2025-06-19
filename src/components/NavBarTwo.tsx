@@ -52,9 +52,9 @@ export default function NavBarTwo() {
           />
         </div>
       </div>
-      <div className="w-max @max-4xl:hidden flex items-center gap-2.5">
+      <div className="w-max @max-3xl:mr-5 flex items-center @max-3xl:gap-4 gap-2.5">
         <button
-          className="w-10 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
+          className="w-10 @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
           type="button"
         >
           <Image
@@ -62,15 +62,15 @@ export default function NavBarTwo() {
             alt=""
             width={24}
             height={24}
-            className="w-5 2xl:w-6"
+            className="w-5 2xl:w-6 @max-3xl:w-4"
           />
         </button>
-        <div className="relative w-max h-max">
+        <div className="relative w-max h-max @max-3xl:w-4">
           <button
             onClick={() => {
               setShowProfileDropdown((prev) => !prev);
             }}
-            className="w-10 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
+            className="w-10 h-10 @max-3xl:w-8 @max-3xl:h-8 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
             type="button"
           >
             <Image
@@ -78,7 +78,7 @@ export default function NavBarTwo() {
               alt=""
               width={24}
               height={24}
-              className="w-5 2xl:w-6"
+              className="w-5 2xl:w-6 @max-3xl:w-4"
             />
           </button>
           <AnimatePresence>

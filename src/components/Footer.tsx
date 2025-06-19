@@ -36,7 +36,7 @@ export default function Footer() {
             ©{new Date().getFullYear()}. All Rights Reversed
           </p>
         </div>
-        <div className="w-max flex @max-4xl:flex-col @max-4xl:mx-auto items-start @max-5xl:gap-[50px] gap-[100px]">
+        <div className="w-max flex @max-4xl:flex-col items-start @max-5xl:gap-[50px] gap-[100px]">
           {links.map((item, index) => {
             return (
               <div key={index} className="w-max flex flex-col gap-2.5">

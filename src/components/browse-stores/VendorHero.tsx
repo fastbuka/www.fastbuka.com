@@ -1,0 +1,87 @@
+"use client";
+import React, { useState } from "react";
+import NavBarTwo from "@/components/NavBarTwo";
+import Image from "next/image";
+import GoBack from "../GoBack";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { cn } from "@/lib/utils";
+
+export default function VendorHero() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  return (
+    <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
+      <NavBarTwo />
+      <div className="2xl:mt-10 mt-8 w-full max-w-[1210px] px-5 h-max pt-10 2xl:pt-12 flex flex-col">
+        <GoBack />
+        <Image
+          src="/images/fries-with-chicken.svg"
+          alt=""
+          width={1210}
+          height={530}
+          className="w-full mt-6 2xl:mt-8 mb-9 2xl:mb-11"
+        />
+        <div className="w-full flex items-start justify-between mb-7 2xl:mb-8">
+          <div className="w-max flex flex-col">
+            <p className="text-[#19CE7C] font-normal text-base 2xl:text-[19px] mb-4 2xl:mb-[19px]">
+              AFRICAN CHICKEN FASTFOOD
+            </p>
+            <h1 className="font-semibold text-[#111111] text-[28px] 2xl:text-[38px] mb-4 2xl:mb-[19px]">
+              Chicken Republic
+            </h1>
+            <div className="flex items-center gap-2.5">
+              <Image src="/images/clock.svg" alt="" width={16} height={16} />
+              <p className="text-sm text-[#5D5D5D] font-normal">33- 40 mins</p>
+            </div>
+          </div>
+          <Tabs defaultValue="delivery" className="w-[497px]">
+            <TabsList className="w-[497px] max-w-full bg-[#DAFEEC]">
+              <TabsTrigger
+                className="data-[state=active]:bg-[#0EAD65]"
+                value="pickup"
+              >
+                Pick Up
+              </TabsTrigger>
+              <TabsTrigger
+                className="data-[state=active]:bg-[#0EAD65]"
+                value="delivery"
+              >
+                Delivery
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="w-full border-b border-[#E7E7E7] pb-6 overflow-x-auto scroll-hidden">
+          <div className="w-max flex gap-7 2xl:gap-8">
+            {categories.map((category, index) => {
+              const isSelected = selectedCategory === category;
+              return (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setSelectedCategory(category);
+                  }}
+                  className={cn(
+                    "px-6 py-2.5 rounded-[12px] cursor-pointer hover:opacity-70 duration-200 bg-transparent text-[#888888] text-base 2xl:text-xl",
+                    {
+                      "bg-[#DAFEEC] text-[#19CE7C]": isSelected,
+                    }
+                  )}
+                >
+                  {category}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const categories = [
+  "All",
+  "Burgers & Sandwich",
+  "Everyday Affordable  Value Meals",
+  "Tasty Sides",
+  "Rotiserrie Chickem",
+];

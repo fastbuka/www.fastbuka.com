@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -12,8 +14,15 @@ interface Props {
 
 export default function VendorListItem(props: Props) {
   const { image, name, heading, time } = props.item;
+  const router = useRouter();
+
   return (
-    <div className="w-[340px] flex flex-col">
+    <div
+      onClick={() => {
+        router.push("/browse-stores/dummy");
+      }}
+      className="w-[340px]  hover:opacity-85 duration-200 cursor-pointer flex flex-col"
+    >
       <div className="w-full h-[215px] overflow-hidden rounded-[7px] mb-3.5">
         <Image
           src={image}
