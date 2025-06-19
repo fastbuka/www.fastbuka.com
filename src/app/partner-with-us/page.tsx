@@ -1,7 +1,6 @@
-import Form from "@/components/contact-us/Form";
 import Footer from "@/components/Footer";
-import TryAppCard from "@/components/home/TryAppCard";
 import NavBarOne from "@/components/NavBarOne";
+import Form from "@/components/contact-us/Form";
 
 export default function Page() {
   return (
