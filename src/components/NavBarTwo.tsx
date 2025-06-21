@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function NavBarTwo() {
+  const router = useRouter();
   const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
   return (
     <nav className="w-full max-w-[1250px] border-b border-[#DAFEEC] pb-6 2xl:pb-[30px] @max-4xl:border-b-0 @max-4xl:pb-0 px-5 h-max flex justify-between items-center">
@@ -108,6 +110,7 @@ export default function NavBarTwo() {
                 </div>
                 <div
                   onClick={() => {
+                    router.push("/profile");
                     setShowProfileDropdown((prev) => !prev);
                   }}
                   className="w-full cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5"
