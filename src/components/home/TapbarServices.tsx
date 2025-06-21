@@ -15,7 +15,7 @@ export default function TapbarServices() {
           height={478}
         />
         <div className="w-full flex flex-col">
-          <h2 className="text-[#111111] mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
+          <h2 className="text-(--primary-black) mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
             Order food seamlessly
           </h2>
           <p className=" font-normal mb-5 2xl:mb-6 max-w-[434px] text-[#5D5D5D] text-sm 2xl:text-base">

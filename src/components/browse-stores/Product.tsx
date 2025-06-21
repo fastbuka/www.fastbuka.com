@@ -16,7 +16,7 @@ export default function Product(product: Product) {
   return (
     <div className="col-span-1 gap-5 border border-[#E7E7E7] rounded-[12px] px-6 py-2.5 flex items-center justify-between">
       <div className="w-max max-w-full flex flex-col">
-        <h3 className="text-[#111111] text-base 2xl:text-xl font-medium mb-2 2xl:mb-2.5">
+        <h3 className="text-(--primary-black) text-base 2xl:text-xl font-medium mb-2 2xl:mb-2.5">
           {name}
         </h3>
         <p className="font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-7 2xl:mb-8">

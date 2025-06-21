@@ -10,7 +10,7 @@ export default function NearbyRestaurants() {
         <RenderMap />
       </div>
       <div className="w-full flex flex-col">
-        <h2 className="text-[#111111] mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
+        <h2 className="text-(--primary-black) mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
           Restaurant Near you
         </h2>
         <p className=" font-normal mb-5 2xl:mb-6 max-w-[434px] text-[#5D5D5D] text-sm 2xl:text-base">
@@ -19,7 +19,7 @@ export default function NearbyRestaurants() {
         </p>
         <Link
           href="#"
-          className="bg-[#0EAD65] w-max flex items-center justify-center hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
+          className="bg-(--primary-green) w-max flex items-center justify-center hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
         >
           Explore Vendors&nbsp; <MoveRight height={14} />
         </Link>

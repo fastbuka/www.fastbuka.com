@@ -33,7 +33,9 @@ export default function VendorListItem(props: Props) {
         />
       </div>
       <p className="text-[#19CE7C] font-normal text-sm mb-2">{name}</p>
-      <h3 className="font-semibold text-[#111111] text-base mb-2">{heading}</h3>
+      <h3 className="font-semibold text-(--primary-black) text-base mb-2">
+        {heading}
+      </h3>
       <div className="flex items-center gap-2.5">
         <Image src="/images/clock.svg" alt="" width={16} height={16} />
         <p className="text-sm text-[#5D5D5D] font-normal">{time}</p>

@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function NavBarTwo() {
   const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
   return (
-    <nav className="w-full max-w-[1250px] px-5 h-max flex justify-between items-center">
+    <nav className="w-full max-w-[1250px] border-b border-[#DAFEEC] pb-6 2xl:pb-[30px] @max-4xl:border-b-0 @max-4xl:pb-0 px-5 h-max flex justify-between items-center">
       <Link href="/">
         <Image
           className="2xl:w-[115px] w-[95px] @max-4xl:w-16"
@@ -54,7 +54,7 @@ export default function NavBarTwo() {
       </div>
       <div className="w-max @max-3xl:mr-5 flex items-center @max-3xl:gap-4 gap-2.5">
         <button
-          className="w-10 @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
+          className="w-10 @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-(--primary-green) flex justify-center items-center hover:opacity-80 duration-200"
           type="button"
         >
           <Image
@@ -70,7 +70,7 @@ export default function NavBarTwo() {
             onClick={() => {
               setShowProfileDropdown((prev) => !prev);
             }}
-            className="w-10 h-10 @max-3xl:w-8 @max-3xl:h-8 2xl:w-11 2xl:h-11 rounded-[12px] bg-[#0EAD65] flex justify-center items-center hover:opacity-80 duration-200"
+            className="w-10 h-10 @max-3xl:w-8 @max-3xl:h-8 2xl:w-11 2xl:h-11 rounded-[12px] bg-(--primary-green) flex justify-center items-center hover:opacity-80 duration-200"
             type="button"
           >
             <Image
@@ -87,7 +87,7 @@ export default function NavBarTwo() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="w-[150px] top-[calc(100%+10px)] p-2.5 absolute right-0 h-max border border-[#0EAD65] rounded-[12px] bg-[#F6F6F6]"
+                className="w-[150px] top-[calc(100%+10px)] p-2.5 absolute right-0 h-max border border-(--primary-green) rounded-[12px] bg-[#F6F6F6]"
               >
                 <div
                   onClick={() => {
@@ -102,7 +102,7 @@ export default function NavBarTwo() {
                     height={24}
                     className="w-5 2xl:w-6"
                   />
-                  <p className="font-normal text-[#111111] text-sm 2xl:text-base">
+                  <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
                     My Profile
                   </p>
                 </div>

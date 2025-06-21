@@ -15,7 +15,7 @@ export default function Page() {
           })}
           <div className="w-full flex flex-col @max-4xl:py-[28px] py-[30px] 2xl:py-[38px]">
             <div className="flex mb-2.5 items-center gap-2.5">
-              <h2 className="text-[#111111] font-medium text-[28px] 2xl:text-[32px]">
+              <h2 className="text-(--primary-black) font-medium text-[28px] 2xl:text-[32px]">
                 All Vendors
               </h2>
               <Image
@@ -34,7 +34,7 @@ export default function Page() {
               {allVendors.map((vendor, index) => {
                 return (
                   <div key={index} className="w-full flex flex-col">
-                    <h2 className="text-[#111111] font-normal text-xl 2xl:text-2xl mb-9 2xl:mb-12">
+                    <h2 className="text-(--primary-black) font-normal text-xl 2xl:text-2xl mb-9 2xl:mb-12">
                       {vendor.title}
                     </h2>
                     <div className="w-full flex overflow-y-auto scroll-hidden">
@@ -55,7 +55,7 @@ export default function Page() {
         <div className="w-full flex 2xl:mb-[111px] @max-4xl:mb-10 @max-4xl:mt-8 @max-4xl:justify-start mb-[81px] justify-center mt-16 2xl:mt-20">
           <button
             type="button"
-            className="border-[#0EAD65] bg-transparent w-max border hover:opacity-80 duration-200 text-[#0EAD65] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
+            className="border-(--primary-green) bg-transparent w-max border hover:opacity-80 duration-200 text-(--primary-green) text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
           >
             View All
           </button>

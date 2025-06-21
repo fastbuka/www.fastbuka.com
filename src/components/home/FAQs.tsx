@@ -9,7 +9,7 @@ import {
 export default function FAQs() {
   return (
     <div className="w-full flex flex-col items-center @max-3xl:pt-5 pt-8 2xl:pt-[42px] pb-[55px] 2xl:pb-[75px]">
-      <h2 className="text-[#111111] text-center @max-3xl:mb-9 mb-[46px] 2xl:mb-[60px] font-semibold text-[28px] 2xl:text-[32px]">
+      <h2 className="text-(--primary-black) text-center @max-3xl:mb-9 mb-[46px] 2xl:mb-[60px] font-semibold text-[28px] 2xl:text-[32px]">
         Frequently Asked Questions
       </h2>
       <Accordion

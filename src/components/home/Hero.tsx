@@ -9,7 +9,7 @@ export default function Hero() {
       <NavBarOne />
       <div className="2xl:mt-[72px] @max-4xl:mt-10 mt-12 w-full max-w-[1250px] px-5 h-max relative @max-4xl:pt-2.5 pt-8 2xl:pt-12 @max-4xl:pb-0 pb-[142px] 2xl:pb-[182px] flex justify-center">
         <div className="w-full max-w-[654px] 2xl:max-w-[714px] flex flex-col items-center">
-          <h1 className="font-bold leading-[55px] @max-4xl:text-[48px] @max-4xl:leading-[64px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-[#111111] text-center">
+          <h1 className="font-bold leading-[55px] @max-4xl:text-[48px] @max-4xl:leading-[64px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
             Disrupting Food & Grocery Delivery in Africa
           </h1>
           <p className="font-normal @max-4xl:text-base @max-4xl:leading-6 text-sm 2xl:text-base leading-5 2xl:leading-7 text-[#5D5D5D] text-center mb-6">

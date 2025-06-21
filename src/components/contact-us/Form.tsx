@@ -39,7 +39,7 @@ export default function Form() {
       />
       <button
         type="submit"
-        className="bg-[#0EAD65] hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
+        className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
       >
         Send Message
       </button>

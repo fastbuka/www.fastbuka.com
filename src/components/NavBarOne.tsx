@@ -52,7 +52,7 @@ export default function NavBarOne() {
       <div className="w-max @max-4xl:hidden flex items-center gap-6">
         <div
           className={`w-max ${
-            pathname === "/" ? "text-[#0EAD65]" : "text-[#3D3D3D]"
+            pathname === "/" ? "text-(--primary-green)" : "text-[#3D3D3D]"
           } flex items-center gap-1.5 2xl:gap-2.5 cursor-pointer`}
         >
           <p className="text-inherit duration-200 font-normal text-sm 2xl:text-xl">
@@ -66,8 +66,8 @@ export default function NavBarOne() {
             <Link
               key={index}
               href={item.path}
-              className={`hover:text-[#0EAD65] duration-200 primary-link-hover font-normal text-sm 2xl:text-xl ${
-                isActive ? "text-[#0EAD65]" : "text-[#3D3D3D]"
+              className={`hover:text-(--primary-green) duration-200 primary-link-hover font-normal text-sm 2xl:text-xl ${
+                isActive ? "text-(--primary-green)" : "text-[#3D3D3D]"
               }`}
             >
               {item.name}
@@ -78,13 +78,13 @@ export default function NavBarOne() {
       <div className="w-max @max-4xl:hidden flex items-center gap-5 pl-2.5">
         <Link
           href="#"
-          className="hover:text-[#0EAD65] duration-200 primary-link-hover font-normal text-[#3D3D3D] text-sm 2xl:text-xl"
+          className="hover:text-(--primary-green) duration-200 primary-link-hover font-normal text-[#3D3D3D] text-sm 2xl:text-xl"
         >
           Login
         </Link>
         <Link
           href="#"
-          className="bg-[#0EAD65] hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
+          className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
         >
           Get Started
         </Link>
@@ -99,7 +99,7 @@ export default function NavBarOne() {
           >
             <div
               className={`w-max ${
-                pathname === "/" ? "text-[#0EAD65]" : "text-[#F6F6F6]"
+                pathname === "/" ? "text-(--primary-green)" : "text-[#F6F6F6]"
               } flex items-center py-2.5 gap-2.5 cursor-pointer`}
             >
               <p className="text-inherit duration-200 font-normal text-lg">
@@ -113,9 +113,9 @@ export default function NavBarOne() {
                 <Link
                   key={index}
                   href={item.path}
-                  className={`hover:text-[#0EAD65] ${
-                    isActive ? "text-[#0EAD65]" : "text-[#F6F6F6]"
-                  }  duration-200 primary-link-hover font-normal text-lg py-2.5`}
+                  className={`hover:text-(--primary-green) ${
+                    isActive ? "text-(--primary-green)" : "text-[#F6F6F6]"
+                  }  duration-200 w-max primary-link-hover font-normal text-lg py-2.5`}
                 >
                   {item.name}
                 </Link>
@@ -123,13 +123,13 @@ export default function NavBarOne() {
             })}
             <Link
               href="#"
-              className="hover:text-[#0EAD65] text-[#F6F6F6] duration-200 primary-link-hover font-normal text-lg py-2.5"
+              className="hover:text-(--primary-green) text-[#F6F6F6] duration-200 primary-link-hover font-normal text-lg py-2.5"
             >
               Login
             </Link>
             <Link
               href="#"
-              className="bg-[#0EAD65] w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
+              className="bg-(--primary-green) w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
             >
               Get Started
             </Link>

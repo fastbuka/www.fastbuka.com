@@ -40,7 +40,7 @@ export default function Footer() {
           {links.map((item, index) => {
             return (
               <div key={index} className="w-max flex flex-col gap-2.5">
-                <h3 className="text-[#0EAD65] py-1.5 font-medium text-base 2xl:text-xl">
+                <h3 className="text-(--primary-green) py-1.5 font-medium text-base 2xl:text-xl">
                   {item.title}
                 </h3>
                 {item.links.map((link, linkIndex) => {

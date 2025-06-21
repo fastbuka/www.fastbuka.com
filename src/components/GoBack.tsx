@@ -10,7 +10,7 @@ export default function GoBack() {
       onClick={() => {
         router.back();
       }}
-      className="cursor-pointer w-max flex items-center gap-2.5 font-normal text-base 2xl:text-xl text-[#111111] hover:text-[#0EAD65] duration-200"
+      className="cursor-pointer w-max flex items-center gap-2.5 font-normal text-base 2xl:text-xl text-(--primary-black) hover:text-(--primary-green) duration-200"
     >
       <ChevronLeft className="w-5 2xl:w-6 text-inherit" />
       Go Back

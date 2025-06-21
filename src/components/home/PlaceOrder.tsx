@@ -9,7 +9,7 @@ export default function PlaceOrder() {
       className="w-full h-max bg-[#FF9702] flex justify-center bg-cover bg-no-repeat rounded-[32px] @max-4xl:px-10 pt-[68px] pb-[74px] pl-[88px]"
     >
       <div className="2xl:w-[494px] w-[444px] flex flex-col items-center">
-        <h2 className="text-[#111111] text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
+        <h2 className="text-(--primary-black) text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
           Place your order in Seconds!
         </h2>
         <p className="text-center font-normal  @max-2xl:mb-6 mb-5 2xl:mb-6 max-w-[414px] 2xl:max-w-[434px] text-[#5D5D5D] text-sm 2xl:text-base">

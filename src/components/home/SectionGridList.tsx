@@ -18,7 +18,7 @@ export default function SectionGridList(props: Props) {
   const { description, list, title } = props.data;
   return (
     <div className="w-full flex flex-col items-center py-4 2xl:py-6">
-      <h2 className="text-[#111111] text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
+      <h2 className="text-(--primary-black) text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
         {title}
       </h2>
       <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base mb-[30px] 2xl:mb-[34px]">
@@ -45,10 +45,10 @@ export default function SectionGridList(props: Props) {
                   {service.tag}
                 </p>
               )}
-              <p className="text-[#111111] font-semibold text-lg 2xl:text-xl">
+              <p className="text-(--primary-black) font-semibold text-lg 2xl:text-xl">
                 {service.title}
               </p>
-              <p className="font-normal text-[#111111] text-sm 2xl:text-base">
+              <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
                 {service.description}
               </p>
             </div>

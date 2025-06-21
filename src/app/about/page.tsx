@@ -11,7 +11,7 @@ export default function Page() {
         <div className="w-full max-w-[1250px] px-5 h-max">
           <SectionGridList data={ourMission} />
           <div className="w-full flex my-8 2xl:my-10 flex-col items-center py-6">
-            <h2 className="text-[#111111] text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
+            <h2 className="text-(--primary-black) text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
               Meet the Team
             </h2>
             <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base mb-8">
@@ -32,7 +32,7 @@ export default function Page() {
                           "url(/images/about/image-placeholder.svg)",
                       }}
                     ></div>
-                    <h3 className="font-semibold text-[#111111] text-lg 2xl:text-xl text-center mb-2.5">
+                    <h3 className="font-semibold text-(--primary-black) text-lg 2xl:text-xl text-center mb-2.5">
                       {member.name}
                     </h3>
                     <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base">

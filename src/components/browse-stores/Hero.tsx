@@ -6,14 +6,14 @@ export default function Hero() {
   return (
     <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
       <NavBarTwo />
-      <div className="2xl:mt-10 mt-8 w-full @max-4xl:pb-5 max-w-[1250px] px-5 h-max pt-10 2xl:pt-12 pb-[56px] 2xl:pb-[76px] flex flex-col items-center">
+      <div className="2xl:mt-[88px] mt-[68px] @max-4xl:mt-[50px] w-full @max-4xl:pb-5 max-w-[1250px] px-5 h-max pb-[56px] 2xl:pb-[76px] flex flex-col items-center">
         <div className="w-full max-w-[512px] 2xl:max-w-[512px] flex flex-col items-center">
-          <h1 className="font-bold @max-2xl:max-w-full leading-[55px] @max-4xl:text-[48px] @max-4xl:leading-[64px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-[#111111] text-center">
+          <h1 className="font-bold @max-2xl:max-w-full leading-[55px] @max-4xl:text-[48px] @max-4xl:leading-[64px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
             Find your favorite bukas, groceries, and more!
           </h1>
         </div>
         <div className="w-[976px] max-w-full pt-6 2xl:pt-8 flex flex-col items-center gap-4 2xl:gap-6">
-          <p className="text-center font-medium text-[#111111] text-base 2xl:text-xl">
+          <p className="text-center font-medium text-(--primary-black) text-base 2xl:text-xl">
             Explore Categories
           </p>
           <div className="w-full p-2.5 flex flex-wrap justify-center max-w-full gap-2.5">

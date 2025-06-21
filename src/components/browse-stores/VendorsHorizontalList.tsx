@@ -18,7 +18,7 @@ export default function VendorsHorizontalList(props: Props) {
   const { description, list, title } = props.item;
   return (
     <div className="w-full flex flex-col @max-4xl:py-7 py-[30px] 2xl:py-[38px]">
-      <h2 className="text-[#111111] font-medium text-[28px] 2xl:text-[32px] mb-2.5 ">
+      <h2 className="text-(--primary-black) font-medium text-[28px] 2xl:text-[32px] mb-2.5 ">
         {title}
       </h2>
       <p className=" font-normal  text-[#5D5D5D] 2xl:mb-[62px] mb-[48px] text-sm 2xl:text-base">
