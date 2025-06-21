@@ -93,6 +93,7 @@ export default function NavBarTwo() {
               >
                 <div
                   onClick={() => {
+                    router.push("/profile");
                     setShowProfileDropdown((prev) => !prev);
                   }}
                   className="w-full cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5"
@@ -110,7 +111,6 @@ export default function NavBarTwo() {
                 </div>
                 <div
                   onClick={() => {
-                    router.push("/profile");
                     setShowProfileDropdown((prev) => !prev);
                   }}
                   className="w-full cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5"
