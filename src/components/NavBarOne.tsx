@@ -86,12 +86,14 @@ export default function NavBarOne() {
         >
           Login
         </button>
-        <Link
-          href="#"
+        <button
+          onClick={() => {
+            openModal(AuthModalTypeEnum.SIGNUP);
+          }}
           className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
         >
           Get Started
-        </Link>
+        </button>
       </div>
       <AnimatePresence>
         {isOpen && (
@@ -134,12 +136,15 @@ export default function NavBarOne() {
             >
               Login
             </button>
-            <Link
-              href="#"
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                openModal(AuthModalTypeEnum.SIGNUP);
+              }}
               className="bg-(--primary-green) w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
             >
               Get Started
-            </Link>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
