@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import NavBarTwo from "@/components/NavBarTwo";
 import Image from "next/image";
