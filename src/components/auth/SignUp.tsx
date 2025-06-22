@@ -3,18 +3,27 @@ import Image from "next/image";
 import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
+import { useRouter } from "next/navigation";
 
-export default function SignUp() {
+interface Props {
+  asPage?: boolean;
+}
+
+export default function SignUp(props: Props) {
+  const { asPage } = props;
   const { openModal } = useAuthModal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [referralCode, setReferralCode] = useState("");
+  const router = useRouter();
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    openModal(AuthModalTypeEnum.SUCCESS);
+    if (!asPage) {
+      openModal(AuthModalTypeEnum.SUCCESS);
+    }
   }
 
   return (
@@ -75,7 +84,11 @@ export default function SignUp() {
           <button
             type="button"
             onClick={() => {
-              openModal(AuthModalTypeEnum.LOGIN);
+              if (asPage) {
+                router.push("/login");
+              } else {
+                openModal(AuthModalTypeEnum.LOGIN);
+              }
             }}
             className="text-(--primary-green) hover:opacity-70 duration-300 cursor-pointer"
           >

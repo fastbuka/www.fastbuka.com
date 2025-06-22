@@ -3,19 +3,26 @@ import Image from "next/image";
 import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
+import { useRouter } from "next/navigation";
 
 type Props = {
   initialEmail?: string;
+  asPage?: boolean;
 };
 
 export default function ForgotPassword(props: Props) {
-  const { initialEmail } = props;
+  const { initialEmail, asPage } = props;
   const { openModal } = useAuthModal();
   const [email, setEmail] = useState(initialEmail || "");
+  const router = useRouter();
 
   async function handleFormSubmit(event: FormEvent) {
     event.preventDefault();
-    openModal(AuthModalTypeEnum.VERIFICATION);
+    if (!asPage) {
+      openModal(AuthModalTypeEnum.VERIFICATION);
+    } else {
+      router.push("/login/verification");
+    }
   }
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">

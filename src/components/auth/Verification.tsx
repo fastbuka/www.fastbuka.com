@@ -6,14 +6,17 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
+import { useRouter } from "next/navigation";
 
 type Props = {
   type: "email" | "phone";
+  asPage?: boolean;
 };
 
 export default function Verification(props: Props) {
-  const { type } = props;
+  const { type, asPage } = props;
   const { openModal } = useAuthModal();
+  const router = useRouter();
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
       <h4 className="font-medium text-[17px] 2xl:text-xl text-[#111111] text-center">
@@ -44,9 +47,7 @@ export default function Verification(props: Props) {
           Didn&apos;t recieve the code?{" "}
           <button
             type="button"
-            onClick={() => {
-              openModal(AuthModalTypeEnum.SIGNUP);
-            }}
+            onClick={() => {}}
             className="text-(--primary-green) hover:opacity-70 duration-300 cursor-pointer"
           >
             Resend(60s)
@@ -57,7 +58,11 @@ export default function Verification(props: Props) {
           <button
             type="button"
             onClick={() => {
-              openModal(AuthModalTypeEnum.SIGNUP);
+              if (!asPage) {
+                openModal(AuthModalTypeEnum.SIGNUP);
+              } else {
+                router.push("/register");
+              }
             }}
             className="text-(--primary-green) hover:opacity-70 duration-300 cursor-pointer"
           >

@@ -5,6 +5,7 @@ export enum ModalTypeEnum {
   FundWallet = "FundWallet",
   FundingOptions = "FundingOptions",
   WalletFunding = "WalletFunding",
+  SwapCurrency = "SwapCurrency",
 }
 
 type ModalType = ModalTypeEnum | null;

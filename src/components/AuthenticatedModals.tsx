@@ -1,14 +1,26 @@
 "use client";
 import { useModal, ModalTypeEnum } from "@/contexts/ModalContext";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useEffect } from "react";
 import ActivateWallet from "./modals/ActivateWallet";
 import FundWallet from "./modals/FundWallet";
 import FundingOptions from "./modals/FundingOptions";
 import WalletFunding from "./modals/WalletFunding";
+import SwapCurrency from "./modals/SwapCurrency";
 
 export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -34,6 +46,7 @@ export default function AuthenticatedModals() {
             {modalType === ModalTypeEnum.FundWallet && <FundWallet />}
             {modalType === ModalTypeEnum.FundingOptions && <FundingOptions />}
             {modalType === ModalTypeEnum.WalletFunding && <WalletFunding />}
+            {modalType === ModalTypeEnum.SwapCurrency && <SwapCurrency />}
           </motion.div>
         </motion.div>
       )}

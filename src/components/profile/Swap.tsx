@@ -1,9 +1,17 @@
+"use client";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import Image from "next/image";
 import React from "react";
 
 export default function Swap() {
+  const { openModal } = useModal();
   return (
-    <button className="w-max cursor-pointer hover:opacity-70 duration-300 flex items-center gap-2.5 p-2 2xl:p-2.5">
+    <button
+      onClick={() => {
+        openModal(ModalTypeEnum.SwapCurrency);
+      }}
+      className="w-max cursor-pointer hover:opacity-70 duration-300 flex items-center gap-2.5 p-2 2xl:p-2.5"
+    >
       <Image
         src="/images/swap.svg"
         alt=""

@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
+import { useRouter } from "next/navigation";
 
 type Props = {
   email: string;
@@ -12,6 +13,7 @@ type Props = {
   setEmail: (value: string) => void;
   setPhone: (value: string) => void;
   setSelectedLoginMethod: (value: "email" | "phone") => void;
+  asPage?: boolean;
 };
 
 export default function Login(props: Props) {
@@ -22,13 +24,17 @@ export default function Login(props: Props) {
     setEmail,
     phone,
     setPhone,
+    asPage,
   } = props;
   const { openModal } = useAuthModal();
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    openModal(AuthModalTypeEnum.SUCCESS);
+    if (!asPage) {
+      openModal(AuthModalTypeEnum.SUCCESS);
+    }
   }
 
   return (
@@ -88,7 +94,11 @@ export default function Login(props: Props) {
           <div className="w-full flex justify-end">
             <button
               onClick={() => {
-                openModal(AuthModalTypeEnum.RESETPASSWORD);
+                if (!asPage) {
+                  openModal(AuthModalTypeEnum.RESETPASSWORD);
+                } else {
+                  router.push("/login/forgot-password");
+                }
               }}
               className="w-max cursor-pointer hover:opacity-70 duration-300 text-(--primary-green) font-medium text-sm 2xl:text-base"
               type="button"
@@ -115,7 +125,11 @@ export default function Login(props: Props) {
           <div className="w-full flex justify-end">
             <button
               onClick={() => {
-                openModal(AuthModalTypeEnum.RESETPASSWORD);
+                if (!asPage) {
+                  openModal(AuthModalTypeEnum.RESETPASSWORD);
+                } else {
+                  router.push("/login/forgot-password");
+                }
               }}
               className="w-max cursor-pointer hover:opacity-70 duration-300 text-(--primary-green) font-medium text-sm 2xl:text-base"
               type="button"
@@ -134,7 +148,11 @@ export default function Login(props: Props) {
             <button
               type="button"
               onClick={() => {
-                openModal(AuthModalTypeEnum.SIGNUP);
+                if (!asPage) {
+                  openModal(AuthModalTypeEnum.SIGNUP);
+                } else {
+                  router.push("/register");
+                }
               }}
               className="text-(--primary-green) hover:opacity-70 duration-300 cursor-pointer"
             >
