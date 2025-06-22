@@ -7,10 +7,12 @@ import links from "@/resources/menu-links.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 
 export default function NavBarOne() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { openModal } = useAuthModal();
 
   return (
     <nav className="w-full max-w-[1250px] px-5 h-max flex justify-between items-center">
@@ -76,12 +78,14 @@ export default function NavBarOne() {
         })}
       </div>
       <div className="w-max @max-4xl:hidden flex items-center gap-5 pl-2.5">
-        <Link
-          href="#"
-          className="hover:text-(--primary-green) duration-200 primary-link-hover font-normal text-[#3D3D3D] text-sm 2xl:text-xl"
+        <button
+          onClick={() => {
+            openModal(AuthModalTypeEnum.LOGIN);
+          }}
+          className="hover:text-(--primary-green) cursor-pointer duration-200 primary-link-hover font-normal text-[#3D3D3D] text-sm 2xl:text-xl"
         >
           Login
-        </Link>
+        </button>
         <Link
           href="#"
           className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
@@ -121,12 +125,15 @@ export default function NavBarOne() {
                 </Link>
               );
             })}
-            <Link
-              href="#"
-              className="hover:text-(--primary-green) text-[#F6F6F6] duration-200 primary-link-hover font-normal text-lg py-2.5"
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                openModal(AuthModalTypeEnum.LOGIN);
+              }}
+              className="hover:text-(--primary-green) w-max text-[#F6F6F6] duration-200 primary-link-hover font-normal text-lg py-2.5"
             >
               Login
-            </Link>
+            </button>
             <Link
               href="#"
               className="bg-(--primary-green) w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
