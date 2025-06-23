@@ -14,10 +14,14 @@ export default function AuthenticatedModals() {
     if (isOpen && modalRef?.current) {
       disableBodyScroll(modalRef.current);
     } else {
-      enableBodyScroll(modalRef?.current);
+      if (modalRef?.current) {
+        enableBodyScroll(modalRef?.current);
+      }
     }
     return () => {
-      enableBodyScroll(modalRef?.current);
+      if (modalRef?.current) {
+        enableBodyScroll(modalRef?.current);
+      }
     };
   }, [isOpen]);
 
