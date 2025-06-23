@@ -1,5 +1,3 @@
-import Authentication from "@/components/auth/Authentication";
-import AuthenticatedModals from "@/components/AuthenticatedModals";
 import Products from "@/components/browse-stores/Products";
 import VendorHero from "@/components/browse-stores/VendorHero";
 import VendorsHorizontalList from "@/components/browse-stores/VendorsHorizontalList";
@@ -9,8 +7,6 @@ import React from "react";
 export default function Page() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
-      <Authentication />
-      <AuthenticatedModals />
       <VendorHero />
       <Products />
       <div className="w-full mt-8 2xl:mt-10 flex justify-center">

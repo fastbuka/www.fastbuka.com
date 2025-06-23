@@ -1,5 +1,3 @@
-import Authentication from "@/components/auth/Authentication";
-import AuthenticatedModals from "@/components/AuthenticatedModals";
 import ChangeCurrency from "@/components/profile/ChangeCurrency";
 import Swap from "@/components/profile/Swap";
 import TopUp from "@/components/profile/TopUp";
@@ -11,8 +9,6 @@ import React from "react";
 export default function Page() {
   return (
     <div className="w-max max-w-full mb-[139px] 2xl:mb-[169px] flex flex-col items-center">
-      <Authentication />
-      <AuthenticatedModals />
       <h2 className="text-(--primary-black) text-center mb-2.5 font-semibold text-[28px] 2xl:text-[32px]">
         Your Account
       </h2>

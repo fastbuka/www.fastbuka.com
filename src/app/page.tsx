@@ -1,5 +1,3 @@
-import Authentication from "@/components/auth/Authentication";
-import AuthenticatedModals from "@/components/AuthenticatedModals";
 import Footer from "@/components/Footer";
 import FAQs from "@/components/home/FAQs";
 import Hero from "@/components/home/Hero";
@@ -12,8 +10,6 @@ import TryAppCard from "@/components/home/TryAppCard";
 export default function Home() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
-      <Authentication />
-      <AuthenticatedModals />
       <Hero />
       <div className="w-full pb-[71px] 2xl:pb-[91px] h-max flex flex-col items-center">
         <div className="w-full max-w-[1250px] px-5 h-max">

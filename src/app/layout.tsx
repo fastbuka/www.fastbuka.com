@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/AppProviders";
+import Authentication from "@/components/auth/Authentication";
+import AuthenticatedModals from "@/components/AuthenticatedModals";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -22,6 +24,8 @@ export default function RootLayout({
       <body
         className={`${poppins.className} h-screen overflow-y-auto @container antialiased`}
       >
+        <Authentication />
+        <AuthenticatedModals />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,5 +1,3 @@
-import Authentication from "@/components/auth/Authentication";
-import AuthenticatedModals from "@/components/AuthenticatedModals";
 import Hero from "@/components/browse-stores/Hero";
 import VendorListItem from "@/components/browse-stores/VendorListItem";
 import VendorsHorizontalList from "@/components/browse-stores/VendorsHorizontalList";
@@ -9,8 +7,6 @@ import Image from "next/image";
 export default function Page() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
-      <Authentication />
-      <AuthenticatedModals />
       <Hero />
       <div className="w-full mt-7 @max-4xl:mt-10 px-6 2xl:mt-10 h-max flex flex-col items-center">
         <div className="max-w-full w-[1210px] flex flex-col @max-4xl:gap-10 gap-7 2xl:gap-10">
