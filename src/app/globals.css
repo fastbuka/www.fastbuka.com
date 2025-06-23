@@ -185,3 +185,13 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
   display: none !important;
   pointer-events: none;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  opacity: 0;
+}
+
+input[type="date"] {
+  appearance: none;
+  -moz-appearance: textfield;
+}

@@ -8,6 +8,16 @@ export default function FundingOptions() {
   const { openModal } = useModal();
   const [selected, setSelected] = useState<string | null>(null);
 
+  const handleContinue = () => {
+    if (selected === "wallet-address") {
+      openModal(ModalTypeEnum.WalletFunding);
+    } else if (selected === "bank-transfer") {
+      openModal(ModalTypeEnum.SelectCurrencyForTransfer);
+    } else {
+      openModal(ModalTypeEnum.CardDetails);
+    }
+  };
+
   return (
     <div className="w-[459px] pb-20 @max-2xl:w-full max-w-full flex flex-col items-center">
       <h3 className="font-medium text-(--primary-black) mb-8 2xl:mb-10 text-base 2xl:text-xl text-center">
@@ -47,7 +57,7 @@ export default function FundingOptions() {
       <button
         type="button"
         onClick={() => {
-          openModal(ModalTypeEnum.WalletFunding);
+          handleContinue();
         }}
         disabled={selected ? false : true}
         className="w-full bg-(--primary-green) disabled:opacity-50 h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"

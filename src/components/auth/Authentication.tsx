@@ -17,17 +17,6 @@ export default function Authentication() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "";
-  //   }
-  //   return () => {
-  //     document.body.style.overflow = "";
-  //   };
-  // }, [isOpen]);
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -35,7 +24,12 @@ export default function Authentication() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed z-50 h-screen top-0 left-0 w-full bg-[#11111133] @max-2xl:items-end flex justify-center items-center"
+          style={{
+            height: "100dvh",
+            WebkitOverflowScrolling: "touch",
+            overscrollBehavior: "none",
+          }}
+          className="fixed z-50 top-0 left-0 w-full bg-[#11111133] @max-2xl:items-end flex justify-center items-center"
         >
           <div
             onClick={() => {

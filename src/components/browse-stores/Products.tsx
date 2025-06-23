@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Product from "./Product";
 import Order from "./Order";
 import Image from "next/image";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 type Product = {
   image: string;
@@ -18,6 +19,10 @@ type Order = {
 };
 
 export default function Products() {
+  const { openModal } = useModal();
+  const [addDeliveryInstructions, setAddDeliveryInstructions] = useState(false);
+  const [addVendorInstructions, setAddVendorInstructions] = useState(false);
+
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-[1210px] @max-5xl:grid-cols-1 px-5 grid grid-cols-5">
@@ -44,10 +49,46 @@ export default function Products() {
           </div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 mb-5 gap-2.5">
             <RenderActionMenu value="Payment Method" label="Choose" />
-            <RenderActionMenu value="Promo Code" label="Choose" />
-            <RenderActionMenu value="Delivery Address" label="Choose" />
-            <RenderActionMenu value="Delivery instructions" label="Add" />
-            <RenderActionMenu value="Vendor instructions" label="Add" />
+            <RenderActionMenu
+              onClick={() => {
+                openModal(ModalTypeEnum.PromoCode);
+              }}
+              value="Promo Code"
+              label="Choose"
+            />
+            <RenderActionMenu
+              onClick={() => {
+                openModal(ModalTypeEnum.DeliveryAddress);
+              }}
+              value="Delivery Address"
+              label="Choose"
+            />
+            <RenderActionMenu
+              value="Delivery instructions"
+              label="Add"
+              onClick={() => {
+                setAddDeliveryInstructions(true);
+              }}
+            />
+            {addDeliveryInstructions && (
+              <textarea
+                placeholder="Add delivery instructions"
+                className="w-full text-sm 2xl:text-base bg-white placeholder:text-[#D1D1D1] text-[#D1D1D1] border border-[#E7E7E7] outline-none rounded-[12px] px-5 py-2.5 h-[75px]"
+              ></textarea>
+            )}
+            <RenderActionMenu
+              onClick={() => {
+                setAddVendorInstructions(true);
+              }}
+              value="Vendor instructions"
+              label="Add"
+            />
+            {addVendorInstructions && (
+              <textarea
+                placeholder="Add vendor instructions"
+                className="w-full text-sm 2xl:text-base bg-white placeholder:text-[#D1D1D1] text-[#D1D1D1] border border-[#E7E7E7] outline-none rounded-[12px] px-5 py-2.5 h-[75px]"
+              ></textarea>
+            )}
           </div>
           <div className="w-full mb-5 gap-2.5 bg-[#DAFEEC] rounded-[12px] px-6 py-3 flex items-center">
             <Image

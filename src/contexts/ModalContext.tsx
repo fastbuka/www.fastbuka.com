@@ -6,6 +6,15 @@ export enum ModalTypeEnum {
   FundingOptions = "FundingOptions",
   WalletFunding = "WalletFunding",
   SwapCurrency = "SwapCurrency",
+  SelectCurrencyForTransfer = "SelectCurrencyForTransfer",
+  ValidateTransfer = "ValidateTransfer",
+  Success = "Success",
+  Error = "Error",
+  CardDetails = "CardDetails",
+  CardVerification = "CardVerification",
+  Pending = "Pending",
+  PromoCode = "PromoCode",
+  DeliveryAddress = "DeliveryAddress",
 }
 
 type ModalType = ModalTypeEnum | null;
