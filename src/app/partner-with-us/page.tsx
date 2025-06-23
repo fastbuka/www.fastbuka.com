@@ -1,10 +1,14 @@
+import AuthenticatedModals from "@/components/AuthenticatedModals";
 import Footer from "@/components/Footer";
 import NavBarOne from "@/components/NavBarOne";
+import Authentication from "@/components/auth/Authentication";
 import Form from "@/components/contact-us/Form";
 
 export default function Page() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
+      <Authentication />
+      <AuthenticatedModals />
       <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
         <NavBarOne />
         <div className="2xl:mt-10 mt-8 w-full @max-4xl:pb-3 max-w-[1250px] px-5 h-max pt-10 2xl:pt-12 pb-[56px] 2xl:pb-[76px] flex flex-col items-center">

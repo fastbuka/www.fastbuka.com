@@ -1,5 +1,7 @@
+import AuthenticatedModals from "@/components/AuthenticatedModals";
 import Footer from "@/components/Footer";
 import Hero from "@/components/about/Hero";
+import Authentication from "@/components/auth/Authentication";
 import SectionGridList from "@/components/home/SectionGridList";
 import TryAppCard from "@/components/home/TryAppCard";
 
@@ -7,6 +9,8 @@ export default function Page() {
   return (
     <main className="w-full flex flex-col bg-[#F6FFFB]">
       <Hero />
+      <Authentication />
+      <AuthenticatedModals />
       <div className="w-full pt-7 2xl:pt-10 pb-[71px] 2xl:pb-[91px] h-max flex flex-col items-center">
         <div className="w-full max-w-[1250px] px-5 h-max">
           <SectionGridList data={ourMission} />
