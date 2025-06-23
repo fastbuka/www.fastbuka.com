@@ -1,7 +1,7 @@
 "use client";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import Verification from "./Verification";
@@ -17,16 +17,16 @@ export default function Authentication() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "";
+  //   }
+  //   return () => {
+  //     document.body.style.overflow = "";
+  //   };
+  // }, [isOpen]);
 
   return (
     <AnimatePresence>
