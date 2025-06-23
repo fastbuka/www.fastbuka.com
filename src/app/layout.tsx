@@ -26,8 +26,10 @@ export default function RootLayout({
       >
         <Providers>
           {children}
-          <Authentication />
-          <AuthenticatedModals />
+          <div className="flxed top-0 left-0">
+            <Authentication />
+            <AuthenticatedModals />
+          </div>
         </Providers>
       </body>
     </html>
