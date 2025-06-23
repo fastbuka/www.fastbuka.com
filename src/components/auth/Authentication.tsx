@@ -1,8 +1,7 @@
 "use client";
-import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import Verification from "./Verification";
@@ -17,20 +16,30 @@ export default function Authentication() {
   >("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const modalRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen && modalRef?.current) {
-      disableBodyScroll(modalRef.current);
+    if (isOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
     } else {
-      if (modalRef?.current) {
-        enableBodyScroll(modalRef?.current);
-      }
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
     return () => {
-      if (modalRef?.current) {
-        enableBodyScroll(modalRef?.current);
-      }
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
     };
   }, [isOpen]);
 
@@ -38,7 +47,6 @@ export default function Authentication() {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          ref={modalRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
