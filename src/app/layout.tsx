@@ -23,8 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <Providers>
-          {children} <Authentication />
-          <AuthenticatedModals />
+          {children}
+          <div className="fixed top-0 left-0 w-full @container">
+            <Authentication />
+            <AuthenticatedModals />
+          </div>
         </Providers>
       </body>
     </html>
