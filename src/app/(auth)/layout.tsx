@@ -3,5 +3,5 @@ export default function AuthenticationLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <main className="w-full">{children}</main>;
+  return <main className="w-full @container">{children}</main>;
 }

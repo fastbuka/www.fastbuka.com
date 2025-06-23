@@ -1,7 +1,7 @@
 "use client";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import Verification from "./Verification";
@@ -16,32 +16,6 @@ export default function Authentication() {
   >("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-
-  useEffect(() => {
-    if (isOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = "0";
-      document.body.style.right = "0";
-      document.body.style.width = "100%";
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
-    }
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-    };
-  }, [isOpen]);
 
   return (
     <AnimatePresence>

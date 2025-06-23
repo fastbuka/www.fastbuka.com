@@ -2,37 +2,11 @@
 import { useModal } from "@/contexts/ModalContext";
 import { modalRegistry } from "@/lib/register-modals";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
-
-  useEffect(() => {
-    if (isOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = "0";
-      document.body.style.right = "0";
-      document.body.style.width = "100%";
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
-    }
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
-    };
-  }, [isOpen]);
 
   return (
     <AnimatePresence>

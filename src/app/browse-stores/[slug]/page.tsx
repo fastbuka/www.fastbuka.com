@@ -6,7 +6,7 @@ import React from "react";
 
 export default function Page() {
   return (
-    <main className="w-full flex flex-col bg-[#F6FFFB]">
+    <main className="w-full @container flex flex-col bg-[#F6FFFB]">
       <VendorHero />
       <Products />
       <div className="w-full mt-8 2xl:mt-10 flex justify-center">

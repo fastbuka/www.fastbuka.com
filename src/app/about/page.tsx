@@ -5,7 +5,7 @@ import TryAppCard from "@/components/home/TryAppCard";
 
 export default function Page() {
   return (
-    <main className="w-full flex flex-col bg-[#F6FFFB]">
+    <main className="w-full @container flex flex-col bg-[#F6FFFB]">
       <Hero />
       <div className="w-full pt-7 2xl:pt-10 pb-[71px] 2xl:pb-[91px] h-max flex flex-col items-center">
         <div className="w-full max-w-[1250px] px-5 h-max">

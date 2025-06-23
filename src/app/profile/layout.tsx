@@ -10,7 +10,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="w-full flex flex-col bg-[#F6FFFB]">
+    <main className="w-full @container flex flex-col bg-[#F6FFFB]">
       <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
         <NavBarTwo />
         <div className="2xl:mt-14 mt-12 w-full max-w-[1210px] px-5 h-max flex flex-col">
