@@ -21,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} @container antialiased`}>
+      <body
+        className={`${poppins.className} h-screen overflow-y-auto @container antialiased`}
+      >
         <Providers>
           {children} <Authentication />
           <AuthenticatedModals />

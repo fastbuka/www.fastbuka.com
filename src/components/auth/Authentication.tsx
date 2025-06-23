@@ -1,7 +1,8 @@
 "use client";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import Verification from "./Verification";
@@ -16,11 +17,24 @@ export default function Authentication() {
   >("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalRef?.current) {
+      disableBodyScroll(modalRef.current);
+    } else {
+      enableBodyScroll(modalRef?.current);
+    }
+    return () => {
+      enableBodyScroll(modalRef?.current);
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={modalRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

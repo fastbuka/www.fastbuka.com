@@ -2,16 +2,30 @@
 import { useModal } from "@/contexts/ModalContext";
 import { modalRegistry } from "@/lib/register-modals";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 
 export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalRef?.current) {
+      disableBodyScroll(modalRef.current);
+    } else {
+      enableBodyScroll(modalRef?.current);
+    }
+    return () => {
+      enableBodyScroll(modalRef?.current);
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
+          ref={modalRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
