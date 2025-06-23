@@ -1,6 +1,6 @@
 "use client";
 import { useModal } from "@/contexts/ModalContext";
-import { modalRegistry } from "@/lib/utils";
+import { modalRegistry } from "@/lib/register-modals";
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 
