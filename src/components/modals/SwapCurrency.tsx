@@ -8,13 +8,13 @@ import Image from "next/image";
 export default function SwapCurrency() {
   const { closeModal } = useModal();
   const [from, setFrom] = useState("USDC");
-  const [to, setTo] = useState("NGN");
+  const [to, setTo] = useState("NGNC");
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
 
   return (
     <div className="w-[484px] pb-10 @max-2xl:w-full max-w-full flex flex-col items-center">
-      <div className="w-full mb-8 2xl:mb-10 flex items-center justify-between">
+      <div className="w-full mb-2.5 flex items-center justify-between">
         <button
           type="button"
           onClick={() => {
@@ -29,6 +29,9 @@ export default function SwapCurrency() {
         </h3>
         <div />
       </div>
+      <p className=" text-center mb-8 2xl:mb-10 max-w-[345px] font-normal text-sm 2xl:text-base text-[#5D5D5D]">
+        Swaping is currently unavailable
+      </p>
       <div className="w-full flex flex-col mb-[30px] 2xl:mb-[34px] gap-2">
         <SwapCurrencyInput
           amount={fromAmount}

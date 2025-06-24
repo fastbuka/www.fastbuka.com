@@ -83,13 +83,13 @@ const assets = [
     rising: false,
   },
   {
-    image: "/images/ngnc-coin.png",
+    image: "/images/usdc-coin.png",
     name: "100USDC",
     value: "+1.94 (0.46%)",
     rising: true,
   },
   {
-    image: "/images/usdc-coin.png",
+    image: "/images/ngnc-coin.png",
     name: "50NGNC",
     value: "+1.94 (0.46%)",
     rising: true,

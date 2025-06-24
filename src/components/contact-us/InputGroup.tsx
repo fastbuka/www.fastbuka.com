@@ -14,15 +14,24 @@ interface Props {
   value: string;
   setValue: (value: string) => void;
   placeholder: string;
-  type?: "email" | "textarea" | "password" | "select" | "date";
+  type?: "email" | "textarea" | "password" | "select" | "number" | "month";
   options?: string[];
   required?: boolean;
   label: string;
+  maxLength?: number;
 }
 
 export default function InputGroup(props: Props) {
-  const { value, label, placeholder, setValue, required, type, options } =
-    props;
+  const {
+    value,
+    label,
+    placeholder,
+    setValue,
+    required,
+    type,
+    options,
+    maxLength,
+  } = props;
   const [passwordType, setPasswordType] = useState("password");
   const dateInputRef = useRef<HTMLInputElement>(null);
   const togglePasswordType = () => {
@@ -42,6 +51,7 @@ export default function InputGroup(props: Props) {
         <textarea
           placeholder={placeholder}
           value={value}
+          maxLength={maxLength || undefined}
           onChange={(e) => setValue(e.target.value)}
           required={required}
           className={cn(className, "h-[132px]")}
@@ -55,7 +65,12 @@ export default function InputGroup(props: Props) {
             <div className="w-full p-2.5 flex flex-col gap-2.5">
               {options?.map((item, index) => (
                 <SelectItem
-                  className="p-2.5 border-b border-[#E7E7E7] rounded-none"
+                  className={cn(
+                    "p-2.5 border-b border-[#E7E7E7] rounded-none",
+                    {
+                      "border-b-0": index === options.length - 1,
+                    }
+                  )}
                   key={index}
                   value={item}
                 >
@@ -73,6 +88,7 @@ export default function InputGroup(props: Props) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             required={required}
+            maxLength={maxLength || undefined}
             className="text-sm 2xl:text-base password-input font-normal text-[#101010] w-full outline-0 border-0 py-2.5 placeholder:text-[#B0B0B0]"
           />
           <button
@@ -87,7 +103,7 @@ export default function InputGroup(props: Props) {
             )}
           </button>
         </div>
-      ) : type === "date" ? (
+      ) : type === "month" ? (
         <div
           onClick={() =>
             dateInputRef.current?.showPicker?.() ||
@@ -96,7 +112,7 @@ export default function InputGroup(props: Props) {
           className="relative w-full"
         >
           <input
-            type="date"
+            type="month"
             ref={dateInputRef}
             value={value}
             onChange={(e) => setValue(e.target.value)}
@@ -115,6 +131,7 @@ export default function InputGroup(props: Props) {
         <input
           type={type || "text"}
           placeholder={placeholder}
+          maxLength={maxLength || undefined}
           required={required}
           value={value}
           onChange={(e) => setValue(e.target.value)}

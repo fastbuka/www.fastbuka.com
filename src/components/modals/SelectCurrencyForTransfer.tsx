@@ -41,11 +41,12 @@ export default function SelectCurrencyForTransfer() {
           value={currency}
           setValue={setCurrency}
           type="select"
-          options={["USD", "NGN"]}
+          options={["NGN"]}
         />
         <InputGroup
           label="Amount"
           placeholder="Amount"
+          type="number"
           value={amount}
           setValue={setAmount}
         />

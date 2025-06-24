@@ -5,6 +5,7 @@ import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   email: string;
@@ -39,7 +40,9 @@ export default function Login(props: Props) {
 
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
-      <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      <Link href="/" className="w-max h-max">
+        <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      </Link>
       <p className="mt-2 text-center font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-5 2xl:mb-6">
         Fill in the form to login and start ordering!
       </p>
@@ -112,6 +115,22 @@ export default function Login(props: Props) {
           >
             Login
           </button>
+          <p className="w-full text-center text-sm 2xl:text-base text-[#5D5D5D] font-normal">
+            New to FastBuka?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                if (!asPage) {
+                  openModal(AuthModalTypeEnum.SIGNUP);
+                } else {
+                  router.push("/register");
+                }
+              }}
+              className="text-(--primary-green) hover:opacity-70 duration-300 cursor-pointer"
+            >
+              Sign Up
+            </button>
+          </p>
         </form>
       ) : (
         <form className="w-full flex flex-col gap-6">

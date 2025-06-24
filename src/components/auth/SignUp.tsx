@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Props {
   asPage?: boolean;
@@ -28,7 +29,10 @@ export default function SignUp(props: Props) {
 
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
-      <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      <Link href="/" className="w-max h-max">
+        <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      </Link>
+
       <p className="mt-2 text-center font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-[30px] 2xl:mb-[34px]">
         Fill in the form to sign up and start ordering!
       </p>

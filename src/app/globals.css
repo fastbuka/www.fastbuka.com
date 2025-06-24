@@ -186,12 +186,12 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
   pointer-events: none;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="month"]::-webkit-calendar-picker-indicator {
   display: none;
   opacity: 0;
 }
 
-input[type="date"] {
+input[type="month"] {
   appearance: none;
   -moz-appearance: textfield;
 }

@@ -28,7 +28,13 @@ export default function SwapCurrencyInput(props: Props) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="w-max absolute min-w-max bg-[#F5F5F5] h-[calc(100%-16px)] left-2.5 top-2 rounded p-2 cursor-pointer duration-300 hover:opacity-70 flex items-center">
-            <Image src={currency?.image || ""} alt="" width={24} height={16} />
+            <Image
+              src={currency?.image || ""}
+              alt=""
+              className="w-6 h-6 object-cover"
+              width={24}
+              height={16}
+            />
             <p className="ml-1 text-sm font-medium text-[#2E2E2E]">
               {currency?.name}
             </p>
@@ -63,6 +69,7 @@ export default function SwapCurrencyInput(props: Props) {
       </DropdownMenu>
       <input
         type="text"
+        disabled
         className="w-full h-full @max-2xl:text-end border-0 text-center outline-0 bg-transparent text-xs font-normal text-[#B0B0B0] placeholder:text-[#B0B0B0]"
         placeholder="Amount to swap"
         value={amount}
@@ -76,11 +83,11 @@ export default function SwapCurrencyInput(props: Props) {
 
 const options = [
   {
-    image: "/images/flags/us.svg",
+    image: "/images/usdc-coin.png",
     name: "USDC",
   },
   {
-    image: "/images/flags/nigeria.svg",
-    name: "NGN",
+    image: "/images/ngnc-coin.png",
+    name: "NGNC",
   },
 ];

@@ -52,13 +52,13 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="w-full flex 2xl:mb-[111px] @max-4xl:mb-10 @max-4xl:mt-8 @max-4xl:justify-start mb-[81px] justify-center mt-16 2xl:mt-20">
-          <button
+        <div className="w-full flex 2xl:mb-[111px] @max-4xl:mb-10 @max-4xl:justify-start mb-[81px] justify-center">
+          {/* <button
             type="button"
             className="border-(--primary-green) bg-transparent w-max border hover:opacity-80 duration-200 text-(--primary-green) text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
           >
             View All
-          </button>
+          </button> */}
         </div>
       </div>
       <Footer />
@@ -68,7 +68,7 @@ export default function Page() {
 
 const vendorsByCategory = [
   {
-    title: "Handpicked for you with 💚",
+    title: "Handpicked for you",
     description:
       "Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app",
     list: Array(6).fill({

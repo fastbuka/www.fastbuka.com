@@ -32,7 +32,7 @@ export default function TapBar() {
 const links = [
   {
     name: "Account",
-    path: "/profile/account",
+    path: "/account",
   },
   {
     name: "Profile",
@@ -40,6 +40,6 @@ const links = [
   },
   {
     name: "Security",
-    path: "/profile/security",
+    path: "/security",
   },
 ];

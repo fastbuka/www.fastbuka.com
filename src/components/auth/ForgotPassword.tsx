@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   initialEmail?: string;
@@ -26,7 +27,9 @@ export default function ForgotPassword(props: Props) {
   }
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
-      <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      <Link href="/" className="w-max h-max">
+        <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      </Link>
       <h4 className="mt-4 font-medium text-[17px] 2xl:text-xl text-[#111111] text-center">
         Reset Your Password
       </h4>

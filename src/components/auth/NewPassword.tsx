@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { FormEvent, useState } from "react";
 import InputGroup from "../contact-us/InputGroup";
+import Link from "next/link";
 
 export default function NewPassword() {
   const [newPassword, setNewPassword] = useState("");
@@ -12,7 +13,9 @@ export default function NewPassword() {
   }
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
-      <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      <Link href="/" className="w-max h-max">
+        <Image src="/images/logo.svg" alt="" width={115} height={60} />
+      </Link>
       <h4 className="mt-4 mb-6 font-medium text-[17px] 2xl:text-xl text-[#111111] text-center">
         Create New Password
       </h4>

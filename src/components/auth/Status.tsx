@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useMemo } from "react";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type Props = {
   status: AuthModalTypeEnum.SUCCESS | AuthModalTypeEnum.ERROR;
@@ -18,13 +19,16 @@ export default function Status(props: Props) {
 
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
-      <Image
-        src="/images/logo.svg"
-        alt=""
-        width={115}
-        height={60}
-        className="mb-4 2xl:mb-6"
-      />
+      <Link href="/" className="w-max h-max">
+        <Image
+          src="/images/logo.svg"
+          alt=""
+          width={115}
+          height={60}
+          className="mb-4 2xl:mb-6"
+        />
+      </Link>
+
       {isSuccess ? (
         <Image src="/images/success.svg" alt="" width={140} height={140} />
       ) : (

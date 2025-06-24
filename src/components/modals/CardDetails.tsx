@@ -39,6 +39,7 @@ export default function CardDetails() {
       >
         <InputGroup
           label="Card Number"
+          type="number"
           placeholder="1234 5678 9012 3456"
           value={cardNumber}
           setValue={setCardNumber}
@@ -50,23 +51,27 @@ export default function CardDetails() {
           placeholder="E.g 08/26"
           value={expiryDate}
           setValue={setExpiryDate}
-          type="date"
+          type="month"
           required
         />
 
         <InputGroup
           label="CVV"
+          maxLength={3}
           placeholder="3-digit code on the back of your card"
           value={cvv}
           setValue={setCvv}
+          type="password"
           required
         />
 
         <InputGroup
+          maxLength={4}
           label="Your Card Pin"
           placeholder="4-digit card pin"
           value={cardPin}
           setValue={setCardPin}
+          type="password"
           required
         />
 
