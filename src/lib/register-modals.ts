@@ -14,6 +14,7 @@ import PendingModal from "@/components/modals/Pending";
 import ApplyPromoCode from "@/components/modals/PromoCode";
 import { ModalTypeEnum } from "@/contexts/ModalContext";
 import DeliveryAddress from "@/components/modals/DeliveryAddress";
+import DeactivateAccount from "@/components/modals/DeactivateAccount";
 
 export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.WalletActivation]: ActivateWallet,
@@ -30,4 +31,5 @@ export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.Pending]: PendingModal,
   [ModalTypeEnum.PromoCode]: ApplyPromoCode,
   [ModalTypeEnum.DeliveryAddress]: DeliveryAddress,
+  [ModalTypeEnum.DeactivateAccount]: DeactivateAccount,
 };

@@ -1,7 +1,7 @@
+"use client";
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function TapbarServices() {
   const RenderTabSection = () => {
@@ -22,26 +22,12 @@ export default function TapbarServices() {
             Get your favorite African and continental dishes delivered fast -
             hot, fresh, and straight to your door!
           </p>
-          <div className="w-full @max-2xl:w-[242px] @max-2xl:grid-cols-1 max-w-[444px] 2xl:max-w-[494px] grid grid-cols-2 gap-2.5">
-            <Link href="#" className="col-span-1">
-              <Image
-                alt=""
-                src="/images/appstore-button.svg"
-                width={232}
-                height={64}
-                className="w-full"
-              />
-            </Link>
-            <Link href="#" className="col-span-1">
-              <Image
-                alt=""
-                src="/images/playstore-button.svg"
-                width={232}
-                height={64}
-                className="w-full"
-              />
-            </Link>
-          </div>
+          <button
+            onClick={() => {}}
+            className="bg-(--primary-green) w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
+          >
+            Get Started
+          </button>
         </div>
       </div>
     );

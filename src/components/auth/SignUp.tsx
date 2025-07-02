@@ -5,6 +5,9 @@ import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import parsePhoneNumber from "libphonenumber-js";
+import Spinner from "./Spinner";
 
 interface Props {
   asPage?: boolean;
@@ -19,11 +22,24 @@ export default function SignUp(props: Props) {
   const [password, setPassword] = useState("");
   const [referralCode, setReferralCode] = useState("");
   const router = useRouter();
+  const { loading, register } = useAuth();
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    if (!asPage) {
-      openModal(AuthModalTypeEnum.SUCCESS);
+    const contact = parsePhoneNumber(phone, "NG")?.number || "";
+    localStorage.setItem("ACCOUNT_REGISTRATION_NUMBER", contact);
+    try {
+      await register(
+        {
+          name,
+          contact,
+          email,
+          password,
+        },
+        asPage
+      );
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -66,7 +82,6 @@ export default function SignUp(props: Props) {
           setValue={setReferralCode}
           label="Referral Code"
           placeholder="Code"
-          required
         />
         <InputGroup
           value={password}
@@ -79,9 +94,10 @@ export default function SignUp(props: Props) {
 
         <button
           type="submit"
+          disabled={loading}
           className="w-full  bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
         >
-          Sign Up
+          {loading ? <Spinner /> : "Sign Up"}
         </button>
         <p className="w-full text-center text-sm 2xl:text-base text-[#5D5D5D] font-normal">
           Have an account?{" "}

@@ -1,14 +1,36 @@
 "use client";
-import React from "react";
+import React, { FormEvent } from "react";
 import InputGroup from "./InputGroup";
+import { useContact } from "@/hooks/useContact";
+import Spinner from "../auth/Spinner";
 
 export default function Form() {
   const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [country, setCountry] = React.useState("");
+  const [subject, setSubject] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const { contactUs, loading } = useContact();
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await contactUs({
+        email,
+        message,
+        subject,
+      });
+      setEmail("");
+      setMessage("");
+      setSubject("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <form className="w-[561px] max-w-full flex flex-col gap-7 2xl:gap-8">
+    <form
+      onSubmit={handleFormSubmit}
+      className="w-[561px] max-w-full flex flex-col gap-7 2xl:gap-8"
+    >
       <InputGroup
         label="Email Address"
         value={email}
@@ -18,18 +40,13 @@ export default function Form() {
         required
       />
       <InputGroup
-        label="Phone Number"
-        value={phone}
-        setValue={setPhone}
-        placeholder="Input your phone number"
+        label="Subject"
+        value={subject}
+        setValue={setSubject}
+        placeholder="Input your subject"
         required
       />
-      <InputGroup
-        label="Country"
-        value={country}
-        setValue={setCountry}
-        placeholder="Country"
-      />
+
       <InputGroup
         label="Message"
         value={message}
@@ -41,7 +58,7 @@ export default function Form() {
         type="submit"
         className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 px-6 rounded-[12px]"
       >
-        Send Message
+        {loading ? <Spinner /> : "Send Message"}
       </button>
     </form>
   );

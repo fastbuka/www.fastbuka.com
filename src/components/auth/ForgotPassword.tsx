@@ -1,28 +1,27 @@
 "use client";
 import Image from "next/image";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent } from "react";
 import InputGroup from "../contact-us/InputGroup";
-import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import Spinner from "./Spinner";
 
 type Props = {
-  initialEmail?: string;
+  email: string;
   asPage?: boolean;
+  setEmail: (v: string) => void;
 };
 
 export default function ForgotPassword(props: Props) {
-  const { initialEmail, asPage } = props;
-  const { openModal } = useAuthModal();
-  const [email, setEmail] = useState(initialEmail || "");
-  const router = useRouter();
+  const { email, asPage, setEmail } = props;
+  const { loading, requestForgotPassword } = useAuth();
 
   async function handleFormSubmit(event: FormEvent) {
     event.preventDefault();
-    if (!asPage) {
-      openModal(AuthModalTypeEnum.VERIFICATION);
-    } else {
-      router.push("/login/verification");
+    try {
+      await requestForgotPassword({ email }, asPage);
+    } catch (error) {
+      console.log(error);
     }
   }
   return (
@@ -48,9 +47,10 @@ export default function ForgotPassword(props: Props) {
         />
         <button
           type="submit"
+          disabled={loading}
           className="w-full  bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
         >
-          Continue
+          {loading ? <Spinner /> : "Continue"}
         </button>
       </form>
     </div>

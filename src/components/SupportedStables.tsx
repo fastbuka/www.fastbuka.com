@@ -8,8 +8,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useWallet } from "@/contexts/WalletContext";
 
 export default function SupportedStables() {
+  const { wallet } = useWallet();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -21,18 +23,19 @@ export default function SupportedStables() {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[223px] p-2.5 h-max border border-(--primary-green) rounded-[12px] bg-[#F6F6F6] shadow-none">
-        {currencies.map((currency, index) => (
+        {wallet?.balances?.map((currency, index) => (
           <div
             key={index}
             className={cn(
               "w-full border-b-0 border-[#E7E7E7] cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5",
               {
-                "border-b": index < currencies.length - 1,
+                "border-b": index < wallet.balances.length - 1,
               }
             )}
           >
             <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
-              {currency}
+              {currency.asset_type === "native" ? "XLM" : currency.asset_code} -
+              Stable
             </p>
           </div>
         ))}
@@ -40,5 +43,3 @@ export default function SupportedStables() {
     </DropdownMenu>
   );
 }
-
-const currencies = ["NGNC - Stable", "USDC - Stable", "XLM - Token"];

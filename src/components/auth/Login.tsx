@@ -6,6 +6,9 @@ import InputGroup from "../contact-us/InputGroup";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import parsePhoneNumber from "libphonenumber-js";
+import Spinner from "./Spinner";
 
 type Props = {
   email: string;
@@ -30,11 +33,21 @@ export default function Login(props: Props) {
   const { openModal } = useAuthModal();
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { loading, login, phoneLogin } = useAuth();
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    if (!asPage) {
-      openModal(AuthModalTypeEnum.SUCCESS);
+    try {
+      if (selectedLoginMethod === "email") {
+        await login({ email, password }, asPage);
+      } else {
+        const contact = parsePhoneNumber(phone, "NG")?.number || "";
+        await phoneLogin({ phone: contact }, asPage, false, () => {
+          setSelectedLoginMethod("email");
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -111,9 +124,9 @@ export default function Login(props: Props) {
           </div>
           <button
             type="submit"
-            className="w-full  bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
+            className="w-full flex items-center justify-center  bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
           >
-            Login
+            {loading ? <Spinner /> : "Login"}
           </button>
           <p className="w-full text-center text-sm 2xl:text-base text-[#5D5D5D] font-normal">
             New to FastBuka?{" "}
@@ -133,7 +146,7 @@ export default function Login(props: Props) {
           </p>
         </form>
       ) : (
-        <form className="w-full flex flex-col gap-6">
+        <form onSubmit={handleLogin} className="w-full flex flex-col gap-6">
           <InputGroup
             value={phone}
             setValue={setPhone}
@@ -158,9 +171,10 @@ export default function Login(props: Props) {
           </div>
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
           >
-            Login
+            {loading ? <Spinner /> : "Login"}
           </button>
           <p className="w-full text-center text-sm 2xl:text-base text-[#5D5D5D] font-normal">
             New to FastBuka?{" "}

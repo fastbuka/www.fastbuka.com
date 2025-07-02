@@ -1,5 +1,6 @@
 "use client";
 import { useModal } from "@/contexts/ModalContext";
+import { useWallet } from "@/contexts/WalletContext";
 import { modalRegistry } from "@/lib/register-modals";
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
@@ -7,6 +8,7 @@ import React from "react";
 export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
+  const { ongoingTransfer, setOngoingTransfer } = useWallet();
 
   return (
     <AnimatePresence>
@@ -25,6 +27,9 @@ export default function AuthenticatedModals() {
           <div
             onClick={() => {
               closeModal();
+              if (ongoingTransfer) {
+                setOngoingTransfer(null);
+              }
             }}
             className="w-full h-full absolute top-0 left-0 bg-transparent"
           ></div>

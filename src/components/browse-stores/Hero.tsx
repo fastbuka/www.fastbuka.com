@@ -9,7 +9,7 @@ export default function Hero() {
       <NavBarTwo />
       <div className="2xl:mt-[88px] mt-[68px] @max-4xl:mt-[50px] w-full @max-4xl:pb-5 max-w-[1250px] px-5 h-max pb-[56px] 2xl:pb-[76px] flex flex-col items-center">
         <div className="w-full max-w-[512px] 2xl:max-w-[512px] flex flex-col items-center">
-          <h1 className="font-bold @max-2xl:max-w-full leading-[55px] @max-4xl:text-[48px] @max-4xl:leading-[64px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
+          <h1 className="font-bold @max-2xl:max-w-full leading-[55px] @max-4xl:text-[38px] @max-4xl:leading-[54px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
             Find your favorite bukas, groceries, and more!
           </h1>
         </div>

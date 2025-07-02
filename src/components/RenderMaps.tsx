@@ -82,27 +82,29 @@ export default function RenderMap() {
       center={center}
       zoom={15}
     >
-      {markersData.map((marker) => (
-        <Marker
-          key={marker.id}
-          position={marker.position}
-          onMouseOver={() => setSelected(marker)}
-          onClick={() => {
-            setSelected(marker);
-          }}
-          icon={{
-            url: "/images/location-pin-green.svg",
-            scaledSize: iconSize,
-          }}
-        />
-      ))}
+      <>
+        {markersData.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={marker.position}
+            onMouseOver={() => setSelected(marker)}
+            onClick={() => {
+              setSelected(marker);
+            }}
+            icon={{
+              url: "/images/location-pin-green.svg",
+              scaledSize: iconSize,
+            }}
+          />
+        ))}
 
-      {selected && (
-        <InfoWindow
-          position={selected.position}
-          options={{ headerDisabled: true }}
-        ></InfoWindow>
-      )}
+        {selected && (
+          <InfoWindow
+            position={selected.position}
+            options={{ headerDisabled: true }}
+          ></InfoWindow>
+        )}
+      </>
     </GoogleMap>
   );
 }

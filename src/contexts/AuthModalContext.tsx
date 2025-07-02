@@ -8,6 +8,8 @@ export enum AuthModalTypeEnum {
   SUCCESS = "SUCCESS",
   ERROR = "ERROR",
   SIGNUP = "SIGNUP",
+  PHONEVERIFICATION = "PHONEVERIFICATION",
+  ACCOUNTACTIVATION = "ACCOUNTACTIVATION",
 }
 
 type AuthModalType = AuthModalTypeEnum | null;

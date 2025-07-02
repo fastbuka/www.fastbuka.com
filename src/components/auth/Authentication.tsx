@@ -8,6 +8,7 @@ import Verification from "./Verification";
 import NewPassword from "./NewPassword";
 import Status from "./Status";
 import SignUp from "./SignUp";
+import PhoneVerification from "./PhoneVerification";
 
 export default function Authentication() {
   const { isOpen, modalType, closeModal } = useAuthModal();
@@ -54,12 +55,20 @@ export default function Authentication() {
             )}
             {modalType === AuthModalTypeEnum.SIGNUP && <SignUp />}
             {modalType === AuthModalTypeEnum.RESETPASSWORD && (
-              <ForgotPassword initialEmail={email} />
+              <ForgotPassword setEmail={setEmail} email={email} />
             )}
             {modalType === AuthModalTypeEnum.VERIFICATION && (
-              <Verification type={selectedLoginMethod} />
+              <Verification email={email} />
             )}
-            {modalType === AuthModalTypeEnum.NEWPASSWORD && <NewPassword />}
+            {modalType === AuthModalTypeEnum.ACCOUNTACTIVATION && (
+              <Verification email={email} />
+            )}
+            {modalType === AuthModalTypeEnum.PHONEVERIFICATION && (
+              <PhoneVerification phone={phone} />
+            )}
+            {modalType === AuthModalTypeEnum.NEWPASSWORD && (
+              <NewPassword email={email} />
+            )}
             {(modalType === AuthModalTypeEnum.ERROR ||
               modalType === AuthModalTypeEnum.SUCCESS) && (
               <Status status={modalType} />

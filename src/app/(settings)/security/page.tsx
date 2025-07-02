@@ -1,4 +1,6 @@
 import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
+import DeactivateAccountButton from "@/components/profile/DeactivateAccountButton";
+import LogoutButton from "@/components/profile/LogoutButton";
 import Image from "next/image";
 import React from "react";
 
@@ -13,19 +15,8 @@ export default function Page() {
       </p>
       <ChangePasswordForm />
       <div className="w-[500px] max-w-full py-6 px-2.5 flex flex-col gap-7">
-        <button className="flex hover:opacity-70 duration-300 items-center gap-2.5">
-          {" "}
-          <Image
-            src="/images/primary-logout.svg"
-            alt=""
-            width={24}
-            height={24}
-            className="w-5 2xl:w-6"
-          />
-          <p className="text-(--primary-black) text-sm 2xl:text-base font-medium">
-            Sign Out
-          </p>
-        </button>
+        <LogoutButton />
+        <DeactivateAccountButton />
         <button className="flex hover:opacity-70 duration-300 items-center gap-2.5">
           {" "}
           <Image
@@ -36,7 +27,7 @@ export default function Page() {
             className="w-5 2xl:w-6"
           />
           <p className="text-[#FF0000] text-sm 2xl:text-base font-medium">
-            Sign Out
+            Delete Account
           </p>
         </button>
       </div>

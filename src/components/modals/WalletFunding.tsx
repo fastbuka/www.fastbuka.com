@@ -3,17 +3,21 @@ import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { Check, MoveLeft } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
-import ChangeCurrency from "../profile/ChangeCurrency";
 import SupportedStables from "../SupportedStables";
+import AssetBalance from "../profile/AssetBalance";
+import { useWallet } from "@/contexts/WalletContext";
+import { toast } from "sonner";
 
 export default function WalletFunding() {
   const { openModal } = useModal();
+  const { wallet } = useWallet();
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText("GABCD1234XYZ...");
+      await navigator.clipboard.writeText(wallet?.address || "");
       setIsCopied(true);
+      toast.success("Copied");
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy: ", err);
@@ -40,9 +44,9 @@ export default function WalletFunding() {
       <p className="max-w-[419px] mb-2 text-center font-normal text-sm 2xl:text-base text-(--primary-black)">
         Deposit only supported stables and tokens in this address
       </p>
-      <div className="flex mb-8 2xl:mb-10 gap-2 items-center">
-        <p className="font-normal text-sm 2xl:text-base text-[#5D5D5D]">
-          GABCD1234XYZ...{" "}
+      <div className="flex w-full mb-8 2xl:mb-10 gap-2 justify-center items-center">
+        <p className="font-normal max-w-[60%] truncate text-sm 2xl:text-base text-[#5D5D5D]">
+          {wallet?.address}
         </p>
         <button
           type="button"
@@ -64,19 +68,10 @@ export default function WalletFunding() {
           {isCopied ? "Copied!" : "Copy"}
         </button>
       </div>
-      <div className="w-full mb-8 2xl:mb-10 h-max bg-[#E26F00] rounded-[12px] px-6 2xl:py-8 py-7 flex flex-col">
-        <div className="w-full flex mb-2.5 justify-between items-center">
-          <p className="2xl:text-sm text-xs font-normal text-[#D1D1D1]">
-            Available Balance
-          </p>
-          <ChangeCurrency className="@max-2xl:block" />
-        </div>
-        <div className="w-full flex justify-between items-center">
-          <h1 className="text-[28px] 2xl:text-[32px] font-medium text-[#F6F6F6]">
-            NGN100
-          </h1>
-        </div>
+      <div className="w-full mb-8 2xl:mb-10">
+        <AssetBalance />
       </div>
+
       <SupportedStables />
     </div>
   );

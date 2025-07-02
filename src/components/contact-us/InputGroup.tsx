@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { cn } from "@/lib/utils";
+import RichTextEditor from "../ui/RichTextEditor";
 
 interface Props {
   value: string;
@@ -19,6 +20,7 @@ interface Props {
   required?: boolean;
   label: string;
   maxLength?: number;
+  disabled?: boolean;
 }
 
 export default function InputGroup(props: Props) {
@@ -31,6 +33,7 @@ export default function InputGroup(props: Props) {
     type,
     options,
     maxLength,
+    disabled,
   } = props;
   const [passwordType, setPasswordType] = useState("password");
   const dateInputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +42,7 @@ export default function InputGroup(props: Props) {
   };
 
   const className =
-    "border border-[#E7E7E7] text-sm 2xl:text-base font-normal text-[#101010] w-full outline-0 rounded-2xl px-6 py-2.5 placeholder:text-[#B0B0B0]";
+    "border border-[#E7E7E7] disabled:bg-gray-100 text-sm 2xl:text-base font-normal text-[#101010] w-full outline-0 rounded-2xl px-6 py-2.5 placeholder:text-[#B0B0B0]";
 
   return (
     <div className="w-full flex flex-col items-start gap-3 2xl:gap-4">
@@ -48,14 +51,7 @@ export default function InputGroup(props: Props) {
       </p>
 
       {type === "textarea" ? (
-        <textarea
-          placeholder={placeholder}
-          value={value}
-          maxLength={maxLength || undefined}
-          onChange={(e) => setValue(e.target.value)}
-          required={required}
-          className={cn(className, "h-[132px]")}
-        />
+        <RichTextEditor value={value} setValue={setValue} />
       ) : type === "select" ? (
         <Select onValueChange={setValue} value={value}>
           <SelectTrigger className="w-full border-[#E7E7E7] text-sm 2xl:text-base h-max shadow-none py-2.5 px-6 rounded-2xl">
@@ -129,6 +125,7 @@ export default function InputGroup(props: Props) {
         </div>
       ) : (
         <input
+          disabled={disabled}
           type={type || "text"}
           placeholder={placeholder}
           maxLength={maxLength || undefined}

@@ -54,7 +54,7 @@ export default function Status(props: Props) {
           }
         )}
       >
-        {isSuccess ? "Done" : "Retry!"}
+        {isSuccess ? "Done" : "Close"}
       </button>
     </div>
   );

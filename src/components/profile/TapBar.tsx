@@ -15,7 +15,7 @@ export default function TapBar() {
             href={link.path}
             key={index}
             className={cn(
-              "col-span-1 py-2 2xl:py-2.5 font-semibold @max-2xl:text-xs @max-2xl:py-1.5 text-lg flex justify-center items-center @max-2xl:rounded-[8px] rounded-[12px] bg-transparent text-[#5D5D5D] duration-300 hover:opacity-70 2xl:text-2xl",
+              "col-span-1 py-2 2xl:py-2.5 font-semibold @max-2xl:text-xs @max-2xl:py-1.5 text-base flex justify-center items-center @max-2xl:rounded-[8px] rounded-[12px] bg-transparent text-[#5D5D5D] duration-300 hover:opacity-70 2xl:text-xl",
               {
                 "bg-(--primary-green) text-[#FFFBEA]": isActive,
               }

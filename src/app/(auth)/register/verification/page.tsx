@@ -12,7 +12,7 @@ export default function Page() {
         width={115}
         height={60}
       />
-      <Verification type="phone" asPage />
+      <Verification asPage />
     </div>
   );
 }

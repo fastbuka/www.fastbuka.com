@@ -1,7 +1,22 @@
+"use client";
+import { useManageUser } from "@/hooks/useManageUser";
 import { ChevronDown, MoveRight } from "lucide-react";
 import React from "react";
+import Spinner from "../auth/Spinner";
+import { useUser } from "@/contexts/UserContext";
 
 export default function ActivateWallet() {
+  const { user } = useUser();
+  const { loading, activateWallet } = useManageUser();
+
+  const handleActivateWallet = async () => {
+    try {
+      await activateWallet(user?.uuid || "");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-[504px] pb-20 @max-2xl:w-full max-w-full flex flex-col items-center">
       <h3 className="font-medium text-(--primary-black) mb-8 2xl:mb-10 text-base 2xl:text-xl text-center">
@@ -29,9 +44,11 @@ export default function ActivateWallet() {
       <div className="w-full px-4">
         <button
           type="button"
+          onClick={handleActivateWallet}
+          disabled={loading}
           className="w-full bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
         >
-          Activate Wallet
+          {loading ? <Spinner /> : "Activate Wallet"}
         </button>
       </div>
     </div>
