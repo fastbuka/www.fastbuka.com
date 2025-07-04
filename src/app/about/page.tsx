@@ -60,19 +60,19 @@ const ourMission = {
       title: "Empower Customers",
       description:
         "Order with familiar payments (bank/USSD), while our system auto-converts to blockchain for security.",
-      image: "/images/about/empower-customers.svg",
+      image: "/images/about/empower-customers.png",
     },
     {
       title: "Protect Transactions",
       description:
         "Stellar blockchain locks funds until you confirm delivery—zero fraud, zero stress.",
-      image: "/images/about/protect-transactions.svg",
+      image: "/images/about/protect-transactions.png",
     },
     {
       title: " Liberate Vendors",
       description:
         "Instant payouts in their preferred currency (₦aira or crypto), with 0% fees.",
-      image: "/images/about/liberate-vendors.svg",
+      image: "/images/about/liberate-vendors.png",
     },
   ],
 };

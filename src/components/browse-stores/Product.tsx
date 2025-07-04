@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import IncrementAndDecrementValue from "./IncrementAndDecrementValue";
 
 type Product = {
   data: {
@@ -25,7 +24,9 @@ export default function Product(product: Product) {
         <p className="font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-2 2xl:mb-2.5">
           {price}
         </p>
-        <IncrementAndDecrementValue />
+        <button className="h-7 w-max px-3 rounded bg-[#FF9702] hover:opacity-80 duration-300 text-sm text-[#F6F6F6] font-normal">
+          Add to cart
+        </button>
       </div>
       <Image
         src={image}

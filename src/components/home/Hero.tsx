@@ -1,9 +1,21 @@
-import React from "react";
+"use client";
+import React, { FormEvent, useState } from "react";
 import NavBarOne from "../NavBarOne";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (search.trim().length > 0) {
+      router.push(`/browse-stores?search=${search}`);
+    }
+  };
+
   return (
     <div className="w-full hero-background @max-4xl:bg-none bg-(image:--hero-bg) h-max flex flex-col items-center @max-4xl:pt-6 pt-7 2xl:pt-10 @max-4xl:pb-[60px] pb-[72px] bg-no-repeat bg-cover">
       <NavBarOne />
@@ -17,7 +29,10 @@ export default function Hero() {
             scams! Tap below to order now or download app
           </p>
           <div className="w-full @max-4xl:items-center @max-4xl:flex-col @max-3xl:mb-6 mb-[34px] flex gap-2.5">
-            <div className="w-full gap-2.5 flex h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6">
+            <form
+              onSubmit={handleFormSubmit}
+              className="w-full gap-2.5 flex h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
+            >
               <Image
                 src="/images/magnifying-glass.svg"
                 alt=""
@@ -26,10 +41,15 @@ export default function Hero() {
                 className="2xl:w-6 w-5"
               />
               <input
-                placeholder="Type 'suya', 'amala', or vendor name..."
+                required
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                placeholder="Type 'Breakfast', 'Lunch', or vendor name..."
                 className="w-full text-sm 2xl:text-base font-normal text-[#888888] placeholder:text-[#888888] h-full outline-none bg-transparent border-none"
               />
-            </div>
+            </form>
             <div className="min-w-[184px] @max-4xl:w-[184px] h-[50px]">
               <div className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 shadow-none min-h-[50px] border border-[#E7E7E7] rounded-[12px]">
                 <Image

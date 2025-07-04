@@ -1,9 +1,26 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import NavBarTwo from "@/components/NavBarTwo";
 import Image from "next/image";
+import { Category } from "@/lib/requests/category";
+import Link from "next/link";
+import { scrollToElement } from "@/lib/shared-utils";
 
-export default function Hero() {
+interface Props {
+  categories: Category[];
+  search?: string;
+  category?: string;
+}
+
+export default function Hero(props: Props) {
+  const { categories, category, search } = props;
+
+  useEffect(() => {
+    if (category || search) {
+      scrollToElement("#vender-list");
+    }
+  }, [category, search]);
+
   return (
     <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
       <NavBarTwo />
@@ -20,9 +37,9 @@ export default function Hero() {
           <div className="w-full p-2.5 flex flex-wrap justify-center max-w-full gap-2.5">
             {categories.map((category, index) => {
               return (
-                <button
+                <Link
                   key={index}
-                  type="button"
+                  href={`/browse-stores?category=${category.name}`}
                   className="w-max px-4 min-w-[118px] cursor-pointer hover:opacity-70 duration-200 flex flex-col items-center justify-center gap-2.5 py-5 2xl:py-6 rounded-[12px] bg-[#EFFEF7]"
                 >
                   <Image
@@ -33,9 +50,9 @@ export default function Hero() {
                     className="w-5 2xl:w-6"
                   />
                   <p className="text-[#19CE7C] text-center text-xs 2xl:text-sm font-medium">
-                    {category}
+                    {category.name}
                   </p>
-                </button>
+                </Link>
               );
             })}
           </div>
@@ -44,12 +61,3 @@ export default function Hero() {
     </div>
   );
 }
-
-const categories = [
-  "Restaurants",
-  "Grocery",
-  "Proteins",
-  "Fast Food",
-  "Buka",
-  "Fine Dining",
-];

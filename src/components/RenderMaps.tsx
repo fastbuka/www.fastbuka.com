@@ -1,42 +1,20 @@
 "use client";
 
+import { Vendor, VendorsResponse } from "@/schema";
 import {
   GoogleMap,
   Marker,
   useJsApiLoader,
   InfoWindow,
 } from "@react-google-maps/api";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-type MarkerType = {
-  id: number;
-  position: google.maps.LatLngLiteral;
-  label?: string;
-  description?: string;
-  ratings?: number;
-  image?: string;
-};
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
-
-const center = {
-  lat: 5.345,
-  lng: 7.013,
-};
-
-const markersData: MarkerType[] = [
-  {
-    id: 1,
-    position: { lat: 5.345, lng: 7.013 },
-    label: "Shoprite",
-    description: "No 1 Ikorodu road,Ikorodu Lagos",
-    ratings: 4,
-    image: "/images/shoprite-banner.png",
-  },
-];
 
 const lightMapStyle = [
   {
@@ -51,12 +29,17 @@ const mapOptions: google.maps.MapOptions = {
   disableDefaultUI: true,
 };
 
-export default function RenderMap() {
+export default function RenderMap({
+  vendors,
+}: {
+  vendors?: VendorsResponse["vendors"];
+}) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
-
-  const [selected, setSelected] = useState<MarkerType | null>(null);
+  const [center, setCenter] = useState<google.maps.LatLngLiteral | undefined>();
+  const router = useRouter();
+  const [selected, setSelected] = useState<Vendor | null>(null);
   const [iconSize, setIconSize] = useState<google.maps.Size | null>(null);
 
   useEffect(() => {
@@ -67,6 +50,18 @@ export default function RenderMap() {
       new window.google.maps.Size(isMobile ? 18 : 26, isMobile ? 22 : 32)
     );
   }, [isLoaded]);
+
+  useEffect(() => {
+    if (vendors?.length) {
+      const first = vendors[0];
+      const lat = Number(first.latitude);
+      const lng = Number(first.longitude);
+
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setCenter({ lat, lng });
+      }
+    }
+  }, [vendors]);
 
   if (!isLoaded || iconSize === null)
     return (
@@ -83,16 +78,19 @@ export default function RenderMap() {
       zoom={15}
     >
       <>
-        {markersData.map((marker) => (
+        {vendors?.map((marker) => (
           <Marker
             key={marker.id}
-            position={marker.position}
-            onMouseOver={() => setSelected(marker)}
+            position={{ lat: marker.latitude, lng: marker.longitude }}
             onClick={() => {
-              setSelected(marker);
+              if (selected && selected?.uuid === marker.uuid) {
+                setSelected(null);
+              } else {
+                setSelected(marker);
+              }
             }}
             icon={{
-              url: "/images/location-pin-green.svg",
+              url: "/images/location.svg",
               scaledSize: iconSize,
             }}
           />
@@ -100,9 +98,33 @@ export default function RenderMap() {
 
         {selected && (
           <InfoWindow
-            position={selected.position}
-            options={{ headerDisabled: true }}
-          ></InfoWindow>
+            onCloseClick={() => {
+              setSelected(null);
+            }}
+            position={{ lat: selected.latitude, lng: selected.longitude }}
+            options={{
+              headerDisabled: true,
+              pixelOffset: new window.google.maps.Size(0, -35),
+            }}
+          >
+            <div
+              onClick={() => {
+                router.push(`/browse-stores/${selected.slug}`);
+              }}
+              className="w-[107px] flex justify-between items-center cursor-pointer hover:opacity-70 duration-300"
+            >
+              <p className="text-xs truncate text-[#1E2022] font-normal">
+                {selected.name}
+              </p>{" "}
+              <Image
+                src="/images/chevron-right.svg"
+                alt=""
+                height={12}
+                width={6.7}
+                className="min-w-1.5"
+              />
+            </div>
+          </InfoWindow>
         )}
       </>
     </GoogleMap>

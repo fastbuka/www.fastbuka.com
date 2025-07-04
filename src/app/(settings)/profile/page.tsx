@@ -1,7 +1,5 @@
-import DeactivateAccountButton from "@/components/profile/DeactivateAccountButton";
 import LogoutButton from "@/components/profile/LogoutButton";
 import ProfileForm from "@/components/profile/ProfileForm";
-import Image from "next/image";
 import React from "react";
 
 export default function Page() {
@@ -17,20 +15,6 @@ export default function Page() {
       <ProfileForm />
       <div className="w-[500px] max-w-full py-6 px-2.5 flex flex-col gap-7">
         <LogoutButton />
-        <DeactivateAccountButton />
-        <button className="flex hover:opacity-70 duration-300 items-center gap-2.5">
-          {" "}
-          <Image
-            src="/images/trash-can-red.svg"
-            alt=""
-            width={24}
-            height={24}
-            className="w-5 2xl:w-6"
-          />
-          <p className="text-[#FF0000] text-sm 2xl:text-base font-medium">
-            Delete Account
-          </p>
-        </button>
       </div>
     </div>
   );

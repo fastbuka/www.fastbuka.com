@@ -9,7 +9,7 @@ export default function ProfileDropdown() {
   const router = useRouter();
   const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
   return (
-    <div className="w-max @max-3xl:mr-5 flex items-center @max-3xl:gap-4 gap-2.5">
+    <div className="w-max @max-4xl:hidden flex items-center @max-3xl:gap-4 gap-2.5">
       <button
         className="w-10 @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-(--primary-green) flex justify-center items-center hover:opacity-80 duration-200"
         type="button"

@@ -53,7 +53,7 @@ export default function ValidateTransfer() {
       if (timeLeft === "00:00") {
         clearInterval(interval);
 
-        // openModal(ModalTypeEnum.Error);
+        openModal(ModalTypeEnum.Error);
       }
     }, 1000);
 

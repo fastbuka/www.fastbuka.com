@@ -35,7 +35,7 @@ export default function SupportedStables() {
           >
             <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
               {currency.asset_type === "native" ? "XLM" : currency.asset_code} -
-              Stable
+              {currency.asset_type === "native" ? "Token" : "Stable"}
             </p>
           </div>
         ))}

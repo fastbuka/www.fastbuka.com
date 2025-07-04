@@ -23,7 +23,7 @@ export default function VendorHero() {
         <div className="w-full @max-4xl:flex-col @max-4xl:gap-6 flex items-start justify-between mb-7 2xl:mb-8">
           <div className="w-max flex flex-col">
             <p className="text-[#19CE7C] font-normal text-base 2xl:text-[19px] mb-4 2xl:mb-[19px]">
-              AFRICAN CHICKEN FASTFOOD
+              FASTBUKA VENDOR
             </p>
             <h1 className="font-semibold text-(--primary-black) text-[28px] 2xl:text-[38px] mb-4 2xl:mb-[19px]">
               Chicken Republic

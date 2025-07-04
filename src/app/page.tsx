@@ -6,8 +6,11 @@ import PlaceOrder from "@/components/home/PlaceOrder";
 import SectionGridList from "@/components/home/SectionGridList";
 import TapbarServices from "@/components/home/TapbarServices";
 import TryAppCard from "@/components/home/TryAppCard";
+import { getVendors } from "@/lib/requests/vendors";
 
-export default function Home() {
+export default async function Home() {
+  const vendors = await getVendors();
+
   return (
     <main className="w-full @container flex flex-col bg-[#F6FFFB]">
       <Hero />
@@ -22,7 +25,7 @@ export default function Home() {
           </div>
           <SectionGridList data={stories} />
           <div className="my-[62px] @max-4xl:my-10 2xl:my-[72px] w-full">
-            <NearbyRestaurants />
+            <NearbyRestaurants vendors={vendors} />
           </div>
           <FAQs />
           <PlaceOrder />
@@ -42,20 +45,20 @@ const whyChooseUs = {
       tag: "ORDER",
       title: "Choose from 500+ vendors ",
       description: "Place orders in seconds from verified vendors!",
-      image: "/images/services/order.svg",
+      image: "/images/services/order.png",
     },
     {
       tag: "MAKE PAYMENT",
       title: "Bank/USSD  or crypto ",
       description:
         "Pay securely via bank, USSD, or crypto & instant confirmation!",
-      image: "/images/services/payment.svg",
+      image: "/images/services/payment.png",
     },
     {
       tag: "GET FOOD",
       title: "Track & Enjoy ",
       description: "Live rider tracking & enjoy blockchain-secured delivery!",
-      image: "/images/services/get-food.svg",
+      image: "/images/services/get-food.png",
     },
   ],
 };
@@ -70,21 +73,21 @@ const stories = {
       title: "Uncle Abu’s Suya Spot (Asaba) ",
       description:
         "I joined just to try crypto... now 40% of my sales come from blockchain payments!",
-      image: "/images/suya.svg",
+      image: "/images/suya.png",
     },
     {
       tag: "Keep All Profits!",
       title: "Glow Organic Store (Enugu)",
       description:
         "Before high fees almost drained my profits, FastBuka’s 0% fee lets my business thrive!",
-      image: "/images/organic.svg",
+      image: "/images/organic.png",
     },
     {
       tag: "Own Your Hustle!",
       title: "Ejiro's Spot, (Warri)",
       description:
         "Dem no dey charge me like the others, my money dey land straight to my wallet!",
-      image: "/images/ejiro.svg",
+      image: "/images/ejiro.png",
     },
   ],
 };

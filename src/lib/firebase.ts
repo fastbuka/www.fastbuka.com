@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, Messaging } from "firebase/messaging";
-import { toast } from "sonner";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -35,7 +34,7 @@ export const getDeviceToken = async (): Promise<string | null> => {
     return currentToken || null;
   } catch (error) {
     console.error("Error retrieving device token:", error);
-    toast.error("Error retrieving device token");
+    console.log(error);
     return null;
   }
 };
