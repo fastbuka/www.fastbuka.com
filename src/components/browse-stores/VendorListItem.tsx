@@ -36,7 +36,7 @@ export default function VendorListItem(props: Props) {
         <div className="flex items-center gap-2.5">
           <Image src="/images/clock.svg" alt="" width={16} height={16} />
           <p className="text-sm text-[#5D5D5D] font-normal">
-            {vendor.opening_time}
+            {vendor?.opening_time} - {vendor?.closing_time}
           </p>
         </div>
       )}

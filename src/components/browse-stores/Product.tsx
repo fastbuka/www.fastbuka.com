@@ -1,24 +1,15 @@
-import Image from "next/image";
+import { Product } from "@/schema";
 import React from "react";
 
-type Product = {
-  data: {
-    image: string;
-    name: string;
-    price: string;
-    description: string;
-  };
-};
-
-export default function Product(product: Product) {
-  const { description, image, name, price } = product.data;
+export default function ProductComponent({ product }: { product: Product }) {
+  const { description, image, name, price } = product;
   return (
     <div className="col-span-1 gap-5 border border-[#E7E7E7] rounded-[12px] px-6 py-2.5 flex items-center justify-between">
       <div className="w-max max-w-full flex flex-col">
-        <h3 className="text-(--primary-black) text-base 2xl:text-xl font-medium mb-2 2xl:mb-2.5">
+        <h3 className="text-(--primary-black) line-clamp-1 text-base 2xl:text-xl font-medium mb-2 2xl:mb-2.5">
           {name}
         </h3>
-        <p className="font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-7 2xl:mb-8">
+        <p className="font-normal line-clamp-2  text-sm 2xl:text-base text-[#5D5D5D] mb-7 2xl:mb-8">
           {description}
         </p>
         <p className="font-normal text-sm 2xl:text-base text-[#5D5D5D] mb-2 2xl:mb-2.5">
@@ -28,12 +19,10 @@ export default function Product(product: Product) {
           Add to cart
         </button>
       </div>
-      <Image
+      <img
         src={image}
         alt=""
-        width={115}
-        height={122}
-        className="min-w-[115px]"
+        className="min-w-[115px] w-[115px] h-[122px] object-cover"
       />
     </div>
   );

@@ -1,6 +1,6 @@
 "use server";
 
-import { VendorsResponse } from "@/schema";
+import { Pagination, Product, VendorsResponse } from "@/schema";
 
 const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -37,6 +37,43 @@ export async function getFeaturedVendors() {
     const response = await request.json();
     if (response?.success) {
       return response?.data as VendorsResponse;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function getVendor(slug: string) {
+  try {
+    const request = await fetch(`${endpoint}/api/v1/vendor/show/${slug}`);
+    const response = await request.json();
+    if (response?.success) {
+      return response?.data?.vendor as VendorsResponse["vendors"][0];
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
+export async function getVendorProducts(slug: string, category?: string) {
+  try {
+    const request = await fetch(
+      `${endpoint}/api/v1/product/public/${slug}${
+        category ? `?q=${category}` : ""
+      }`
+    );
+    const response = await request.json();
+    if (response?.success) {
+      return response?.data as {
+        products: Product[];
+        pagination: Pagination;
+      };
     } else {
       return undefined;
     }

@@ -15,6 +15,7 @@ export enum ModalTypeEnum {
   Pending = "Pending",
   PromoCode = "PromoCode",
   DeliveryAddress = "DeliveryAddress",
+  Search = "Search",
   DeactivateAccount = "DeactivateAccount",
 }
 

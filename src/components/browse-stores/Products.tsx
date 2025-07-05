@@ -1,16 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import Product from "./Product";
+import ProductComponent from "./Product";
 import Order from "./Order";
 import Image from "next/image";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
-
-type Product = {
-  image: string;
-  name: string;
-  price: string;
-  description: string;
-};
+import { Pagination, Product, Vendor } from "@/schema";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 type Order = {
   name: string;
@@ -18,25 +14,99 @@ type Order = {
   description: string;
 };
 
-export default function Products() {
+interface Props {
+  vendor?: Vendor;
+  slug: string;
+  category?: string;
+  data?: {
+    pagination: Pagination;
+    products: Product[];
+  };
+}
+
+const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+export default function Products(props: Props) {
+  const { data, vendor, slug, category } = props;
   const { openModal } = useModal();
+  const [list, setList] = useState(data?.products || []);
+  const [pagination, setPagination] = useState<Pagination | null>(
+    data?.pagination || null
+  );
+  const [isLoading, setIsLoading] = useState(false);
   const [addDeliveryInstructions, setAddDeliveryInstructions] = useState(false);
   const [addVendorInstructions, setAddVendorInstructions] = useState(false);
+
+  async function fetchMore() {
+    try {
+      setIsLoading(true);
+      const request = await fetch(
+        `${endpoint}/api/v1/product/public/${slug}?page=${
+          pagination?.nextPage
+        }${category ? `&q=${category}` : ""}`
+      );
+      const response = await request.json();
+      if (response?.success) {
+        setPagination(response.data.pagination);
+        setList((prev) => [...prev, ...response.data.products]);
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-[1210px] @max-5xl:grid-cols-1 px-5 grid grid-cols-5">
         <div className="col-span-3 @max-5xl:col-span-1 @max-2xl:pr-0 2xl:pr-[43px] @max-5xl:border-r-0 border-r pt-5 2xl:pt-6 border-[#E7E7E7]">
           <div className="grid @max-2xl:grid-cols-1 grid-cols-2 gap-x-10 gap-y-8 2xl:gap-y-10 w-full p-2.5">
-            {dummyProducts.map((product, index) => {
-              return <Product key={index} data={product} />;
+            {list.map((product, index) => {
+              return <ProductComponent key={index} product={product} />;
             })}
+            {list.length === 0 && (
+              <div className="col-span-2 @max-2xl:col-span-1 py-14 flex justify-center items-center">
+                <p className=" font-normal  text-[#5D5D5D] text-base 2xl:text-lg">
+                  No available product
+                </p>
+              </div>
+            )}
+            {pagination?.nextPage && (
+              <div className="col-span-2 @max-2xl:col-span-1 flex items-center justify-center">
+                <button
+                  onClick={fetchMore}
+                  className={cn(
+                    "w-20 h-20 duration-200 rounded-full bg-[#EFFEF7] cursor-pointer hover:scale-110 text-[#19CE7C] text-[13px] font-medium",
+                    {
+                      "animate-pulse": isLoading,
+                    }
+                  )}
+                >
+                  {isLoading ? (
+                    <div className="lds-ring w-5 h-5">
+                      <div className="w-5 h-5 border-4 border-[#19CE7C]" />
+                      <div className="w-5 h-5 border-4 border-[#19CE7C]" />
+                      <div className="w-5 h-5 border-4 border-[#19CE7C]" />
+                      <div className="w-5 h-5 border-4 border-[#19CE7C]" />
+                    </div>
+                  ) : (
+                    <span>
+                      Fetch
+                      <br />
+                      More
+                    </span>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className="col-span-2 @max-5xl:col-span-1 @max-2xl:px-2 p-6 flex flex-col">
           <div className="w-full @max-2xl:flex-col @max-2xl:gap-6 mb-7 2xl:mb-8 pb-4 border-b border-[#E7E7E7] flex justify-between items-start gap-8">
             <p className="text-sm w-full 2xl:text-base text-[#5D5D5D] font-normal">
-              Chicken Republic - Asaba
+              {vendor?.name} - {vendor?.city}
             </p>
             <button className="min-w-max font-normal text-(--primary-green) text-sm 2xl:text-base bg-[#DAFEEC] py-2 px-4 rounded-[12px] hover:opacity-70 duration-300">
               Add another pack
@@ -187,13 +257,6 @@ const RenderOrderDetail = (menu: { label: string; value: string }) => {
     </div>
   );
 };
-
-const dummyProducts: Product[] = Array(8).fill({
-  image: "/images/fanta.svg",
-  name: "Fanta 50cl",
-  description: "Description",
-  price: "NGNC900",
-});
 
 const dummyOrders: Order[] = Array(3).fill({
   name: "Pack 1",

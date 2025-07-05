@@ -42,3 +42,22 @@ export type VendorsResponse = {
   vendors: Vendor[];
   pagination: Pagination;
 };
+
+export type Product = {
+  id: number;
+  uuid: string;
+  vendor_uuid: string;
+  name: string;
+  description: string;
+  categories: string[];
+  image: string;
+  price: number;
+  discount: number;
+  processing_time: string;
+  ratings: number;
+  featured: number;
+  ready_made: boolean;
+  stock: boolean;
+  created_at: string;
+  updated_at: string;
+};
