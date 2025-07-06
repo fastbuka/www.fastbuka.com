@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductComponent from "./Product";
 import Order from "./Order";
 import Image from "next/image";
@@ -57,6 +57,13 @@ export default function Products(props: Props) {
       setIsLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (data) {
+      setList(data.products);
+      setPagination(data.pagination);
+    }
+  }, [data]);
 
   return (
     <div className="w-full flex flex-col items-center">

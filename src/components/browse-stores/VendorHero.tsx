@@ -6,6 +6,7 @@ import GoBack from "../GoBack";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { cn } from "@/lib/utils";
 import { Vendor } from "@/schema";
+import { useRouter } from "next/navigation";
 
 export default function VendorHero({
   vendor,
@@ -16,18 +17,32 @@ export default function VendorHero({
   category?: string;
   slug: string;
 }) {
+  const router = useRouter();
   return (
     <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
       <NavBarTwo />
       <div className="2xl:mt-14 mt-11 @max-4xl:mt-[50px] w-full max-w-[1210px] px-5 h-max flex flex-col">
         <GoBack />
-        <Image
-          src="/images/fries-with-chicken.svg"
-          alt=""
-          width={1210}
-          height={530}
-          className="w-full mt-6 2xl:mt-8 mb-9 2xl:mb-11"
-        />
+
+        <div className="w-full rounded-t-lg overflow-hidden mt-6 2xl:mt-8 mb-9 2xl:mb-11 @max-3xl:h-[111px] h-42 2xl:h-56 relative">
+          <Image
+            src="/images/fries-with-chicken.svg"
+            alt=""
+            width={1210}
+            height={530}
+            className="w-full h-[115px] @max-3xl:h-[77px] 2xl:h-[155px] object-cover"
+          />
+          <div className="2xl:w-[129px] @max-3xl:w-[63px] @max-3xl:h-[63px]  w-[94px] h-[94px] 2xl:h-[129px] rounded-full bg-white border-[6px] border-white absolute @max-3xl:left-2 left-8 bottom-0 overflow-hidden">
+            <Image
+              src="/images/vendor-profile.png"
+              alt=""
+              width={129}
+              height={129}
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+
         <div className="w-full @max-4xl:flex-col @max-4xl:gap-6 flex items-start justify-between mb-7 2xl:mb-8">
           <div className="w-max flex flex-col">
             <p className="text-[#19CE7C] font-normal text-base 2xl:text-[19px] mb-4 2xl:mb-[19px]">
@@ -64,7 +79,7 @@ export default function VendorHero({
           <div className="w-max flex gap-7 2xl:gap-8">
             <button
               onClick={() => {
-                window.location.href = `/browse-stores/${slug}`;
+                router.replace(`/browse-stores/${slug}`);
               }}
               className={cn(
                 "px-6 py-2.5 rounded-[12px] cursor-pointer hover:opacity-70 duration-200 bg-transparent text-[#888888] text-base 2xl:text-xl",
@@ -81,7 +96,7 @@ export default function VendorHero({
                 <button
                   key={index}
                   onClick={() => {
-                    window.location.href = `/browse-stores/${slug}?category=${cat}`;
+                    router.replace(`/browse-stores/${slug}?category=${cat}`);
                   }}
                   className={cn(
                     "px-6 py-2.5 rounded-[12px] cursor-pointer hover:opacity-70 duration-200 bg-transparent text-[#888888] text-base 2xl:text-xl",

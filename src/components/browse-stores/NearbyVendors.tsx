@@ -26,7 +26,6 @@ export default function NearbyVendors() {
               `${endpoint}/api/v1/vendor/public/approved?latitude=${latitude}&longitude=${longitude}`
             );
             const data = await res.json();
-            console.log(data);
 
             if (data?.success) {
               setVendorsResponse(data.data);

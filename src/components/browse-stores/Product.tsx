@@ -1,8 +1,10 @@
+"use client";
 import { Product } from "@/schema";
-import React from "react";
+import React, { useState } from "react";
 
 export default function ProductComponent({ product }: { product: Product }) {
   const { description, image, name, price } = product;
+  const [imgSrc, setImgSrc] = useState(image);
   return (
     <div className="col-span-1 gap-5 border border-[#E7E7E7] rounded-[12px] px-6 py-2.5 flex items-center justify-between">
       <div className="w-max max-w-full flex flex-col">
@@ -20,8 +22,12 @@ export default function ProductComponent({ product }: { product: Product }) {
         </button>
       </div>
       <img
-        src={image}
+        src={imgSrc}
         alt=""
+        onError={() => {
+          console.log("error loading image");
+          setImgSrc("/images/product-placeholder.jpg");
+        }}
         className="min-w-[115px] w-[115px] h-[122px] object-cover"
       />
     </div>

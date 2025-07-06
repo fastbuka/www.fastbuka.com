@@ -37,7 +37,7 @@ export default function Hero(props: Props) {
             }}
             className="w-11/12 mb-6 hidden @max-4xl:flex gap-2.5 h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
           >
-            <div className="w-full text-sm 2xl:text-base flex items-center font-normal text-[#888888] placeholder:text-[#888888] h-full outline-none bg-transparent border-none">
+            <div className="w-full truncate text-sm 2xl:text-base flex items-center font-normal text-[#888888] placeholder:text-[#888888] h-full outline-none bg-transparent border-none">
               Search for food, drinks, vendors e.t.c
             </div>
             <Image

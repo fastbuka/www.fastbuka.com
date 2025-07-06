@@ -27,6 +27,7 @@ export type Vendor = {
   updated_at: string;
   user_uuid: string;
   uuid: string;
+  other_names: string;
 };
 
 export type Pagination = {
@@ -58,6 +59,16 @@ export type Product = {
   featured: number;
   ready_made: boolean;
   stock: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Team = {
+  id: number;
+  uuid: string;
+  name: string;
+  role: string;
+  avatar: string;
   created_at: string;
   updated_at: string;
 };

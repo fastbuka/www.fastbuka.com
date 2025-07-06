@@ -8,7 +8,10 @@ export default function RenderLogin() {
     "email" | "phone"
   >("email");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState({
+    countryCode: "NG",
+    number: "",
+  });
 
   return (
     <motion.div

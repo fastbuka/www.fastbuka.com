@@ -9,6 +9,7 @@ type User = {
   contact: string;
   username: string;
   uuid: string;
+  other_names: string;
 };
 
 type UserContextType = {

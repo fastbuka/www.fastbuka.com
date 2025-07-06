@@ -8,7 +8,6 @@ import {
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import parsePhoneNumber from "libphonenumber-js";
 import Spinner from "./Spinner";
 
 type Props = {
@@ -55,7 +54,7 @@ export default function PhoneVerification(props: Props) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     try {
-      const c = parsePhoneNumber(userContact, "NG")?.number || "";
+      const c = userContact || "";
       await verifyPhone({ code, contact: c }, asPage);
     } catch (error) {
       console.log(error);
@@ -64,7 +63,7 @@ export default function PhoneVerification(props: Props) {
 
   const handleResendCode = async () => {
     try {
-      const c = parsePhoneNumber(userContact, "NG")?.number || "";
+      const c = userContact || "";
       await phoneLogin(
         {
           phone: c,

@@ -76,7 +76,7 @@ export default function NavBarTwo() {
             height={24}
             className="2xl:w-6 w-5"
           />
-          <div className="w-full text-sm 2xl:text-base font-normal text-[#888888] flex items-center h-full outline-none bg-transparent border-none">
+          <div className="w-full truncate text-sm 2xl:text-base font-normal text-[#888888] flex items-center h-full outline-none bg-transparent border-none">
             Search for food, drinks, vendors e.t.c
           </div>
         </div>

@@ -6,8 +6,9 @@ import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-import parsePhoneNumber from "libphonenumber-js";
+import parsePhoneNumber, { CountryCode } from "libphonenumber-js";
 import Spinner from "./Spinner";
+import PhoneNumberInputGroup from "../contact-us/PhoneNumberInputGroup";
 
 interface Props {
   asPage?: boolean;
@@ -18,7 +19,10 @@ export default function SignUp(props: Props) {
   const { openModal } = useAuthModal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState({
+    countryCode: "NG",
+    number: "",
+  });
   const [password, setPassword] = useState("");
   const [referralCode, setReferralCode] = useState("");
   const router = useRouter();
@@ -26,7 +30,9 @@ export default function SignUp(props: Props) {
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    const contact = parsePhoneNumber(phone, "NG")?.number || "";
+    const contact =
+      parsePhoneNumber(phone.number, phone.countryCode as CountryCode)
+        ?.number || "";
     localStorage.setItem("ACCOUNT_REGISTRATION_NUMBER", contact);
     try {
       await register(
@@ -70,12 +76,11 @@ export default function SignUp(props: Props) {
           required
         />
 
-        <InputGroup
-          value={phone}
-          setValue={setPhone}
+        <PhoneNumberInputGroup
           label="Phone Number"
-          placeholder="Phone Number"
-          required
+          placeholder="Enter number"
+          value={phone}
+          onChange={setPhone}
         />
         <InputGroup
           value={referralCode}

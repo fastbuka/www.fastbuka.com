@@ -43,7 +43,7 @@ export default function AccountActivation(props: Props) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     try {
-      await activateAccount({ code, email: userEmail });
+      await activateAccount({ code, email: userEmail }, asPage);
     } catch (error) {
       console.log(error);
     }

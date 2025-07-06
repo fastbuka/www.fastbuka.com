@@ -1,9 +1,13 @@
 import Footer from "@/components/Footer";
 import Hero from "@/components/about/Hero";
+import RenderTeam from "@/components/about/RenderTeam";
 import SectionGridList from "@/components/home/SectionGridList";
 import TryAppCard from "@/components/home/TryAppCard";
+import { getTeam } from "@/lib/requests/category";
 
-export default function Page() {
+export default async function Page() {
+  const team = await getTeam();
+
   return (
     <main className="w-full @container flex flex-col bg-[#F6FFFB]">
       <Hero />
@@ -19,27 +23,8 @@ export default function Page() {
               Africa’s first blockchain-powered food app
             </p>
             <div className="w-full @max-6xl:grid-cols-2 @max-2xl:grid-cols-1 max-w-[1218px] grid grid-cols-3 gap-x-6 gap-y-9 2xl:gap-y-[42px]">
-              {team.map((member, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="col-span-1 flex flex-col items-center"
-                  >
-                    <div
-                      className="w-[280px] h-[280px] bg-no-repeat bg-contain mb-4"
-                      style={{
-                        backgroundImage:
-                          "url(/images/about/image-placeholder.svg)",
-                      }}
-                    ></div>
-                    <h3 className="font-semibold text-(--primary-black) text-lg 2xl:text-xl text-center mb-2.5">
-                      {member.name}
-                    </h3>
-                    <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base">
-                      {member.role}
-                    </p>
-                  </div>
-                );
+              {team?.map((member, index) => {
+                return <RenderTeam member={member} key={index} />;
               })}
             </div>
           </div>
@@ -76,12 +61,3 @@ const ourMission = {
     },
   ],
 };
-
-const team = [
-  { name: "Name", role: "Position", image: "" },
-  { name: "Name", role: "Position", image: "" },
-  { name: "Name", role: "Position", image: "" },
-  { name: "Name", role: "Position", image: "" },
-  { name: "Name", role: "Position", image: "" },
-  { name: "Name", role: "Position", image: "" },
-];

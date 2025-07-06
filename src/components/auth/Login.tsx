@@ -7,15 +7,19 @@ import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-import parsePhoneNumber from "libphonenumber-js";
+import parsePhoneNumber, { CountryCode } from "libphonenumber-js";
 import Spinner from "./Spinner";
+import PhoneNumberInputGroup from "../contact-us/PhoneNumberInputGroup";
 
 type Props = {
   email: string;
-  phone: string;
+  phone: {
+    countryCode: string;
+    number: string;
+  };
   selectedLoginMethod: "email" | "phone";
   setEmail: (value: string) => void;
-  setPhone: (value: string) => void;
+  setPhone: (value: { countryCode: string; number: string }) => void;
   setSelectedLoginMethod: (value: "email" | "phone") => void;
   asPage?: boolean;
 };
@@ -41,7 +45,9 @@ export default function Login(props: Props) {
       if (selectedLoginMethod === "email") {
         await login({ email, password }, asPage);
       } else {
-        const contact = parsePhoneNumber(phone, "NG")?.number || "";
+        const contact =
+          parsePhoneNumber(phone.number, phone.countryCode as CountryCode)
+            ?.number || "";
         await phoneLogin({ phone: contact }, asPage, false, () => {
           setSelectedLoginMethod("email");
         });
@@ -147,12 +153,11 @@ export default function Login(props: Props) {
         </form>
       ) : (
         <form onSubmit={handleLogin} className="w-full flex flex-col gap-6">
-          <InputGroup
-            value={phone}
-            setValue={setPhone}
+          <PhoneNumberInputGroup
             label="Phone Number"
-            placeholder="Enter phone number"
-            required
+            placeholder="Enter number"
+            value={phone}
+            onChange={setPhone}
           />
           <div className="w-full flex justify-end">
             <button

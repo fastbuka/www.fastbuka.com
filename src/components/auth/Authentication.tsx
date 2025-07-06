@@ -9,6 +9,7 @@ import NewPassword from "./NewPassword";
 import Status from "./Status";
 import SignUp from "./SignUp";
 import PhoneVerification from "./PhoneVerification";
+import parsePhoneNumber, { CountryCode } from "libphonenumber-js";
 
 export default function Authentication() {
   const { isOpen, modalType, closeModal } = useAuthModal();
@@ -16,7 +17,10 @@ export default function Authentication() {
     "email" | "phone"
   >("email");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState({
+    countryCode: "NG",
+    number: "",
+  });
 
   return (
     <AnimatePresence>
@@ -64,7 +68,14 @@ export default function Authentication() {
               <Verification email={email} />
             )}
             {modalType === AuthModalTypeEnum.PHONEVERIFICATION && (
-              <PhoneVerification phone={phone} />
+              <PhoneVerification
+                phone={
+                  parsePhoneNumber(
+                    phone.number,
+                    phone.countryCode as CountryCode
+                  )?.number
+                }
+              />
             )}
             {modalType === AuthModalTypeEnum.NEWPASSWORD && (
               <NewPassword email={email} />

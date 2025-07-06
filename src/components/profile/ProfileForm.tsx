@@ -14,7 +14,7 @@ export default function ProfileForm() {
 
   useEffect(() => {
     if (user) {
-      setName(`${user.first_name} ${user.last_name}`);
+      setName(`${user.first_name} ${user.other_names}`);
       setEmail(user.email);
       setPhone(user.contact);
     }
