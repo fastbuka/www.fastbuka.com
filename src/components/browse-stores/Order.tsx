@@ -1,24 +1,30 @@
+"use client";
 import React from "react";
 import IncrementAndDecrementValue from "./IncrementAndDecrementValue";
 import Image from "next/image";
+import { CartProduct, useCart } from "@/contexts/CartContext";
+import { motion } from "framer-motion";
+import { formatNumber } from "@/lib/shared-utils";
 
 type Product = {
-  data: {
-    name: string;
-    price: string;
-    description: string;
-  };
+  data: CartProduct;
 };
 
 export default function Order(order: Product) {
-  const { description, name, price } = order.data;
+  const { description, name, price, uuid } = order.data;
+  const { removeFromCart } = useCart();
   return (
-    <div className="w-full border-b border-dashed p-2.5 pb-4 flex flex-col border-[#E7E7E7]">
+    <motion.div className="w-full border-b border-dashed p-2.5 pb-4 flex flex-col border-[#E7E7E7]">
       <div className="w-full mb-7 2xl:mb-8 flex justify-between items-center">
         <h3 className="2xl:text-base text-sm font-normal text-(--primary-black)">
           {name}
         </h3>
-        <button className="w-8 h-8 bg-[#FFDDDD] rounded-[8px] duration-300 hover:opacity-70 flex justify-center items-center">
+        <button
+          onClick={() => {
+            removeFromCart(uuid);
+          }}
+          className="w-8 h-8 bg-[#FFDDDD] rounded-[8px] duration-300 hover:opacity-70 flex justify-center items-center"
+        >
           <Image
             width={16}
             height={16}
@@ -33,13 +39,13 @@ export default function Order(order: Product) {
             {description}
           </p>
           <p className="font-normal text-[#B0B0B0] text-xs 2xl:text-sm">
-            {price}
+            NGN{formatNumber(price)}
           </p>
         </div>
         <div className="min-w-max">
-          <IncrementAndDecrementValue />
+          <IncrementAndDecrementValue item={order.data} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

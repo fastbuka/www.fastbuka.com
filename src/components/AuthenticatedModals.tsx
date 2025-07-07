@@ -1,5 +1,6 @@
 "use client";
 import { useModal } from "@/contexts/ModalContext";
+import { useUser } from "@/contexts/UserContext";
 import { useWallet } from "@/contexts/WalletContext";
 import { modalRegistry } from "@/lib/register-modals";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,6 +10,7 @@ export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
   const { ongoingTransfer, setOngoingTransfer } = useWallet();
+  const { setActiveProduct, activeProduct } = useUser();
 
   return (
     <AnimatePresence>
@@ -29,6 +31,9 @@ export default function AuthenticatedModals() {
               closeModal();
               if (ongoingTransfer) {
                 setOngoingTransfer(null);
+              }
+              if (activeProduct) {
+                setActiveProduct(null);
               }
             }}
             className="w-full h-full absolute top-0 left-0 bg-transparent"

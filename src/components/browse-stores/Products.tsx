@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ProductComponent from "./Product";
 import Order from "./Order";
 import Image from "next/image";
@@ -7,6 +7,9 @@ import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { Pagination, Product, Vendor } from "@/schema";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useCart } from "@/contexts/CartContext";
+import { motion } from "framer-motion";
+import { formatNumber } from "@/lib/shared-utils";
 
 type Order = {
   name: string;
@@ -36,6 +39,7 @@ export default function Products(props: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [addDeliveryInstructions, setAddDeliveryInstructions] = useState(false);
   const [addVendorInstructions, setAddVendorInstructions] = useState(false);
+  const { clearCart, cart } = useCart();
 
   async function fetchMore() {
     try {
@@ -58,6 +62,14 @@ export default function Products(props: Props) {
     }
   }
 
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const totalPrice = useMemo(() => {
+    return getTotalPrice() || 0;
+  }, [cart]);
+
   useEffect(() => {
     if (data) {
       setList(data.products);
@@ -69,7 +81,7 @@ export default function Products(props: Props) {
     <div className="w-full flex flex-col items-center">
       <div className="w-full max-w-[1210px] @max-5xl:grid-cols-1 px-5 grid grid-cols-5">
         <div className="col-span-3 @max-5xl:col-span-1 @max-2xl:pr-0 2xl:pr-[43px] @max-5xl:border-r-0 border-r pt-5 2xl:pt-6 border-[#E7E7E7]">
-          <div className="grid @max-2xl:grid-cols-1 grid-cols-2 gap-x-10 gap-y-8 2xl:gap-y-10 w-full p-2.5">
+          <div className="grid @max-2xl:grid-cols-1 grid-cols-2 gap-x-7 gap-y-8 2xl:gap-y-10 w-full p-2.5">
             {list.map((product, index) => {
               return <ProductComponent key={index} product={product} />;
             })}
@@ -119,20 +131,22 @@ export default function Products(props: Props) {
               Add another pack
             </button>
           </div>
-          <div className="w-full flex flex-col gap-5 2xl:gap-6 mb-2">
-            {dummyOrders.map((order, index) => {
+          <motion.div
+            layout
+            className="w-full flex flex-col gap-5 2xl:gap-6 mb-2"
+          >
+            {cart.map((order, index) => {
               return <Order data={order} key={index} />;
             })}
-          </div>
+          </motion.div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 mb-5 gap-2.5">
-            <RenderActionMenu value="Payment Method" label="Choose" />
-            <RenderActionMenu
+            {/* <RenderActionMenu
               onClick={() => {
                 openModal(ModalTypeEnum.PromoCode);
               }}
               value="Promo Code"
               label="Choose"
-            />
+            /> */}
             <RenderActionMenu
               onClick={() => {
                 openModal(ModalTypeEnum.DeliveryAddress);
@@ -186,8 +200,8 @@ export default function Products(props: Props) {
           </div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 gap-2.5 2xl:mb-28 @max-2xl:mb-10 mb-20">
             <RenderOrderDetail
-              label="Sub total (3 items)"
-              value="NGN9,600.00"
+              label={`Sub total (${cart.length} items)`}
+              value={`NGN${formatNumber(totalPrice)}`}
             />
             <RenderOrderDetail label="Delivery fee" value="NGN0.00" />
             <RenderOrderDetail label="Service fee" value="NGN0.00" />
@@ -196,7 +210,7 @@ export default function Products(props: Props) {
                 Total
               </p>
               <p className="text-sm 2xl:text-base text-(--primary-black) font-normal">
-                NGN9,600.00
+                {`NGN${formatNumber(totalPrice)}`}
               </p>
             </div>
           </div>
@@ -204,7 +218,12 @@ export default function Products(props: Props) {
             <button className="w-full bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]">
               Place Order
             </button>
-            <button className="w-full bg-[#FFF0F0] h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-[#FF0000] font-normal 2xl:h-[50px]">
+            <button
+              onClick={() => {
+                clearCart();
+              }}
+              className="w-full bg-[#FFF0F0] h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-[#FF0000] font-normal 2xl:h-[50px]"
+            >
               Clear Orders
             </button>
             <button className="w-full bg-transparent h-11 text-sm flex items-center gap-2.5 justify-center 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-(--primary-green) font-normal 2xl:h-[50px]">
@@ -264,9 +283,3 @@ const RenderOrderDetail = (menu: { label: string; value: string }) => {
     </div>
   );
 };
-
-const dummyOrders: Order[] = Array(3).fill({
-  name: "Pack 1",
-  description: "Chickwizz Meal",
-  price: "NGN3,200.00",
-});

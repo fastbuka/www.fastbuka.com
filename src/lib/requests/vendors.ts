@@ -83,6 +83,23 @@ export async function getVendorProducts(slug: string, category?: string) {
   }
 }
 
+export async function getProduct(vendorSlug: string, productUUID?: string) {
+  try {
+    const request = await fetch(
+      `${endpoint}/api/v1/product/${vendorSlug}/${productUUID}`
+    );
+    const response = await request.json();
+    if (response?.success) {
+      return response?.data?.product as Product;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+}
+
 export async function getAllVendors(q: string) {
   try {
     const request = await fetch(

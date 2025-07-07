@@ -95,3 +95,32 @@ export function scrollToElement(selector: string) {
     });
   }
 }
+
+export async function reverseGeocodeWithGoogle(lat: number, lng: number) {
+  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const res = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`
+  );
+
+  const data = await res.json();
+
+  if (data.status !== "OK" || !data.results.length) {
+    throw new Error("Failed to reverse geocode");
+  }
+
+  const addressComponents = data.results[0].address_components;
+
+  const cityObj = addressComponents.find(
+    (c: { types: string[] }) =>
+      c.types.includes("locality") ||
+      c.types.includes("administrative_area_level_2")
+  );
+  const countryObj = addressComponents.find((c: { types: string[] }) =>
+    c.types.includes("country")
+  );
+
+  return {
+    city: cityObj?.long_name || "Unknown City",
+    country: countryObj?.long_name || "Unknown Country",
+  };
+}

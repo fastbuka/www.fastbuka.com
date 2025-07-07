@@ -17,6 +17,7 @@ export enum ModalTypeEnum {
   DeliveryAddress = "DeliveryAddress",
   Search = "Search",
   DeactivateAccount = "DeactivateAccount",
+  ViewProduct = "ViewProduct",
 }
 
 type ModalType = ModalTypeEnum | null;

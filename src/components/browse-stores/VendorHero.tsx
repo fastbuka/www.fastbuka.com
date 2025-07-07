@@ -1,23 +1,37 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import NavBarTwo from "@/components/NavBarTwo";
 import Image from "next/image";
 import GoBack from "../GoBack";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { cn } from "@/lib/utils";
-import { Vendor } from "@/schema";
+import { Product, Vendor } from "@/schema";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/contexts/UserContext";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function VendorHero({
   vendor,
   category,
   slug,
+  product,
 }: {
   vendor?: Vendor;
   category?: string;
   slug: string;
+  product?: Product;
 }) {
   const router = useRouter();
+  const { setActiveProduct } = useUser();
+  const { openModal } = useModal();
+
+  useEffect(() => {
+    if (product) {
+      setActiveProduct(product);
+      openModal(ModalTypeEnum.ViewProduct);
+    }
+  }, [product]);
+
   return (
     <div className="w-full @max-4xl:pt-6 pt-7 2xl:pt-10  h-max flex flex-col items-center">
       <NavBarTwo />

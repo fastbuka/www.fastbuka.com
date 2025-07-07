@@ -61,6 +61,7 @@ export type Product = {
   stock: boolean;
   created_at: string;
   updated_at: string;
+  vendor_slug?: string;
 };
 
 export type Team = {

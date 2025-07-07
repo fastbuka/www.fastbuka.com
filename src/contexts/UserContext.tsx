@@ -1,5 +1,6 @@
 "use client";
 
+import { Product } from "@/schema";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type User = {
@@ -15,15 +16,20 @@ type User = {
 type UserContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
+  activeProduct: Product | null;
+  setActiveProduct: (product: Product | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [activeProduct, setActiveProduct] = useState<Product | null>(null);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider
+      value={{ user, activeProduct, setUser, setActiveProduct }}
+    >
       {children}
     </UserContext.Provider>
   );
