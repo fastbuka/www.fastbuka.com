@@ -83,15 +83,23 @@ export default function SelectLocation() {
         toast.error("No results found or error from Google Places.");
         return;
       }
-      console.log(data);
 
       const predictions = data.predictions;
 
-      const detailedResults = predictions.map((prediction: any) => ({
-        city:
-          prediction.structured_formatting?.main_text || prediction.description,
-        country: prediction.structured_formatting?.secondary_text || "",
-      }));
+      const detailedResults = predictions.map(
+        (prediction: {
+          description?: string;
+          structured_formatting: {
+            main_text?: string;
+            secondary_text?: string;
+          };
+        }) => ({
+          city:
+            prediction.structured_formatting?.main_text ||
+            prediction.description,
+          country: prediction.structured_formatting?.secondary_text || "",
+        })
+      );
 
       setResults(detailedResults);
     } catch (error) {
