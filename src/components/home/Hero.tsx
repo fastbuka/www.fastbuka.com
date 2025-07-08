@@ -4,9 +4,11 @@ import NavBarOne from "../NavBarOne";
 import Image from "next/image";
 import Link from "next/link";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import { useUser } from "@/contexts/UserContext";
 
 export default function Hero() {
   const { openModal } = useModal();
+  const { location } = useUser();
   return (
     <div className="w-full hero-background @max-4xl:bg-none bg-(image:--hero-bg) h-max flex flex-col items-center @max-4xl:pt-6 pt-7 2xl:pt-10 @max-4xl:pb-[60px] pb-[72px] bg-no-repeat bg-cover">
       <NavBarOne />
@@ -38,7 +40,12 @@ export default function Hero() {
               </div>
             </div>
             <div className="min-w-[184px] @max-4xl:w-[184px] h-[50px]">
-              <div className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 shadow-none min-h-[50px] border border-[#E7E7E7] rounded-[12px]">
+              <div
+                onClick={() => {
+                  openModal(ModalTypeEnum.FindLocation);
+                }}
+                className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 shadow-none min-h-[50px] border border-[#E7E7E7] rounded-[12px]"
+              >
                 <Image
                   src="/images/location-pin.svg"
                   width={24}
@@ -46,7 +53,7 @@ export default function Hero() {
                   alt=""
                   className="2xl:w-6 w-5"
                 />{" "}
-                Location
+                {location ? location.city : "Location"}
                 <Image
                   src="/images/chevron-down.svg"
                   width={24}

@@ -6,6 +6,7 @@ import { Category } from "@/lib/requests/category";
 import Link from "next/link";
 import { scrollToElement } from "@/lib/shared-utils";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import { useUser } from "@/contexts/UserContext";
 
 interface Props {
   categories: Category[];
@@ -16,6 +17,7 @@ interface Props {
 export default function Hero(props: Props) {
   const { categories, category, search } = props;
   const { openModal } = useModal();
+  const { location } = useUser();
 
   useEffect(() => {
     if (category || search) {
@@ -31,11 +33,12 @@ export default function Hero(props: Props) {
           <h1 className="font-bold @max-2xl:max-w-full leading-[55px] @max-4xl:text-[38px] @max-4xl:leading-[54px] 2xl:leading-[64px] mb-4 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
             Find your favorite bukas, groceries, and more!
           </h1>
+
           <div
             onClick={() => {
               openModal(ModalTypeEnum.Search);
             }}
-            className="w-11/12 mb-6 hidden @max-4xl:flex gap-2.5 h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
+            className="w-11/12 mb-3 hidden @max-4xl:flex gap-2.5 h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
           >
             <div className="w-full truncate text-sm 2xl:text-base flex items-center font-normal text-[#888888] placeholder:text-[#888888] h-full outline-none bg-transparent border-none">
               Search for food, drinks, vendors e.t.c
@@ -47,6 +50,31 @@ export default function Hero(props: Props) {
               height={24}
               className="2xl:w-6 w-5"
             />
+          </div>
+
+          <div
+            onClick={() => {
+              openModal(ModalTypeEnum.FindLocation);
+            }}
+            className="w-11/12 mb-6 hidden @max-4xl:flex h-[50px] border border-[#E7E7E7] rounded-[12px]"
+          >
+            <div className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 h-[50px]">
+              <Image
+                src="/images/location-pin.svg"
+                width={24}
+                height={24}
+                alt=""
+                className="2xl:w-6 w-5"
+              />{" "}
+              {location ? location.city : "Location"}
+              <Image
+                src="/images/chevron-down.svg"
+                width={24}
+                height={24}
+                alt=""
+                className="2xl:w-6 w-5"
+              />
+            </div>
           </div>
         </div>
         <div className="w-[976px] max-w-full pt-6 2xl:pt-8 flex flex-col items-center gap-4 2xl:gap-6">

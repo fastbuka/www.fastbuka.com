@@ -12,7 +12,7 @@ import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function NavBarTwo() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, location } = useUser();
   const { fetchUser, fetchWallet } = useManageUser();
   const { wallet } = useWallet();
   const pathname = usePathname();
@@ -44,8 +44,13 @@ export default function NavBarTwo() {
       </Link>
 
       <div className="w-max @max-4xl:hidden flex items-center gap-2.5">
-        {/* <div className="min-w-[184px]  @max-4xl:w-[184px] h-[50px]">
-          <div className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 h-[50px]">
+        <div className="min-w-[184px]  @max-4xl:w-[184px] h-[50px]">
+          <div
+            onClick={() => {
+              openModal(ModalTypeEnum.FindLocation);
+            }}
+            className="w-full text-[#888888] flex justify-between items-center cursor-pointer text-sm 2xl:text-base font-normal px-6 h-[50px]"
+          >
             <Image
               src="/images/location-pin.svg"
               width={24}
@@ -53,7 +58,7 @@ export default function NavBarTwo() {
               alt=""
               className="2xl:w-6 w-5"
             />{" "}
-            Location
+            {location ? location.city : "Location"}
             <Image
               src="/images/chevron-down.svg"
               width={24}
@@ -62,12 +67,12 @@ export default function NavBarTwo() {
               className="2xl:w-6 w-5"
             />
           </div>
-        </div> */}
+        </div>
         <div
           onClick={() => {
             openModal(ModalTypeEnum.Search);
           }}
-          className="w-[520px] @max-6xl:w-[450px] gap-2.5 flex h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
+          className="w-[400px] @max-6xl:w-[450px] gap-2.5 flex h-[50px] border border-[#E7E7E7] rounded-[12px] items-center px-6"
         >
           <Image
             src="/images/magnifying-glass.svg"

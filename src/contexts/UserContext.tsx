@@ -13,22 +13,37 @@ type User = {
   other_names: string;
 };
 
+export type Location = {
+  city: string;
+  country: string;
+};
+
 type UserContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
   activeProduct: Product | null;
   setActiveProduct: (product: Product | null) => void;
+  location: Location | null;
+  setLocation: (location: Location | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
   const [activeProduct, setActiveProduct] = useState<Product | null>(null);
 
   return (
     <UserContext.Provider
-      value={{ user, activeProduct, setUser, setActiveProduct }}
+      value={{
+        user,
+        activeProduct,
+        location,
+        setUser,
+        setActiveProduct,
+        setLocation,
+      }}
     >
       {children}
     </UserContext.Provider>

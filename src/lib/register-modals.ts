@@ -17,6 +17,7 @@ import DeliveryAddress from "@/components/modals/DeliveryAddress";
 import DeactivateAccount from "@/components/modals/DeactivateAccount";
 import SearchVendor from "@/components/modals/Search";
 import ViewProduct from "@/components/modals/ViewProduct";
+import SelectLocation from "@/components/modals/SelectLocation";
 
 export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.WalletActivation]: ActivateWallet,
@@ -36,4 +37,5 @@ export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.DeactivateAccount]: DeactivateAccount,
   [ModalTypeEnum.Search]: SearchVendor,
   [ModalTypeEnum.ViewProduct]: ViewProduct,
+  [ModalTypeEnum.FindLocation]: SelectLocation,
 };

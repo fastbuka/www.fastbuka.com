@@ -1,41 +1,29 @@
 "use client";
 import { useModal } from "@/contexts/ModalContext";
-import { useUser } from "@/contexts/UserContext";
+import { Location, useUser } from "@/contexts/UserContext";
 import { reverseGeocodeWithGoogle } from "@/lib/shared-utils";
-import { Product, Vendor } from "@/schema";
-import { ArrowUpRight } from "lucide-react";
+import { Check } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 let debounceTimer: NodeJS.Timeout;
-const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export default function SearchVendor() {
+export default function SelectLocation() {
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState<Vendor[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { location, setLocation } = useUser();
-  const { closeModal } = useModal();
   const [gettingLocation, setGettingLocation] = useState(false);
+  const { location, setLocation } = useUser();
+  const [results, setResults] = useState<Location[]>([]);
+  const { closeModal } = useModal();
 
   const isValid = useMemo(() => {
-    if (!location) {
-      return false;
-    }
-    return (
-      search.length > 0 &&
-      location.city.length > 0 &&
-      location.country.length > 0
-    );
-  }, [search, location]);
+    return search.length > 0;
+  }, [search]);
 
   useEffect(() => {
     if (!isValid) {
       setResults([]);
-      setProducts([]);
       return;
     }
     clearTimeout(debounceTimer);
@@ -81,27 +69,32 @@ export default function SearchVendor() {
   };
 
   const fetchResults = async () => {
-    if (!location) {
-      return;
-    }
+    if (!search.trim()) return;
+
     setIsLoading(true);
 
     try {
       const res = await fetch(
-        `${endpoint}/api/search?q=${encodeURIComponent(
-          search
-        )}&city=${encodeURIComponent(
-          location.city
-        )}&country=${encodeURIComponent(location.country)}`
+        `/api/location-autocomplete?input=${encodeURIComponent(search.trim())}`
       );
       const data = await res.json();
 
-      if (data?.success) {
-        setProducts(data.data.products);
-        setResults(data.data.vendors);
+      if (data.status !== "OK") {
+        toast.error("No results found or error from Google Places.");
+        return;
       }
+      console.log(data);
+
+      const predictions = data.predictions;
+
+      const detailedResults = predictions.map((prediction: any) => ({
+        city:
+          prediction.structured_formatting?.main_text || prediction.description,
+        country: prediction.structured_formatting?.secondary_text || "",
+      }));
+
+      setResults(detailedResults);
     } catch (error) {
-      console.log(error);
       console.error("Search error:", error);
     } finally {
       setIsLoading(false);
@@ -116,7 +109,7 @@ export default function SearchVendor() {
   return (
     <div className="w-[500px] pb-5 h-[70vh] @max-2xl:w-full max-w-full flex flex-col items-center">
       <h4 className="font-medium mb-8 2xl:mb-10 text-[17px] 2xl:text-xl text-[#111111] text-start w-full">
-        Find Vendor Or Product
+        Select your Location
       </h4>
 
       {gettingLocation ? (
@@ -142,7 +135,7 @@ export default function SearchVendor() {
                 required
                 autoFocus
                 className="w-full h-full border-none bg-transparent outline-none text-sm 2xl:text-base text-[#B0B0B0]"
-                placeholder="Search anything"
+                placeholder="Find your city"
               />
               <button
                 type="submit"
@@ -162,43 +155,46 @@ export default function SearchVendor() {
           <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
             {isLoading ? (
               <p className="text-sm text-center text-gray-400">Searching...</p>
-            ) : results.length === 0 && products.length === 0 && isValid ? (
+            ) : results.length === 0 && isValid ? (
               <p className="text-sm text-center text-gray-400">
                 No results found.
               </p>
             ) : (
-              <>
-                {products.map((product) => (
-                  <Link
-                    key={product.uuid}
-                    onClick={() => {
-                      closeModal();
-                    }}
-                    href={`/browse-stores/${product.vendor_slug}?search=${product?.uuid}`}
-                    className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
-                  >
-                    <p className="text-sm text-[#5D5D5D] font-normal">
-                      {product.name}
-                    </p>
-                    <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
-                  </Link>
-                ))}
-                {results.map((vendor) => (
-                  <Link
-                    key={vendor.id}
-                    onClick={() => {
-                      closeModal();
-                    }}
-                    href={`/browse-stores/${vendor.slug}`}
-                    className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
-                  >
-                    <p className="text-sm text-[#5D5D5D] font-normal">
-                      {vendor.name}
-                    </p>
-                    <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
-                  </Link>
-                ))}
-              </>
+              <div className="w-full flex flex-col gap-3">
+                {[...(location ? [location] : []), ...results].map(
+                  (item, index) => {
+                    const isSelected =
+                      location?.city === item.city &&
+                      item.country === location.country;
+                    return (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setLocation(item);
+                          closeModal();
+                        }}
+                        className="w-full hover:opacity-70 duration-200 cursor-pointer py-2.5 px-1 flex items-center justify-between gap-4"
+                      >
+                        <div className="flex w-full max-w-[90%] items-center gap-4">
+                          <Image
+                            src="/images/location-pin.svg"
+                            width={24}
+                            height={24}
+                            alt=""
+                            className="2xl:w-6 w-5"
+                          />
+                          <p className="text-sm truncate text-[#5D5D5D] font-normal">
+                            {item.city} {item.country}
+                          </p>
+                        </div>
+                        {isSelected && (
+                          <Check className="text-[#5D5D5D] 2xl:min-w-6 min-w-5" />
+                        )}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
             )}
           </div>
         </>
