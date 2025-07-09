@@ -1,6 +1,5 @@
 "use client";
 import ActivateWallet from "@/components/modals/ActivateWallet";
-import FundWallet from "@/components/modals/FundWallet";
 import FundingOptions from "@/components/modals/FundingOptions";
 import WalletFunding from "@/components/modals/WalletFunding";
 import SwapCurrency from "@/components/modals/SwapCurrency";
@@ -18,10 +17,11 @@ import DeactivateAccount from "@/components/modals/DeactivateAccount";
 import SearchVendor from "@/components/modals/Search";
 import ViewProduct from "@/components/modals/ViewProduct";
 import SelectLocation from "@/components/modals/SelectLocation";
+import MakePayment from "@/components/modals/MakePayment";
 
 export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.WalletActivation]: ActivateWallet,
-  [ModalTypeEnum.FundWallet]: FundWallet,
+  [ModalTypeEnum.MakePayment]: MakePayment,
   [ModalTypeEnum.FundingOptions]: FundingOptions,
   [ModalTypeEnum.WalletFunding]: WalletFunding,
   [ModalTypeEnum.SwapCurrency]: SwapCurrency,

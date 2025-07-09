@@ -9,7 +9,7 @@ import React, { useMemo, useState } from "react";
 export default function ProductComponent({ product }: { product: Product }) {
   const { description, image, name, price } = product;
   const [imgSrc, setImgSrc] = useState(image);
-  const { setActiveProduct } = useUser();
+  const { setActiveProduct, setHasCartItems, hasCartItems } = useUser();
   const { openModal } = useModal();
   const { cart, addToCart, removeFromCart } = useCart();
 
@@ -42,6 +42,9 @@ export default function ProductComponent({ product }: { product: Product }) {
             if (inCart) {
               removeFromCart(product.uuid);
             } else {
+              if (!hasCartItems) {
+                setHasCartItems(true);
+              }
               addToCart({
                 uuid: product.uuid,
                 vendor_uuid: product.vendor_uuid,

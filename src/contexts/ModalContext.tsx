@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export enum ModalTypeEnum {
   WalletActivation = "WalletActivation",
-  FundWallet = "FundWallet",
+  MakePayment = "MakePayment",
   FundingOptions = "FundingOptions",
   WalletFunding = "WalletFunding",
   SwapCurrency = "SwapCurrency",

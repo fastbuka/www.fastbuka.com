@@ -12,13 +12,14 @@ import PhoneNumberInputGroup from "../contact-us/PhoneNumberInputGroup";
 
 interface Props {
   asPage?: boolean;
+  email: string;
+  setEmail: (value: string) => void;
 }
 
 export default function SignUp(props: Props) {
-  const { asPage } = props;
+  const { asPage, email, setEmail } = props;
   const { openModal } = useAuthModal();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState({
     countryCode: "NG",
     number: "",

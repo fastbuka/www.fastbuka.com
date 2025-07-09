@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useWallet } from "@/contexts/WalletContext";
+import { useRouter } from "next/navigation";
 
 export type User = {
   first_name: string;
@@ -24,15 +25,31 @@ type UpdateUserPayload = {
   profile?: string;
 };
 
+type PlaceOrderPayload = {
+  vendor_slug: string;
+  delivery_name: string;
+  delivery_email: string;
+  delivery_contact: string;
+  delivery_address: string;
+  latitude: number;
+  longitude: number;
+  newOrder: boolean;
+  cartItems: {
+    product_uuid: string;
+    quantity: number;
+  }[];
+};
+
 type DeactivateAccountPayload = {
   password: string;
 };
 
 export const useManageUser = () => {
-  const { setUser } = useUser();
+  const { setUser, setActiveOrder, setOrders } = useUser();
   const { setWallet, setOngoingTransfer } = useWallet();
   const [loading, setLoading] = useState(false);
   const { openModal, closeModal } = useModal();
+  const router = useRouter();
 
   const fetchUser = async (token: string) => {
     try {
@@ -42,6 +59,7 @@ export const useManageUser = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      await fetchOrders(token);
 
       if (response.data?.success) {
         setUser(response.data?.data?.user);
@@ -57,6 +75,29 @@ export const useManageUser = () => {
       return { success: false };
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchOrders = async (token: string) => {
+    try {
+      const response = await api.get("/api/v1/order/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        setOrders(response.data?.data?.orders);
+        return { success: true, data: response.data.data };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      toast.error(err?.response?.data?.message || "Failed to fetch orders");
+      return { success: false };
     }
   };
 
@@ -209,13 +250,81 @@ export const useManageUser = () => {
     }
   };
 
+  const placeOrder = async (
+    payload: PlaceOrderPayload,
+    handleSuccess: () => void
+  ) => {
+    const token = cookie.get("TOKEN");
+    try {
+      setLoading(true);
+      const response = await api.post("/api/v1/order", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        setActiveOrder(response.data?.data?.order);
+        handleSuccess();
+        openModal(ModalTypeEnum.Success);
+        return { success: true };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      console.log(err);
+      toast.error(err?.response?.data?.message || "Failed to place order");
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const makePayment = async (orderUUID: string) => {
+    const token = cookie.get("TOKEN");
+    try {
+      setLoading(true);
+      const response = await api.request({
+        method: "POST",
+        url: `/api/v1/payment/local-payment/${orderUUID}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        console.log(response);
+        toast.success("Payment successful");
+        router.refresh();
+        return { success: true };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      console.log(err);
+      toast.error(err?.response?.data?.message || "Failed to make payment");
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     fetchUser,
+    placeOrder,
     updateUser,
     fetchWallet,
     activateWallet,
     deactivateAccount,
+    makePayment,
+    fetchOrders,
     generateAccountForTransfer,
   };
 };

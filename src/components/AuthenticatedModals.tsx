@@ -10,7 +10,8 @@ export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
   const { ongoingTransfer, setOngoingTransfer } = useWallet();
-  const { setActiveProduct, activeProduct } = useUser();
+  const { setActiveProduct, activeProduct, activeOrder, setActiveOrder } =
+    useUser();
 
   return (
     <AnimatePresence>
@@ -34,6 +35,9 @@ export default function AuthenticatedModals() {
               }
               if (activeProduct) {
                 setActiveProduct(null);
+              }
+              if (activeOrder) {
+                setActiveOrder(null);
               }
             }}
             className="w-full h-full absolute top-0 left-0 bg-transparent"

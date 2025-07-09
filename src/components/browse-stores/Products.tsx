@@ -9,7 +9,11 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
 import { motion } from "framer-motion";
-import { formatNumber } from "@/lib/shared-utils";
+import { formatNumber, reverseGeocodeWithGoogle } from "@/lib/shared-utils";
+import { useUser } from "@/contexts/UserContext";
+import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
+import { useManageUser } from "@/hooks/useManageUser";
+import Spinner from "../auth/Spinner";
 
 type Order = {
   name: string;
@@ -40,6 +44,15 @@ export default function Products(props: Props) {
   const [addDeliveryInstructions, setAddDeliveryInstructions] = useState(false);
   const [addVendorInstructions, setAddVendorInstructions] = useState(false);
   const { clearCart, cart } = useCart();
+  const { deliveryAddress, user, location, setLocation, setLastVendorViewed } =
+    useUser();
+  const { openModal: openAuthModal } = useAuthModal();
+  const { placeOrder, loading } = useManageUser();
+  const [gettingLocation, setGettingLocation] = useState(false);
+
+  const isAddressValid = useMemo(() => {
+    return deliveryAddress.trim().length > 0 ? true : false;
+  }, [deliveryAddress]);
 
   async function fetchMore() {
     try {
@@ -66,7 +79,88 @@ export default function Products(props: Props) {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation not supported");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          setGettingLocation(true);
+          const locationData = await reverseGeocodeWithGoogle(
+            coords.latitude,
+            coords.longitude
+          );
+          setLocation({
+            ...locationData,
+            lat: coords.latitude,
+            lng: coords.longitude,
+          });
+          handlePlaceOrder(coords.latitude, coords.longitude);
+        } catch {
+          toast.error("Failed to detect location.");
+        } finally {
+          setGettingLocation(false);
+        }
+      },
+      () => {
+        toast.info("Location access is required to place an order");
+      }
+    );
+  };
+
+  const handlePlaceOrder = async (lat?: number, lng?: number) => {
+    if (!user) {
+      openAuthModal(AuthModalTypeEnum.LOGIN);
+      return;
+    }
+
+    if (!lat && !lng && !location?.lat && !location?.lng) {
+      getUserLocation();
+      return;
+    }
+
+    const cartItems: {
+      product_uuid: string;
+      quantity: number;
+    }[] = [];
+
+    cart.forEach((item) => {
+      cartItems.push({
+        product_uuid: item.uuid,
+        quantity: item.quantity,
+      });
+    });
+
+    try {
+      await placeOrder(
+        {
+          delivery_address: deliveryAddress,
+          delivery_email: user.email,
+          delivery_contact: user.contact,
+          delivery_name: `${user.first_name} ${user.other_names}`,
+          newOrder: true,
+          vendor_slug: slug,
+          latitude: lat || location?.lat || 0,
+          longitude: lng || location?.lng || 0,
+          cartItems,
+        },
+        () => {
+          clearCart();
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const totalPrice = useMemo(() => {
+    if (cart.length > 0) {
+      setLastVendorViewed(slug);
+      localStorage.setItem("last_viewed_vendor", slug);
+    }
     return getTotalPrice() || 0;
   }, [cart]);
 
@@ -152,7 +246,7 @@ export default function Products(props: Props) {
                 openModal(ModalTypeEnum.DeliveryAddress);
               }}
               value="Delivery Address"
-              label="Choose"
+              label={isAddressValid ? "Change" : "Choose"}
             />
             <RenderActionMenu
               value="Delivery instructions"
@@ -215,8 +309,14 @@ export default function Products(props: Props) {
             </div>
           </div>
           <div className="w-full mb-16 @max-2xl:mb-5 2xl:mb-20 flex flex-col items-center gap-3">
-            <button className="w-full bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]">
-              Place Order
+            <button
+              disabled={!isAddressValid || !cart.length}
+              onClick={() => {
+                handlePlaceOrder();
+              }}
+              className="w-full disabled:opacity-60 bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
+            >
+              {loading || gettingLocation ? <Spinner /> : "Place Order"}
             </button>
             <button
               onClick={() => {

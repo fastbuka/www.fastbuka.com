@@ -57,7 +57,9 @@ export default function Authentication() {
                 setSelectedLoginMethod={setSelectedLoginMethod}
               />
             )}
-            {modalType === AuthModalTypeEnum.SIGNUP && <SignUp />}
+            {modalType === AuthModalTypeEnum.SIGNUP && (
+              <SignUp email={email} setEmail={setEmail} />
+            )}
             {modalType === AuthModalTypeEnum.RESETPASSWORD && (
               <ForgotPassword setEmail={setEmail} email={email} />
             )}

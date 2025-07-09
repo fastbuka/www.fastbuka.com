@@ -75,6 +75,7 @@ export default function VendorHero({
           <Tabs defaultValue="delivery" className="w-[497px] max-w-full">
             <TabsList className="w-[497px] max-w-full bg-[#DAFEEC]">
               <TabsTrigger
+                disabled
                 className="data-[state=active]:bg-(--primary-green) @max-4xl:text-xs"
                 value="pickup"
               >

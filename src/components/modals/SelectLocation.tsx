@@ -55,7 +55,11 @@ export default function SelectLocation() {
             coords.latitude,
             coords.longitude
           );
-          setLocation(locationData);
+          setLocation({
+            ...locationData,
+            lat: coords.latitude,
+            lng: coords.longitude,
+          });
         } catch {
           toast.error("Failed to detect location. Please enter manually.");
         } finally {

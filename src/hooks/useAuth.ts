@@ -48,7 +48,7 @@ type ResendEmailVerificationCodePayload = {
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { openModal } = useAuthModal();
+  const { openModal, closeModal } = useAuthModal();
   const { fetchUser } = useManageUser();
 
   const login = async (payload: LoginPayload, asPage?: boolean) => {
@@ -77,7 +77,7 @@ export const useAuth = () => {
         if (asPage) {
           router.push("/profile");
         } else {
-          // Proceed with Order
+          closeModal();
         }
       }
 
@@ -226,7 +226,7 @@ export const useAuth = () => {
         if (asPage) {
           router.push("/profile");
         } else {
-          // Proceed with Order
+          closeModal();
         }
       }
 

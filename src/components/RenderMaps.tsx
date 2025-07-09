@@ -7,6 +7,7 @@ import {
   useJsApiLoader,
   InfoWindow,
 } from "@react-google-maps/api";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -111,18 +112,48 @@ export default function RenderMap({
               onClick={() => {
                 router.push(`/browse-stores/${selected.slug}`);
               }}
-              className="w-[107px] flex justify-between items-center cursor-pointer hover:opacity-70 duration-300"
+              className=" cursor-pointer relative @max-3xl:w-[131px] w-[215px]"
             >
-              <p className="text-xs truncate text-[#1E2022] font-normal">
-                {selected.name}
-              </p>{" "}
-              <Image
-                src="/images/chevron-right.svg"
-                alt=""
-                height={12}
-                width={6.7}
-                className="min-w-1.5"
-              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelected(null);
+                }}
+                className="w-5 h-5 hover:opacity-80 rounded-full bg-white absolute right-1 top-1 cursor-pointer flex justify-center items-center"
+              >
+                <X className="w-3 h-3" />
+              </button>
+              {selected.cover && (
+                <img
+                  src={selected.cover}
+                  alt=""
+                  className="mb-2 w-[215px] h-[60px] @max-3xl:w-[131px] @max-3xl:h-[33px]"
+                />
+              )}
+              <div className="w-full flex flex-col gap-0.5">
+                <p className="font-normal text-black text-[10px]">
+                  {selected?.name}
+                </p>
+                <p className="font-normal text-[#8D8C8C] text-[8px]">
+                  {selected?.description}
+                </p>
+                <div className="flex items-center gap-1.5">
+                  <p className="font-normal text-black text-[8px]">
+                    {selected?.ratings} stars
+                  </p>
+                  <div className="w-max flex">
+                    {[...Array(selected.ratings)].map((_, index) => (
+                      <Image
+                        key={index}
+                        src="/images/star.svg"
+                        alt="star"
+                        width={10}
+                        height={10}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </InfoWindow>
         )}
