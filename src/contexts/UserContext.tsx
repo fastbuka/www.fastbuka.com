@@ -18,6 +18,7 @@ export type Location = {
   country: string;
   lat?: number;
   lng?: number;
+  address?: string;
 };
 
 type UserContextType = {
@@ -33,10 +34,8 @@ type UserContextType = {
   setActiveOrder: (order: Order | null) => void;
   orders: Order[] | null;
   setOrders: (orders: Order[] | null) => void;
-  hasCartItems: boolean;
-  setHasCartItems: (value: boolean) => void;
-  lastVendorViewed: string;
-  setLastVendorViewed: (value: string) => void;
+  totalVendorCarts: number;
+  setTotalVendorCarts: (value: number) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -48,8 +47,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [hasCartItems, setHasCartItems] = useState(false);
-  const [lastVendorViewed, setLastVendorViewed] = useState("");
+  const [totalVendorCarts, setTotalVendorCarts] = useState(0);
 
   return (
     <UserContext.Provider
@@ -66,10 +64,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         setActiveOrder,
         orders,
         setOrders,
-        hasCartItems,
-        setHasCartItems,
-        lastVendorViewed,
-        setLastVendorViewed,
+        totalVendorCarts,
+        setTotalVendorCarts,
       }}
     >
       {children}

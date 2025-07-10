@@ -15,6 +15,7 @@ export type CartProduct = {
 type CartData = {
   products: CartProduct[];
   updatedAt: number;
+  slug: string;
 };
 
 type AllVendorCarts = {
@@ -66,6 +67,7 @@ export const CartProvider = ({
     allCarts[vendorId] = {
       products: updatedCart,
       updatedAt: Date.now(),
+      slug: vendorId,
     };
     localStorage.setItem(CART_KEY, JSON.stringify(allCarts));
   };

@@ -2,24 +2,31 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 import ProfileDropdown from "./ProfileDropdown";
 import { useManageUser } from "@/hooks/useManageUser";
 import cookie from "js-cookie";
 import { useWallet } from "@/contexts/WalletContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 
 export default function NavBarTwo() {
-  const router = useRouter();
-  const { user, location } = useUser();
+  const { user, location, setLocation } = useUser();
   const { fetchUser, fetchWallet } = useManageUser();
   const { wallet } = useWallet();
   const pathname = usePathname();
   const { openModal } = useModal();
+  const { openModal: openAuthModal } = useAuthModal();
 
   useEffect(() => {
     const token = cookie.get("TOKEN");
+    const locationData = cookie.get("LOCATION");
+    if (!locationData) {
+      openModal(ModalTypeEnum.FindLocation);
+    } else {
+      setLocation(JSON.parse(locationData));
+    }
     if (token && !user) {
       fetchUser(token);
     }
@@ -92,7 +99,7 @@ export default function NavBarTwo() {
         <div className="w-max flex items-center  gap-5">
           <button
             onClick={() => {
-              router.push("/login");
+              openAuthModal(AuthModalTypeEnum.LOGIN);
             }}
             className="hover:text-(--primary-green) cursor-pointer duration-200 primary-link-hover font-normal text-[#3D3D3D] text-sm 2xl:text-xl"
           >
@@ -100,7 +107,7 @@ export default function NavBarTwo() {
           </button>
           <button
             onClick={() => {
-              router.push("/register");
+              openAuthModal(AuthModalTypeEnum.SIGNUP);
             }}
             className="bg-(--primary-green) hover:opacity-80 duration-200 text-[#F6F6F6] text-sm 2xl:text-xl font-normal py-3 @max-xl:px-3 px-6 rounded-[12px]"
           >

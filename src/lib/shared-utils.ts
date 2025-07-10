@@ -109,12 +109,14 @@ export async function reverseGeocodeWithGoogle(lat: number, lng: number) {
   }
 
   const addressComponents = data.results[0].address_components;
+  const formattedAddress = data.results[0].formatted_address;
 
   const cityObj = addressComponents.find(
     (c: { types: string[] }) =>
       c.types.includes("locality") ||
       c.types.includes("administrative_area_level_2")
   );
+
   const countryObj = addressComponents.find((c: { types: string[] }) =>
     c.types.includes("country")
   );
@@ -122,5 +124,43 @@ export async function reverseGeocodeWithGoogle(lat: number, lng: number) {
   return {
     city: cityObj?.long_name || "Unknown City",
     country: countryObj?.long_name || "Unknown Country",
+    address: formattedAddress || "Unknown Address",
   };
+}
+
+export function countVendorsWithProducts() {
+  const cart = localStorage.getItem("vendor_carts") || "{}";
+  const vendorCarts = JSON.parse(cart);
+
+  let count = 0;
+
+  for (const vendor in vendorCarts) {
+    const products = vendorCarts[vendor].products || [];
+
+    const hasValidProduct = products.some(
+      (product: { quantity: number }) => product.quantity > 0
+    );
+    if (hasValidProduct) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+export function getFirstVendorWithProducts() {
+  const cart = localStorage.getItem("vendor_carts") || "{}";
+  const vendorCarts = JSON.parse(cart);
+  for (const vendorSlug in vendorCarts) {
+    const products = vendorCarts[vendorSlug].products || [];
+    const hasValidProduct = products.some(
+      (product: { quantity: number }) => product.quantity > 0
+    );
+
+    if (hasValidProduct) {
+      return vendorSlug;
+    }
+  }
+
+  return null;
 }

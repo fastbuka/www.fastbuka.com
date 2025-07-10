@@ -1,13 +1,11 @@
 "use client";
-import { useModal } from "@/contexts/ModalContext";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useUser } from "@/contexts/UserContext";
-import { reverseGeocodeWithGoogle } from "@/lib/shared-utils";
 import { Product, Vendor } from "@/schema";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FormEvent, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 
 let debounceTimer: NodeJS.Timeout;
 const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -17,9 +15,8 @@ export default function SearchVendor() {
   const [results, setResults] = useState<Vendor[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { location, setLocation } = useUser();
-  const { closeModal } = useModal();
-  const [gettingLocation, setGettingLocation] = useState(false);
+  const { location } = useUser();
+  const { closeModal, openModal } = useModal();
 
   const isValid = useMemo(() => {
     if (!location) {
@@ -46,43 +43,12 @@ export default function SearchVendor() {
 
   useEffect(() => {
     if (!location) {
-      getUserLocation();
+      openModal(ModalTypeEnum.FindLocation);
     }
     return () => {
       clearTimeout(debounceTimer);
     };
   }, []);
-
-  const getUserLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation not supported");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          setGettingLocation(true);
-          const locationData = await reverseGeocodeWithGoogle(
-            coords.latitude,
-            coords.longitude
-          );
-          setLocation({
-            ...locationData,
-            lat: coords.latitude,
-            lng: coords.longitude,
-          });
-        } catch {
-          toast.error("Failed to detect location. Please enter manually.");
-        } finally {
-          setGettingLocation(false);
-        }
-      },
-      () => {
-        toast.info("Allow location access for better experience");
-      }
-    );
-  };
 
   const fetchResults = async () => {
     if (!location) {
@@ -123,90 +89,72 @@ export default function SearchVendor() {
         Find Vendor Or Product
       </h4>
 
-      {gettingLocation ? (
-        <div className="w-full h-[90%] flex text-[#0ead65] justify-center items-center">
-          <div className="lds-ring w-5 h-5">
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-          </div>
-        </div>
-      ) : (
-        <>
-          <form
-            onSubmit={handleFormSubmit}
-            className="w-full mb-6 flex flex-col"
+      <form onSubmit={handleFormSubmit} className="w-full mb-6 flex flex-col">
+        <div className="w-full h-11 2xl:h-[50px] border border-[#E7E7E7] rounded-[12px] px-6 flex items-center gap-2.5">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            required
+            autoFocus
+            className="w-full h-full border-none bg-transparent outline-none text-sm 2xl:text-base text-[#B0B0B0]"
+            placeholder="Search anything"
+          />
+          <button
+            type="submit"
+            className="w-max h-max hover:opacity-70 duration-200 bg-transparent border-none cursor-pointer"
           >
-            <div className="w-full h-11 2xl:h-[50px] border border-[#E7E7E7] rounded-[12px] px-6 flex items-center gap-2.5">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                required
-                autoFocus
-                className="w-full h-full border-none bg-transparent outline-none text-sm 2xl:text-base text-[#B0B0B0]"
-                placeholder="Search anything"
-              />
-              <button
-                type="submit"
-                className="w-max h-max hover:opacity-70 duration-200 bg-transparent border-none cursor-pointer"
-              >
-                <Image
-                  src="/images/magnifying-glass.svg"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="2xl:w-6 w-5"
-                />
-              </button>
-            </div>
-          </form>
+            <Image
+              src="/images/magnifying-glass.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="2xl:w-6 w-5"
+            />
+          </button>
+        </div>
+      </form>
 
-          <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
-            {isLoading ? (
-              <p className="text-sm text-center text-gray-400">Searching...</p>
-            ) : results.length === 0 && products.length === 0 && isValid ? (
-              <p className="text-sm text-center text-gray-400">
-                No results found.
-              </p>
-            ) : (
-              <>
-                {products.map((product) => (
-                  <Link
-                    key={product.uuid}
-                    onClick={() => {
-                      closeModal();
-                    }}
-                    href={`/browse-stores/${product.vendor_slug}?search=${product?.uuid}`}
-                    className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
-                  >
-                    <p className="text-sm text-[#5D5D5D] font-normal">
-                      {product.name}
-                    </p>
-                    <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
-                  </Link>
-                ))}
-                {results.map((vendor) => (
-                  <Link
-                    key={vendor.id}
-                    onClick={() => {
-                      closeModal();
-                    }}
-                    href={`/browse-stores/${vendor.slug}`}
-                    className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
-                  >
-                    <p className="text-sm text-[#5D5D5D] font-normal">
-                      {vendor.name}
-                    </p>
-                    <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
-                  </Link>
-                ))}
-              </>
-            )}
-          </div>
-        </>
-      )}
+      <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
+        {isLoading ? (
+          <p className="text-sm text-center text-gray-400">Searching...</p>
+        ) : results.length === 0 && products.length === 0 && isValid ? (
+          <p className="text-sm text-center text-gray-400">No results found.</p>
+        ) : (
+          <>
+            {products.map((product) => (
+              <Link
+                key={product.uuid}
+                onClick={() => {
+                  closeModal();
+                }}
+                href={`/browse-stores/${product.vendor_slug}?search=${product?.uuid}`}
+                className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
+              >
+                <p className="text-sm text-[#5D5D5D] font-normal">
+                  {product.name}
+                </p>
+                <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
+              </Link>
+            ))}
+            {results.map((vendor) => (
+              <Link
+                key={vendor.id}
+                onClick={() => {
+                  closeModal();
+                }}
+                href={`/browse-stores/${vendor.slug}`}
+                className="w-full px-2 hover:opacity-70 duration-200 flex justify-between items-center py-2.5 border-b border-[#E7E7E7]"
+              >
+                <p className="text-sm text-[#5D5D5D] font-normal">
+                  {vendor.name}
+                </p>
+                <ArrowUpRight className="text-[#5D5D5D] 2xl:w-6 w-5" />
+              </Link>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }

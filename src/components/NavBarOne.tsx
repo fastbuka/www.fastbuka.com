@@ -11,16 +11,24 @@ import { useUser } from "@/contexts/UserContext";
 import { useManageUser } from "@/hooks/useManageUser";
 import cookie from "js-cookie";
 import ProfileDropdown from "./ProfileDropdown";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function NavBarOne() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useUser();
+  const { user, setLocation } = useUser();
   const { fetchUser } = useManageUser();
+  const { openModal } = useModal();
 
   useEffect(() => {
     const token = cookie.get("TOKEN");
+    const location = cookie.get("LOCATION");
+    if (!location) {
+      openModal(ModalTypeEnum.FindLocation);
+    } else {
+      setLocation(JSON.parse(location));
+    }
     if (token && !user) {
       fetchUser(token);
     }

@@ -2,20 +2,25 @@
 import { useCart } from "@/contexts/CartContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useUser } from "@/contexts/UserContext";
-import { formatNumber } from "@/lib/shared-utils";
+import { countVendorsWithProducts, formatNumber } from "@/lib/shared-utils";
 import { Product } from "@/schema";
 import React, { useMemo, useState } from "react";
 
 export default function ProductComponent({ product }: { product: Product }) {
   const { description, image, name, price } = product;
   const [imgSrc, setImgSrc] = useState(image);
-  const { setActiveProduct, setHasCartItems, hasCartItems } = useUser();
+  const { setActiveProduct, setTotalVendorCarts } = useUser();
   const { openModal } = useModal();
   const { cart, addToCart, removeFromCart } = useCart();
 
   const inCart = useMemo(() => {
     return cart.some((p) => p.uuid === product.uuid);
   }, [cart]);
+
+  const updateCartCount = () => {
+    const count = countVendorsWithProducts();
+    setTotalVendorCarts(count);
+  };
 
   return (
     <div
@@ -42,9 +47,6 @@ export default function ProductComponent({ product }: { product: Product }) {
             if (inCart) {
               removeFromCart(product.uuid);
             } else {
-              if (!hasCartItems) {
-                setHasCartItems(true);
-              }
               addToCart({
                 uuid: product.uuid,
                 vendor_uuid: product.vendor_uuid,
@@ -55,6 +57,7 @@ export default function ProductComponent({ product }: { product: Product }) {
                 description: product.description,
               });
             }
+            updateCartCount();
           }}
           className="h-7 w-max px-3 rounded bg-[#FF9702] hover:opacity-80 duration-300 text-[13px] text-[#F6F6F6] font-normal"
         >

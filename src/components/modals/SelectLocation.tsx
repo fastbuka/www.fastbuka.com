@@ -6,6 +6,8 @@ import { Check } from "lucide-react";
 import Image from "next/image";
 import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import Spinner from "../auth/Spinner";
+import cookie from "js-cookie";
 
 let debounceTimer: NodeJS.Timeout;
 
@@ -33,9 +35,6 @@ export default function SelectLocation() {
   }, [search, isValid]);
 
   useEffect(() => {
-    if (!location) {
-      getUserLocation();
-    }
     return () => {
       clearTimeout(debounceTimer);
     };
@@ -43,7 +42,7 @@ export default function SelectLocation() {
 
   const getUserLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("Geolocation not supported");
+      toast.error("Geolocation not supported or disabled in browser settings.");
       return;
     }
 
@@ -55,10 +54,14 @@ export default function SelectLocation() {
             coords.latitude,
             coords.longitude
           );
-          setLocation({
+          const data = {
             ...locationData,
             lat: coords.latitude,
             lng: coords.longitude,
+          };
+          setLocation(data);
+          cookie.set("LOCATION", JSON.stringify(data), {
+            expires: 1,
           });
         } catch {
           toast.error("Failed to detect location. Please enter manually.");
@@ -89,20 +92,54 @@ export default function SelectLocation() {
       }
 
       const predictions = data.predictions;
+      const detailedResults = await Promise.all(
+        predictions.map(
+          async (prediction: {
+            place_id: string;
+            description: string;
+            structured_formatting: {
+              main_text: string;
+              secondary_text: string;
+            };
+          }) => {
+            try {
+              const detailsRes = await fetch(
+                `/api/place-details?place_id=${prediction.place_id}`
+              );
+              const detailsData = await detailsRes.json();
 
-      const detailedResults = predictions.map(
-        (prediction: {
-          description?: string;
-          structured_formatting: {
-            main_text?: string;
-            secondary_text?: string;
-          };
-        }) => ({
-          city:
-            prediction.structured_formatting?.main_text ||
-            prediction.description,
-          country: prediction.structured_formatting?.secondary_text || "",
-        })
+              const result = detailsData.result;
+
+              const cityComponent = result.address_components.find(
+                (c: { types: string[] }) =>
+                  c.types.includes("locality") ||
+                  c.types.includes("administrative_area_level_2")
+              );
+              const countryComponent = result.address_components.find(
+                (c: { types: string[] }) => c.types.includes("country")
+              );
+
+              return {
+                city:
+                  cityComponent?.long_name ||
+                  prediction.structured_formatting?.main_text,
+                country:
+                  countryComponent?.long_name ||
+                  prediction.structured_formatting?.secondary_text,
+                address: result.formatted_address || prediction.description,
+              };
+            } catch (err) {
+              console.warn("Place details error:", err);
+              return {
+                city:
+                  prediction.structured_formatting?.main_text ||
+                  prediction.description,
+                country: prediction.structured_formatting?.secondary_text || "",
+                address: prediction.description || "",
+              };
+            }
+          }
+        )
       );
 
       setResults(detailedResults);
@@ -123,94 +160,87 @@ export default function SelectLocation() {
       <h4 className="font-medium mb-8 2xl:mb-10 text-[17px] 2xl:text-xl text-[#111111] text-start w-full">
         Select your Location
       </h4>
-
-      {gettingLocation ? (
-        <div className="w-full h-[90%] flex text-[#0ead65] justify-center items-center">
-          <div className="lds-ring w-5 h-5">
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-            <div className="w-5 h-5 border-4" />
-          </div>
-        </div>
-      ) : (
-        <>
-          <form
-            onSubmit={handleFormSubmit}
-            className="w-full mb-6 flex flex-col"
+      <form onSubmit={handleFormSubmit} className="w-full mb-3 flex flex-col">
+        <div className="w-full h-11 2xl:h-[50px] border border-[#E7E7E7] rounded-[12px] px-6 flex items-center gap-2.5">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            required
+            autoFocus
+            className="w-full h-full border-none bg-transparent outline-none text-sm 2xl:text-base text-[#B0B0B0]"
+            placeholder="Find your city"
+          />
+          <button
+            type="submit"
+            className="w-max h-max hover:opacity-70 duration-200 bg-transparent border-none cursor-pointer"
           >
-            <div className="w-full h-11 2xl:h-[50px] border border-[#E7E7E7] rounded-[12px] px-6 flex items-center gap-2.5">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                required
-                autoFocus
-                className="w-full h-full border-none bg-transparent outline-none text-sm 2xl:text-base text-[#B0B0B0]"
-                placeholder="Find your city"
-              />
-              <button
-                type="submit"
-                className="w-max h-max hover:opacity-70 duration-200 bg-transparent border-none cursor-pointer"
-              >
-                <Image
-                  src="/images/magnifying-glass.svg"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="2xl:w-6 w-5"
-                />
-              </button>
-            </div>
-          </form>
+            <Image
+              src="/images/magnifying-glass.svg"
+              alt=""
+              width={24}
+              height={24}
+              className="2xl:w-6 w-5"
+            />
+          </button>
+        </div>
+      </form>
+      {!location && (
+        <button
+          type="button"
+          onClick={getUserLocation}
+          className="w-full mb-6 bg-(--primary-green) h-11 min-h-11 text-sm 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
+        >
+          {gettingLocation ? <Spinner /> : "Use current location"}
+        </button>
+      )}
 
-          <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
-            {isLoading ? (
-              <p className="text-sm text-center text-gray-400">Searching...</p>
-            ) : results.length === 0 && isValid ? (
-              <p className="text-sm text-center text-gray-400">
-                No results found.
-              </p>
-            ) : (
-              <div className="w-full flex flex-col gap-3">
-                {[...(location ? [location] : []), ...results].map(
-                  (item, index) => {
-                    const isSelected =
-                      location?.city === item.city &&
-                      item.country === location.country;
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          setLocation(item);
-                          closeModal();
-                        }}
-                        className="w-full hover:opacity-70 duration-200 cursor-pointer py-2.5 px-1 flex items-center justify-between gap-4"
-                      >
-                        <div className="flex w-full max-w-[90%] items-center gap-4">
-                          <Image
-                            src="/images/location-pin.svg"
-                            width={24}
-                            height={24}
-                            alt=""
-                            className="2xl:w-6 w-5"
-                          />
-                          <p className="text-sm truncate text-[#5D5D5D] font-normal">
-                            {item.city} {item.country}
-                          </p>
-                        </div>
-                        {isSelected && (
-                          <Check className="text-[#5D5D5D] 2xl:min-w-6 min-w-5" />
-                        )}
-                      </div>
-                    );
-                  }
-                )}
-              </div>
+      <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
+        {isLoading ? (
+          <p className="text-sm text-center text-gray-400">Searching...</p>
+        ) : results.length === 0 && isValid ? (
+          <p className="text-sm text-center text-gray-400">No results found.</p>
+        ) : (
+          <div className="w-full flex flex-col gap-3">
+            {[...(location ? [location] : []), ...results].map(
+              (item, index) => {
+                const isSelected =
+                  location?.city === item.city &&
+                  item.country === location.country;
+                return (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setLocation(item);
+                      cookie.set("LOCATION", JSON.stringify(item), {
+                        expires: 1,
+                      });
+                      closeModal();
+                    }}
+                    className="w-full hover:opacity-70 duration-200 cursor-pointer py-2.5 px-1 flex items-center justify-between gap-4"
+                  >
+                    <div className="flex w-full max-w-[90%] items-center gap-4">
+                      <Image
+                        src="/images/location-pin.svg"
+                        width={24}
+                        height={24}
+                        alt=""
+                        className="2xl:w-6 w-5"
+                      />
+                      <p className="text-sm truncate text-[#5D5D5D] font-normal">
+                        {item?.address || `${item.city}, ${item.country}`}
+                      </p>
+                    </div>
+                    {isSelected && (
+                      <Check className="text-[#5D5D5D] 2xl:min-w-6 min-w-5" />
+                    )}
+                  </div>
+                );
+              }
             )}
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

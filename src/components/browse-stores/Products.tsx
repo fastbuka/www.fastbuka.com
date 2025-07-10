@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
 import { motion } from "framer-motion";
-import { formatNumber, reverseGeocodeWithGoogle } from "@/lib/shared-utils";
+import { countVendorsWithProducts, formatNumber } from "@/lib/shared-utils";
 import { useUser } from "@/contexts/UserContext";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useManageUser } from "@/hooks/useManageUser";
@@ -44,15 +44,27 @@ export default function Products(props: Props) {
   const [addDeliveryInstructions, setAddDeliveryInstructions] = useState(false);
   const [addVendorInstructions, setAddVendorInstructions] = useState(false);
   const { clearCart, cart } = useCart();
-  const { deliveryAddress, user, location, setLocation, setLastVendorViewed } =
-    useUser();
+  const { user, location, setTotalVendorCarts } = useUser();
   const { openModal: openAuthModal } = useAuthModal();
   const { placeOrder, loading } = useManageUser();
-  const [gettingLocation, setGettingLocation] = useState(false);
+
+  const updateCartCount = () => {
+    const count = countVendorsWithProducts();
+    setTotalVendorCarts(count);
+  };
 
   const isAddressValid = useMemo(() => {
-    return deliveryAddress.trim().length > 0 ? true : false;
-  }, [deliveryAddress]);
+    if (!location?.address) return false;
+    return location.address.trim().length > 0 ? true : false;
+  }, [location]);
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
+  const totalPrice = useMemo(() => {
+    return getTotalPrice() || 0;
+  }, [cart]);
 
   async function fetchMore() {
     try {
@@ -75,50 +87,14 @@ export default function Products(props: Props) {
     }
   }
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
-
-  const getUserLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation not supported");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          setGettingLocation(true);
-          const locationData = await reverseGeocodeWithGoogle(
-            coords.latitude,
-            coords.longitude
-          );
-          setLocation({
-            ...locationData,
-            lat: coords.latitude,
-            lng: coords.longitude,
-          });
-          handlePlaceOrder(coords.latitude, coords.longitude);
-        } catch {
-          toast.error("Failed to detect location.");
-        } finally {
-          setGettingLocation(false);
-        }
-      },
-      () => {
-        toast.info("Location access is required to place an order");
-      }
-    );
-  };
-
-  const handlePlaceOrder = async (lat?: number, lng?: number) => {
+  const handlePlaceOrder = async () => {
     if (!user) {
       openAuthModal(AuthModalTypeEnum.LOGIN);
       return;
     }
 
-    if (!lat && !lng && !location?.lat && !location?.lng) {
-      getUserLocation();
+    if (!location) {
+      openModal(ModalTypeEnum.FindLocation);
       return;
     }
 
@@ -137,14 +113,14 @@ export default function Products(props: Props) {
     try {
       await placeOrder(
         {
-          delivery_address: deliveryAddress,
+          delivery_address: location.address || "",
           delivery_email: user.email,
           delivery_contact: user.contact,
           delivery_name: `${user.first_name} ${user.other_names}`,
           newOrder: true,
           vendor_slug: slug,
-          latitude: lat || location?.lat || 0,
-          longitude: lng || location?.lng || 0,
+          latitude: location?.lat || 0,
+          longitude: location?.lng || 0,
           cartItems,
         },
         () => {
@@ -155,14 +131,6 @@ export default function Products(props: Props) {
       console.log(error);
     }
   };
-
-  const totalPrice = useMemo(() => {
-    if (cart.length > 0) {
-      setLastVendorViewed(slug);
-      localStorage.setItem("last_viewed_vendor", slug);
-    }
-    return getTotalPrice() || 0;
-  }, [cart]);
 
   useEffect(() => {
     if (data) {
@@ -229,9 +197,22 @@ export default function Products(props: Props) {
             layout
             className="w-full flex flex-col gap-5 2xl:gap-6 mb-2"
           >
-            {cart.map((order, index) => {
-              return <Order data={order} key={index} />;
-            })}
+            {cart.length === 0 ? (
+              <div className="w-full flex justify-center">
+                <Image
+                  alt=""
+                  width={200}
+                  height={200}
+                  src="/images/empty-carton.png"
+                />
+              </div>
+            ) : (
+              <>
+                {cart.map((order, index) => {
+                  return <Order data={order} key={index} />;
+                })}
+              </>
+            )}
           </motion.div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 mb-5 gap-2.5">
             {/* <RenderActionMenu
@@ -243,7 +224,7 @@ export default function Products(props: Props) {
             /> */}
             <RenderActionMenu
               onClick={() => {
-                openModal(ModalTypeEnum.DeliveryAddress);
+                openModal(ModalTypeEnum.FindLocation);
               }}
               value="Delivery Address"
               label={isAddressValid ? "Change" : "Choose"}
@@ -310,17 +291,22 @@ export default function Products(props: Props) {
           </div>
           <div className="w-full mb-16 @max-2xl:mb-5 2xl:mb-20 flex flex-col items-center gap-3">
             <button
-              disabled={!isAddressValid || !cart.length}
+              disabled={!cart.length}
               onClick={() => {
-                handlePlaceOrder();
+                if (!isAddressValid) {
+                  openModal(ModalTypeEnum.FindLocation);
+                } else {
+                  handlePlaceOrder();
+                }
               }}
               className="w-full disabled:opacity-60 bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
             >
-              {loading || gettingLocation ? <Spinner /> : "Place Order"}
+              {loading ? <Spinner /> : "Place Order"}
             </button>
             <button
               onClick={() => {
                 clearCart();
+                updateCartCount();
               }}
               className="w-full bg-[#FFF0F0] h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-[#FF0000] font-normal 2xl:h-[50px]"
             >

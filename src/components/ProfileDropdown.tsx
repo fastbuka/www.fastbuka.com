@@ -1,5 +1,9 @@
 "use client";
-import { logout } from "@/lib/shared-utils";
+import {
+  countVendorsWithProducts,
+  getFirstVendorWithProducts,
+  logout,
+} from "@/lib/shared-utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -23,47 +27,37 @@ export default function ProfileDropdown() {
   const isMobile = useIsMobileView();
   const { orders, setActiveOrder } = useUser();
   const { openModal } = useModal();
-  const {
-    hasCartItems,
-    setHasCartItems,
-    lastVendorViewed,
-    setLastVendorViewed,
-  } = useUser();
-
-  const checkCartItems = () => {
-    try {
-      const cart = localStorage.getItem("vendor_carts");
-      const lastViewed = localStorage.getItem("last_viewed_vendor");
-      setHasCartItems(cart ? true : false);
-      setLastVendorViewed(lastViewed || "");
-    } catch {
-      setHasCartItems(false);
-    }
-  };
+  const { totalVendorCarts, setTotalVendorCarts } = useUser();
 
   useEffect(() => {
-    checkCartItems();
+    const count = countVendorsWithProducts();
+    setTotalVendorCarts(count);
   }, []);
 
   return (
     <div className="w-max @max-4xl:mr-5 flex items-center @max-3xl:gap-4 gap-2.5">
-      {hasCartItems && lastVendorViewed.length > 0 && (
-        <button
-          onClick={() => {
-            router.push(`/browse-stores/${lastVendorViewed}`);
-          }}
-          className="w-10 @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-(--primary-green) flex justify-center items-center hover:opacity-80 duration-200"
-          type="button"
-        >
-          <Image
-            src="/images/shopping-cart.svg"
-            alt=""
-            width={24}
-            height={24}
-            className="w-5 2xl:w-6 @max-3xl:w-4"
-          />
-        </button>
-      )}
+      <button
+        onClick={() => {
+          if (totalVendorCarts > 0) {
+            router.push(`/browse-stores/${getFirstVendorWithProducts()}`);
+          } else {
+            router.push("/browse-stores");
+          }
+        }}
+        className="w-10 relative @max-3xl:w-8 @max-3xl:h-8 h-10 2xl:w-11 2xl:h-11 rounded-[12px] bg-(--primary-green) flex justify-center items-center hover:opacity-80 duration-200"
+        type="button"
+      >
+        <Image
+          src="/images/shopping-cart.svg"
+          alt=""
+          width={24}
+          height={24}
+          className="w-5 2xl:w-6 @max-3xl:w-4"
+        />
+        <div className="absolute w-4 h-4 bg-red-600 flex justify-center items-center rounded-full -right-1 -top-1">
+          <p className="text-white text-[8px]">{totalVendorCarts}</p>
+        </div>
+      </button>
       <div className="relative w-max h-max @max-3xl:w-4">
         <button
           onClick={() => {
