@@ -92,6 +92,7 @@ export default function SelectLocation() {
       }
 
       const predictions = data.predictions;
+
       const detailedResults = await Promise.all(
         predictions.map(
           async (prediction: {
@@ -107,7 +108,6 @@ export default function SelectLocation() {
                 `/api/place-details?place_id=${prediction.place_id}`
               );
               const detailsData = await detailsRes.json();
-
               const result = detailsData.result;
 
               const cityComponent = result.address_components.find(
@@ -127,6 +127,8 @@ export default function SelectLocation() {
                   countryComponent?.long_name ||
                   prediction.structured_formatting?.secondary_text,
                 address: result.formatted_address || prediction.description,
+                lat: result.geometry?.location?.lat,
+                lng: result.geometry?.location?.lng,
               };
             } catch (err) {
               console.warn("Place details error:", err);
@@ -136,6 +138,8 @@ export default function SelectLocation() {
                   prediction.description,
                 country: prediction.structured_formatting?.secondary_text || "",
                 address: prediction.description || "",
+                lat: null,
+                lng: null,
               };
             }
           }
@@ -185,15 +189,13 @@ export default function SelectLocation() {
           </button>
         </div>
       </form>
-      {!location && (
-        <button
-          type="button"
-          onClick={getUserLocation}
-          className="w-full mb-6 bg-(--primary-green) h-11 min-h-11 text-sm 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
-        >
-          {gettingLocation ? <Spinner /> : "Use current location"}
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={getUserLocation}
+        className="w-full mb-6 bg-(--primary-green) h-11 min-h-11 text-sm 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
+      >
+        {gettingLocation ? <Spinner /> : "Use current location"}
+      </button>
 
       <div className="w-full flex flex-col h-full overflow-y-auto scroll-hidden">
         {isLoading ? (
