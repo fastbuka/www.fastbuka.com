@@ -2,15 +2,15 @@
 import Image from "next/image";
 import React from "react";
 import { cn } from "@/lib/utils";
-import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import { useModal } from "@/contexts/ModalContext";
 import { useWallet } from "@/contexts/WalletContext";
 import { formatNumber } from "@/lib/shared-utils";
 import { useUser } from "@/contexts/UserContext";
 
 export default function Success() {
-  const { closeModal, openModal } = useModal();
+  const { closeModal } = useModal();
   const { ongoingTransfer, setOngoingTransfer } = useWallet();
-  const { activeOrder } = useUser();
+  const { activeOrder, setActiveOrder } = useUser();
 
   return (
     <div className="w-[472px] @max-2xl:w-full max-w-full flex flex-col items-center">
@@ -35,10 +35,10 @@ export default function Success() {
       <button
         type="button"
         onClick={() => {
+          closeModal();
           if (activeOrder) {
-            openModal(ModalTypeEnum.MakePayment);
+            setActiveOrder(null);
           } else if (ongoingTransfer) {
-            closeModal();
             setOngoingTransfer(null);
           }
         }}
@@ -46,7 +46,7 @@ export default function Success() {
           "w-full  bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
         )}
       >
-        Make Payment
+        Okay
       </button>
     </div>
   );

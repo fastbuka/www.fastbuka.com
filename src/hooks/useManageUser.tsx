@@ -266,7 +266,7 @@ export const useManageUser = () => {
       if (response.data?.success) {
         setActiveOrder(response.data?.data?.order);
         handleSuccess();
-        openModal(ModalTypeEnum.Success);
+        openModal(ModalTypeEnum.MakePayment);
         return { success: true };
       }
 
@@ -295,10 +295,11 @@ export const useManageUser = () => {
         },
       });
 
+      openModal(ModalTypeEnum.Success);
+
       if (response.data?.success) {
         console.log(response);
         toast.success("Payment successful");
-        router.refresh();
         return { success: true };
       }
 

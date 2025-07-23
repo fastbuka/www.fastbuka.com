@@ -125,6 +125,7 @@ export default function Products(props: Props) {
         },
         () => {
           clearCart();
+          updateCartCount();
         }
       );
     } catch (error) {
