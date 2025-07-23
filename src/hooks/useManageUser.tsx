@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useWallet } from "@/contexts/WalletContext";
-import { useRouter } from "next/navigation";
 
 export type User = {
   first_name: string;
@@ -49,7 +48,6 @@ export const useManageUser = () => {
   const { setWallet, setOngoingTransfer } = useWallet();
   const [loading, setLoading] = useState(false);
   const { openModal, closeModal } = useModal();
-  const router = useRouter();
 
   const fetchUser = async (token: string) => {
     try {
