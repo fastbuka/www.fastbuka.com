@@ -44,7 +44,7 @@ type DeactivateAccountPayload = {
 };
 
 export const useManageUser = () => {
-  const { setUser, setActiveOrder, setOrders } = useUser();
+  const { setUser, setActiveOrder, setOrders, user } = useUser();
   const { setWallet, setOngoingTransfer } = useWallet();
   const [loading, setLoading] = useState(false);
   const { openModal, closeModal } = useModal();
@@ -292,6 +292,7 @@ export const useManageUser = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+      await fetchWallet(user?.uuid || "");
 
       openModal(ModalTypeEnum.Success);
 

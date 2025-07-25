@@ -28,7 +28,7 @@ export default function Success() {
 
       {activeOrder && (
         <p className="mt-4 mb-9 2xl:mb-[50px] 2xl:mt-6 text-center max-w-[294px] font-normal text-sm 2xl:text-base text-[#5D5D5D]">
-          You have successfully placed an order, please Proceed to make payment
+          You have successfully placed an order, Thank you for using FastBuka!
         </p>
       )}
 
