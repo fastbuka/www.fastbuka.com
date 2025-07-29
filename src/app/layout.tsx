@@ -19,9 +19,10 @@ export const metadata: Metadata = {
     siteName: "FastBuka Delivery",
     images: [
       {
-        url: "/images/fastbuka.jpg",
-        width: 800,
-        height: 600,
+        url: "https://www.fastbuka.com/images/fastbuka.jpg",
+        width: 1200,
+        height: 630,
+        alt: "FastBuka Delivery",
       },
     ],
     locale: "en_US",
@@ -42,7 +43,7 @@ export default function RootLayout({
       <head>
         <link
           rel="icon"
-          href="https://www.fastbuka.com/images/fastbuka.jpg"
+          href="https://www.fastbuka.com/favicon.ico"
           sizes="any"
         />
       </head>
