@@ -8,6 +8,9 @@ interface Props {
   item: Vendor;
 }
 
+const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
+const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
+
 export default function VendorListItem(props: Props) {
   const { item: vendor } = props;
   const router = useRouter();
@@ -21,11 +24,15 @@ export default function VendorListItem(props: Props) {
     >
       <div className="w-full h-[215px] overflow-hidden rounded-[7px] mb-3.5">
         <Image
-          src={vendor?.cover || "/images/dummy-vendor.svg"}
+          src={
+            bucketEnv && vendor?.cover?.startsWith(bucketEnv)
+              ? `${bucketURL}/${vendor.cover}`
+              : "/images/dummy-vendor.svg"
+          }
           alt=""
           width={340}
           height={215}
-          className="object-cover"
+          className="object-cover h-full w-full"
         />
       </div>
       <p className="text-[#19CE7C] font-normal text-sm mb-2">Fastbuka Vendor</p>

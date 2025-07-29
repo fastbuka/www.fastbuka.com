@@ -190,9 +190,9 @@ export default function Products(props: Props) {
             <p className="text-sm w-full 2xl:text-base text-[#5D5D5D] font-normal">
               {vendor?.name} - {vendor?.city}
             </p>
-            <button className="min-w-max font-normal text-(--primary-green) text-sm 2xl:text-base bg-[#DAFEEC] py-2 px-4 rounded-[12px] hover:opacity-70 duration-300">
+            {/* <button className="min-w-max font-normal text-(--primary-green) text-sm 2xl:text-base bg-[#DAFEEC] py-2 px-4 rounded-[12px] hover:opacity-70 duration-300">
               Add another pack
-            </button>
+            </button> */}
           </div>
           <motion.div
             layout

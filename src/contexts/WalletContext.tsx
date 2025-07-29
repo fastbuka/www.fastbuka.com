@@ -29,6 +29,7 @@ type TransferDetails = {
   transfer_bank: string;
   transfer_note: string;
   transfer_reference: string;
+  account_name: string;
 };
 
 type WalletContextType = {

@@ -30,6 +30,9 @@ const mapOptions: google.maps.MapOptions = {
   disableDefaultUI: true,
 };
 
+const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
+const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
+
 export default function RenderMap({
   vendors,
 }: {
@@ -124,8 +127,14 @@ export default function RenderMap({
                 <X className="w-3 h-3" />
               </button>
               {selected.cover && (
-                <img
-                  src={selected.cover}
+                <Image
+                  width={215}
+                  height={60}
+                  src={
+                    bucketEnv && selected.cover.startsWith(bucketEnv)
+                      ? `${bucketURL}/${selected.cover}`
+                      : "/images/fries-with-chicken.svg"
+                  }
                   alt=""
                   className="mb-2 w-[215px] h-[60px] @max-3xl:w-[131px] @max-3xl:h-[33px]"
                 />

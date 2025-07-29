@@ -78,7 +78,7 @@ export default function ValidateTransfer() {
         <div />
       </div>
       <p className="text-black text-sm 2xl:text-base font-normal mb-1.5">
-        Account Name: {ongoingTransfer?.transfer_account}{" "}
+        Account Name: {ongoingTransfer?.account_name}{" "}
       </p>
       <p className="text-black text-sm 2xl:text-base font-normal mb-1.5">
         Account Number: {ongoingTransfer?.transfer_account}

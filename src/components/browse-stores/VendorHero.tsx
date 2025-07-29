@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
+const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
+const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
+
 export default function VendorHero({
   vendor,
   category,
@@ -40,7 +43,11 @@ export default function VendorHero({
 
         <div className="w-full rounded-t-lg overflow-hidden mt-6 2xl:mt-8 mb-9 2xl:mb-11 @max-3xl:h-[111px] h-42 2xl:h-56 relative">
           <Image
-            src="/images/fries-with-chicken.svg"
+            src={
+              bucketEnv && vendor?.cover?.startsWith(bucketEnv)
+                ? `${bucketURL}/${vendor.cover}`
+                : "/images/fries-with-chicken.svg"
+            }
             alt=""
             width={1210}
             height={530}
@@ -48,11 +55,15 @@ export default function VendorHero({
           />
           <div className="2xl:w-[129px] @max-3xl:w-[63px] @max-3xl:h-[63px]  w-[94px] h-[94px] 2xl:h-[129px] rounded-full bg-white border-[6px] border-white absolute @max-3xl:left-2 left-8 bottom-0 overflow-hidden">
             <Image
-              src="/images/vendor-profile.png"
+              src={
+                bucketEnv && vendor?.cover?.startsWith(bucketEnv)
+                  ? `${bucketURL}/${vendor.cover}`
+                  : "/images/vendor-profile.png"
+              }
               alt=""
               width={129}
               height={129}
-              className="w-full h-full"
+              className="w-full object-cover h-full"
             />
           </div>
         </div>

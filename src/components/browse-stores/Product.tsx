@@ -4,11 +4,14 @@ import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useUser } from "@/contexts/UserContext";
 import { countVendorsWithProducts, formatNumber } from "@/lib/shared-utils";
 import { Product } from "@/schema";
+import Image from "next/image";
 import React, { useMemo, useState } from "react";
+
+const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
 
 export default function ProductComponent({ product }: { product: Product }) {
   const { description, image, name, price } = product;
-  const [imgSrc, setImgSrc] = useState(image);
+  const [imgSrc, setImgSrc] = useState(`${bucketURL}/${image}`);
   const { setActiveProduct, setTotalVendorCarts } = useUser();
   const { openModal } = useModal();
   const { cart, addToCart, removeFromCart } = useCart();
@@ -64,7 +67,9 @@ export default function ProductComponent({ product }: { product: Product }) {
           {inCart ? "Remove from cart" : "Add to cart"}
         </button>
       </div>
-      <img
+      <Image
+        width={115}
+        height={122}
         src={imgSrc}
         alt=""
         onError={() => {
