@@ -11,15 +11,15 @@ const poppins = Poppins({
 });
 export const metadata: Metadata = {
   title: "FastBuka Delivery",
-  description: "Disrupting Food & Grocery Delivery in Africa.",
+  description: "Food & Grocery Delivery in Africa.",
   openGraph: {
     title: "FastBuka Delivery",
-    description: "Disrupting Food & Grocery Delivery in Africa.",
+    description: "Food & Grocery Delivery in Africa.",
     url: "https://www.fastbuka.com",
     siteName: "FastBuka Delivery",
     images: [
       {
-        url: "https://www.fastbuka.com/images/fastbuka.jpg",
+        url: "https://storage.fastbuka.com/images/fastbuka.jpg",
         width: 1200,
         height: 630,
         alt: "FastBuka Delivery",
@@ -43,7 +43,7 @@ export default function RootLayout({
       <head>
         <link
           rel="icon"
-          href="https://www.fastbuka.com/favicon.ico"
+          href="https://storage.fastbuka.com/images/favicon.ico"
           sizes="any"
         />
       </head>
