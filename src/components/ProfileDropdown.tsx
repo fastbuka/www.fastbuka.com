@@ -2,6 +2,7 @@
 import {
   countVendorsWithProducts,
   getFirstVendorWithProducts,
+  getOrderStatus,
   logout,
 } from "@/lib/shared-utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import { useIsMobileView } from "@/hooks/useIsMobileView";
 import { useUser } from "@/contexts/UserContext";
-import { Order } from "@/schema";
+import { Order, OrderStatus } from "@/schema";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function ProfileDropdown() {
@@ -131,19 +132,34 @@ export default function ProfileDropdown() {
                             openModal(ModalTypeEnum.MakePayment);
                           }, 500);
                         }}
-                        className="p-2.5 cursor-pointer hover:opacity-70 duration-200 flex justify-between items-start"
+                        className="p-2.5 cursor-pointer hover:opacity-70 duration-200 gap-2.5 flex flex-col"
                       >
-                        <div className="flex flex-col gap-2.5">
-                          <p className="font-medium text-[#111111] truncate text-base 2xl:text-xl">
-                            {item?.orderItems?.[0].product.name}
+                        <div className="flex justify-between items-start">
+                          <div className="flex max-w-[50%] items-start flex-col gap-2.5">
+                            <p className="font-medium max-w-full text-[#111111] truncate text-base 2xl:text-xl">
+                              {item?.orderItems?.[0].product.name}
+                            </p>
+                            <p className="text-xs text-start 2xl:text-base font-normal text-[#5D5D5D]">
+                              {new Date(item.created_at).toDateString()}
+                            </p>
+                          </div>
+                          <div className="flex flex-col items-end gap-2.5">
+                            <p className="text-xs 2xl:text-base font-normal text-[#5D5D5D]">
+                              Order {item.order_number}
+                            </p>
+                            <p className="text-xs 2xl:text-base font-normal text-[#5D5D5D]">
+                              Payment status: {item.payment_status}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p className="text-xs 2xl:text-base font-normal text-[#5D5D5D]">
+                            Order status
                           </p>
-                          <p className="text-xs text-start 2xl:text-base font-normal text-[#5D5D5D]">
-                            {new Date(item.created_at).toDateString()}
+                          <p className="text-xs 2xl:text-base font-normal text-[#5D5D5D]">
+                            {getOrderStatus(item.order_status as OrderStatus)}
                           </p>
                         </div>
-                        <p className="text-xs 2xl:text-base font-normal text-[#5D5D5D]">
-                          Order {item.order_number}
-                        </p>
                       </SheetClose>
                     ))}
                   </div>

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useWallet } from "@/contexts/WalletContext";
+import { OrderType } from "@/schema";
 
 export type User = {
   first_name: string;
@@ -30,9 +31,12 @@ type PlaceOrderPayload = {
   delivery_email: string;
   delivery_contact: string;
   delivery_address: string;
+  order_type: OrderType;
   latitude: number;
   longitude: number;
   newOrder: boolean;
+  vendor_instructions?: string;
+  delivery_instruction?: string;
   cartItems: {
     product_uuid: string;
     quantity: number;
@@ -262,6 +266,7 @@ export const useManageUser = () => {
       });
 
       if (response.data?.success) {
+        await fetchOrders(token || "");
         setActiveOrder(response.data?.data?.order);
         handleSuccess();
         openModal(ModalTypeEnum.MakePayment);
@@ -293,11 +298,10 @@ export const useManageUser = () => {
         },
       });
       await fetchWallet(user?.uuid || "");
-
+      await fetchOrders(token || "");
       openModal(ModalTypeEnum.Success);
 
       if (response.data?.success) {
-        console.log(response);
         toast.success("Payment successful");
         return { success: true };
       }

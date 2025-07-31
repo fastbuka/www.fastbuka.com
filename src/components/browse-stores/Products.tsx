@@ -4,7 +4,7 @@ import ProductComponent from "./Product";
 import Order from "./Order";
 import Image from "next/image";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
-import { Pagination, Product, Vendor } from "@/schema";
+import { OrderType, Pagination, Product, Vendor } from "@/schema";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useCart } from "@/contexts/CartContext";
@@ -14,6 +14,13 @@ import { useUser } from "@/contexts/UserContext";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useManageUser } from "@/hooks/useManageUser";
 import Spinner from "../auth/Spinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type Order = {
   name: string;
@@ -47,6 +54,9 @@ export default function Products(props: Props) {
   const { user, location, setTotalVendorCarts } = useUser();
   const { openModal: openAuthModal } = useAuthModal();
   const { placeOrder, loading } = useManageUser();
+  const [orderType, setOrderType] = useState<OrderType>(OrderType.PickUp);
+  const [vendorInstructions, setVendorInstructions] = useState("");
+  const [deliveryInstructions, setDeliveryInstructions] = useState("");
 
   const updateCartCount = () => {
     const count = countVendorsWithProducts();
@@ -122,6 +132,13 @@ export default function Products(props: Props) {
           latitude: location?.lat || 0,
           longitude: location?.lng || 0,
           cartItems,
+          order_type: orderType,
+          ...(orderType === OrderType.Delivery
+            ? {
+                delivery_instruction: deliveryInstructions,
+                vendor_instructions: vendorInstructions,
+              }
+            : {}),
         },
         () => {
           clearCart();
@@ -214,6 +231,29 @@ export default function Products(props: Props) {
                 })}
               </>
             )}
+            <Select
+              onValueChange={(v) => setOrderType(v as OrderType)}
+              value={orderType}
+            >
+              <SelectTrigger className="w-full mb-2 border-[#E7E7E7] text-sm 2xl:text-base h-max shadow-none py-3 px-6 rounded-lg">
+                <SelectValue placeholder="Select option" />
+              </SelectTrigger>
+              <SelectContent className="shadow-none w-full bg-[#F6FFFB] border border-[--primary-green] rounded-[12px]">
+                <div className="w-full p-2.5 flex flex-col">
+                  {[OrderType.PickUp, OrderType.Delivery].map((item, index) => (
+                    <SelectItem
+                      className={cn(
+                        "p-2.5 rounded-none focus:bg-transparent hover:opacity-70"
+                      )}
+                      key={index}
+                      value={item}
+                    >
+                      {item}
+                    </SelectItem>
+                  ))}
+                </div>
+              </SelectContent>
+            </Select>
           </motion.div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 mb-5 gap-2.5">
             {/* <RenderActionMenu
@@ -223,63 +263,77 @@ export default function Products(props: Props) {
               value="Promo Code"
               label="Choose"
             /> */}
-            <RenderActionMenu
-              onClick={() => {
-                openModal(ModalTypeEnum.FindLocation);
-              }}
-              value="Delivery Address"
-              label={isAddressValid ? "Change" : "Choose"}
-            />
-            <RenderActionMenu
-              value="Delivery instructions"
-              label="Add"
-              onClick={() => {
-                setAddDeliveryInstructions(true);
-              }}
-            />
-            {addDeliveryInstructions && (
+            {orderType === OrderType.Delivery && (
+              <>
+                <RenderActionMenu
+                  onClick={() => {
+                    openModal(ModalTypeEnum.FindLocation);
+                  }}
+                  value="Delivery Address"
+                  label={isAddressValid ? "Change" : "Choose"}
+                />
+                <RenderActionMenu
+                  value="Delivery instructions"
+                  label="Add"
+                  onClick={() => {
+                    setAddDeliveryInstructions(true);
+                  }}
+                />
+              </>
+            )}
+            {addDeliveryInstructions && orderType === OrderType.Delivery && (
               <textarea
                 placeholder="Add delivery instructions"
+                value={deliveryInstructions}
+                onChange={(e) => setDeliveryInstructions(e.target.value)}
                 className="w-full text-sm 2xl:text-base bg-white placeholder:text-[#D1D1D1] text-[#D1D1D1] border border-[#E7E7E7] outline-none rounded-[12px] px-5 py-2.5 h-[75px]"
               ></textarea>
             )}
-            <RenderActionMenu
-              onClick={() => {
-                setAddVendorInstructions(true);
-              }}
-              value="Vendor instructions"
-              label="Add"
-            />
-            {addVendorInstructions && (
+            {orderType === OrderType.Delivery && (
+              <RenderActionMenu
+                onClick={() => {
+                  setAddVendorInstructions(true);
+                }}
+                value="Vendor instructions"
+                label="Add"
+              />
+            )}
+            {addVendorInstructions && orderType === OrderType.Delivery && (
               <textarea
                 placeholder="Add vendor instructions"
+                value={vendorInstructions}
+                onChange={(e) => setVendorInstructions(e.target.value)}
                 className="w-full text-sm 2xl:text-base bg-white placeholder:text-[#D1D1D1] text-[#D1D1D1] border border-[#E7E7E7] outline-none rounded-[12px] px-5 py-2.5 h-[75px]"
               ></textarea>
             )}
           </div>
-          <div className="w-full mb-5 gap-2.5 bg-[#DAFEEC] rounded-[12px] px-6 py-3 flex items-center">
-            <Image
-              src="/images/info.svg"
-              alt=""
-              width={24}
-              height={24}
-              className="w-5 2xl:w-6"
-            />
-            <div className="w-full flex flex-col gap-1">
-              <p className="text-sm font-medium text-(--primary-black)">
-                Delivery includes PIN confirmation
-              </p>
-              <p className="text-xs font-normal text-[#888888]">
-                This helps ensure that your order is given to the right person
-              </p>
+          {orderType === OrderType.Delivery && (
+            <div className="w-full mb-5 gap-2.5 bg-[#DAFEEC] rounded-[12px] px-6 py-3 flex items-center">
+              <Image
+                src="/images/info.svg"
+                alt=""
+                width={24}
+                height={24}
+                className="w-5 2xl:w-6"
+              />
+              <div className="w-full flex flex-col gap-1">
+                <p className="text-sm font-medium text-(--primary-black)">
+                  Delivery includes PIN confirmation
+                </p>
+                <p className="text-xs font-normal text-[#888888]">
+                  This helps ensure that your order is given to the right person
+                </p>
+              </div>
             </div>
-          </div>
+          )}
           <div className="w-full flex flex-col py-2 2xl:py-2.5 gap-2.5 2xl:mb-28 @max-2xl:mb-10 mb-20">
             <RenderOrderDetail
               label={`Sub total (${cart.length} items)`}
               value={`NGN${formatNumber(totalPrice)}`}
             />
-            <RenderOrderDetail label="Delivery fee" value="NGN0.00" />
+            {orderType === OrderType.Delivery && (
+              <RenderOrderDetail label="Delivery fee" value="NGN0.00" />
+            )}
             <RenderOrderDetail label="Service fee" value="NGN0.00" />
             <div className="w-full flex justify-between items-center">
               <p className="text-sm 2xl:text-base text-(--primary-black) font-medium">

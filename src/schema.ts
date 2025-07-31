@@ -106,3 +106,19 @@ export type Order = {
     };
   }[];
 };
+
+export enum OrderStatus {
+  AcceptedVendor = "ACCEPTED_VENDOR",
+  PendingVendor = "PENDING_VENDOR",
+  PendingCustomer = "PENDING_CUSTOMER",
+  PendingRider = "PENDING_Rider",
+  AcceptedRider = "ACCEPTED_RIDER",
+  Delivered = "DELIVERED",
+  Cancelled = "CANCELLED",
+  Rejected = "REJECTED",
+}
+
+export enum OrderType {
+  PickUp = "PICKUP",
+  Delivery = "DELIVERY",
+}
