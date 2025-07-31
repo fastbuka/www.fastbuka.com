@@ -1,8 +1,8 @@
 on:
   push:
     branches:
-      - master
-name: 🚀 Deploy fastbuka on push
+      - hotfix/app
+name: 🚀 Deploy on push
 jobs:
   web-deploy:
     name: 🎉 Deploy
