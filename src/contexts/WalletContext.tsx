@@ -1,5 +1,6 @@
 "use client";
 
+import { CardTopupMode } from "@/schema";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export type Asset = {
@@ -32,10 +33,33 @@ type TransferDetails = {
   account_name: string;
 };
 
+export type CardDetails = {
+  currency: string;
+  amount: number;
+  card_number: string;
+  cvv: string;
+  expiry_month: string;
+  expiry_year: string;
+  redirect_url: string;
+  authorization: {
+    mode: CardTopupMode;
+    value?: string;
+    endpoint?: string;
+    flw_ref?: string;
+    city?: string;
+    address?: string;
+    country?: string;
+    state?: string;
+    zipcode?: number;
+  };
+};
+
 type WalletContextType = {
   wallet: Wallet | null;
   setWallet: (wallet: Wallet | null) => void;
   ongoingTransfer: TransferDetails | null;
+  ongoingTopup: CardDetails | null;
+  setOngoingTopup: (ongoingTopup: CardDetails | null) => void;
   setOngoingTransfer: (ongoingTransfer: TransferDetails | null) => void;
 };
 
@@ -45,10 +69,18 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [ongoingTransfer, setOngoingTransfer] =
     useState<TransferDetails | null>(null);
+  const [ongoingTopup, setOngoingTopup] = useState<CardDetails | null>(null);
 
   return (
     <WalletContext.Provider
-      value={{ wallet, setWallet, ongoingTransfer, setOngoingTransfer }}
+      value={{
+        wallet,
+        setWallet,
+        ongoingTransfer,
+        setOngoingTransfer,
+        ongoingTopup,
+        setOngoingTopup,
+      }}
     >
       {children}
     </WalletContext.Provider>

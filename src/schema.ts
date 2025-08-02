@@ -122,3 +122,11 @@ export enum OrderType {
   PickUp = "PICKUP",
   Delivery = "DELIVERY",
 }
+
+export enum CardTopupMode {
+  Pin = "pin",
+  OTP = "otp",
+  AvsNoAuth = "avs_noauth",
+  Redirect = "redirect",
+  Init = "init",
+}

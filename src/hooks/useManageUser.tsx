@@ -6,7 +6,7 @@ import cookie from "js-cookie";
 import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
-import { useWallet } from "@/contexts/WalletContext";
+import { CardDetails, useWallet } from "@/contexts/WalletContext";
 import { OrderType } from "@/schema";
 
 export type User = {
@@ -151,6 +151,36 @@ export const useManageUser = () => {
       };
       toast.error(err?.response?.data?.message || "Failed to activate wallet");
       closeModal();
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cardTopup = async (payload: CardDetails) => {
+    const token = cookie.get("TOKEN");
+    try {
+      setLoading(true);
+      const response = await api.post(
+        "/api/v1/payment/fw/deposit/card",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data?.success) {
+        return { success: true, data: response.data?.data };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      toast.error(err?.response?.data?.message || "Failed to topup account.");
       return { success: false };
     } finally {
       setLoading(false);
@@ -330,5 +360,6 @@ export const useManageUser = () => {
     makePayment,
     fetchOrders,
     generateAccountForTransfer,
+    cardTopup,
   };
 };
