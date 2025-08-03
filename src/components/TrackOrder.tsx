@@ -11,6 +11,8 @@ import { Order, OrderStatus } from "@/schema";
 import { formatNumber } from "@/lib/shared-utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSocket } from "@/hooks/useSocket";
+import { useUser } from "@/contexts/UserContext";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
 const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
@@ -45,6 +47,19 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
     latitude: number;
     longitude: number;
   } | null>(null);
+  const { location, setLocation } = useUser();
+  const { openModal } = useModal();
+
+  useEffect(() => {
+    const locationData = cookie.get("LOCATION");
+    if (!location && !locationData) {
+      openModal(ModalTypeEnum.FindLocation);
+    }
+    if (locationData && !location) {
+      setLocation(JSON.parse(locationData));
+    }
+  }, []);
+
   const getOrder = async () => {
     try {
       const res = await fetchOrder(uuid);
@@ -126,15 +141,15 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
   return (
     <div className="w-full h-screen mb-6 relative">
       <RiderLocationMap
-        lng={riderLocation?.longitude}
-        lat={riderLocation?.latitude}
+        lng={riderLocation?.longitude || location?.lng}
+        lat={riderLocation?.latitude || location?.lat}
       />
       <button
         type="button"
         onClick={() => {
           setShowDetails(true);
         }}
-        className="max-w-[95%] flex text-[13px] 2xl:text-base gap-2 items-center justify-start text-white w-[650px] 2xl:w-[850px] bg-[#0EAD65] h-11 2xl:h-12 rounded-full px-6 absolute top-[50%] left-[50%] translate-y-[-50%] cursor-pointer translate-x-[-50%]"
+        className="max-w-[95%] custom-shadow-one flex text-[13px] 2xl:text-base gap-2 items-center justify-start text-white w-[650px] 2xl:w-[850px] bg-[#0EAD65] h-11 2xl:h-12 rounded-full px-6 absolute top-[50%] left-[50%] translate-y-[-50%] cursor-pointer translate-x-[-50%]"
       >
         View Order Details
         <ChevronDown className="text-white w-5 2xl:w-6" />
