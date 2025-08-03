@@ -1,16 +1,18 @@
 "use client";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const containerStyle = {
   width: "100%",
   height: "100%",
 };
 
-// Dummy rider position (San Francisco)
-const riderPosition = { lat: 37.7749, lng: -122.4194 };
+type RiderLocationMapProps = {
+  lat?: number;
+  lng?: number;
+};
 
-export default function RiderLocationMap() {
+export default function RiderLocationMap({ lat, lng }: RiderLocationMapProps) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
@@ -25,6 +27,10 @@ export default function RiderLocationMap() {
       new window.google.maps.Size(isMobile ? 18 : 26, isMobile ? 22 : 32)
     );
   }, [isLoaded]);
+
+  const riderPosition = useMemo(() => {
+    return lat !== undefined && lng !== undefined ? { lat, lng } : null;
+  }, [lat, lng]);
 
   if (!isLoaded) {
     return (
@@ -43,10 +49,10 @@ export default function RiderLocationMap() {
     <div style={{ height: "100%", width: "100%" }}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={riderPosition}
-        zoom={15}
+        center={riderPosition || { lat: 0, lng: 0 }}
+        zoom={riderPosition ? 15 : 2} // Zoom out if no position
       >
-        {iconSize && (
+        {riderPosition && iconSize && (
           <Marker
             position={riderPosition}
             icon={{

@@ -103,6 +103,29 @@ export const useManageUser = () => {
     }
   };
 
+  const fetchOrder = async (uuid: string) => {
+    const token = cookie.get("TOKEN");
+    try {
+      const response = await api.get(`/api/v1/order/show_details/${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        return { success: true, data: response.data.data };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      toast.error(err?.response?.data?.message || "Failed to fetch order");
+      return { success: false };
+    }
+  };
+
   const fetchWallet = async (uuid: string) => {
     try {
       setLoading(true);
@@ -361,5 +384,6 @@ export const useManageUser = () => {
     fetchOrders,
     generateAccountForTransfer,
     cardTopup,
+    fetchOrder,
   };
 };

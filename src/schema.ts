@@ -100,9 +100,22 @@ export type Order = {
   user_uuid: string;
   uuid: string;
   vendor_uuid: string;
+  order_type: string;
   orderItems: {
+    id: number;
+    price: number;
+    quantity: number;
+    uuid: number;
     product: {
       name: string;
+      categories: string[];
+      description: string;
+      discount: number;
+      featured: number;
+      id: number;
+      image: string;
+      price: string;
+      processing_time: string;
     };
   }[];
 };

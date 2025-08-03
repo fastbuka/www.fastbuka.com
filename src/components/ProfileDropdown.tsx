@@ -127,10 +127,17 @@ export default function ProfileDropdown() {
                         key={item.uuid}
                         onClick={() => {
                           setShowProfileDropdown(false);
-                          setActiveOrder(item);
-                          setTimeout(() => {
-                            openModal(ModalTypeEnum.MakePayment);
-                          }, 500);
+                          if (item.payment_status !== "SUCCESSFUL") {
+                            setActiveOrder(item);
+                            setTimeout(() => {
+                              openModal(ModalTypeEnum.MakePayment);
+                            }, 500);
+                          } else if (
+                            item.payment_status === "SUCCESSFUL" &&
+                            item.paid_amount
+                          ) {
+                            router.push(`/track-order/${item.uuid}`);
+                          }
                         }}
                         className="p-2.5 cursor-pointer hover:opacity-70 duration-200 gap-2.5 flex flex-col"
                       >
