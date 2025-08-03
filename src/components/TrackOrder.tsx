@@ -40,7 +40,7 @@ const initialStages = [
 export default function TrackOrder({ uuid }: { uuid: string }) {
   const [order, setOrder] = useState<Order | null>(null);
   const { fetchOrder } = useManageUser();
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
   const [stages, setStages] = useState(initialStages);
   const socketRef = useSocket(endpoint);
   const [riderLocation, setRiderLocation] = useState<{
