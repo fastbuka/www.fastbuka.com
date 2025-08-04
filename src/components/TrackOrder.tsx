@@ -7,12 +7,14 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useManageUser } from "@/hooks/useManageUser";
 import cookie from "js-cookie";
-import { Order, OrderStatus } from "@/schema";
+import { Order, OrderStatus, OrderType } from "@/schema";
 import { formatNumber } from "@/lib/shared-utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSocket } from "@/hooks/useSocket";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import { useWallet } from "@/contexts/WalletContext";
+import { useRouter } from "next/navigation";
 
 const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
 const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
@@ -39,7 +41,7 @@ const initialStages = [
 
 export default function TrackOrder({ uuid }: { uuid: string }) {
   const [order, setOrder] = useState<Order | null>(null);
-  const { fetchOrder } = useManageUser();
+  const { fetchOrder, fetchUser, fetchWallet } = useManageUser();
   const [showDetails, setShowDetails] = useState(true);
   const [stages, setStages] = useState(initialStages);
   const socketRef = useSocket(endpoint);
@@ -47,24 +49,43 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
     latitude: number;
     longitude: number;
   } | null>(null);
-  const { location, setLocation } = useUser();
+  const { location, setLocation, setActiveOrder, user } = useUser();
+  const { wallet } = useWallet();
   const { openModal } = useModal();
+  const router = useRouter();
 
   useEffect(() => {
+    const token = cookie.get("TOKEN");
     const locationData = cookie.get("LOCATION");
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     if (!location && !locationData) {
       openModal(ModalTypeEnum.FindLocation);
     }
     if (locationData && !location) {
       setLocation(JSON.parse(locationData));
     }
+    if (token && !user) {
+      fetchUser(token);
+    }
   }, []);
+
+  useEffect(() => {
+    if (user && !wallet) {
+      fetchWallet(user.uuid);
+    }
+  }, [user, wallet]);
 
   const getOrder = async () => {
     try {
       const res = await fetchOrder(uuid);
       if (res.success) {
         setOrder(res.data?.order);
+        console.log(res.data?.order);
       }
     } catch (error) {
       console.log(error);
@@ -164,7 +185,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
               opacity: 1,
             }}
             exit={{ opacity: 0 }}
-            className="absolute z-50 overflow-y-auto scroll-hidden top-[50%] left-[50%] translate-y-[-50%] 2xl:px-[30px] px-7 2xl:py-6 py-5 translate-x-[-50%] h-max max-w-[95%] w-[650px] 2xl:w-[850px] bg-white rounded-[14px] @max-3xl:max-h-[80%] max-h-[90%]"
+            className="absolute overflow-y-auto scroll-hidden top-[50%] left-[50%] translate-y-[-50%] 2xl:px-[30px] px-7 2xl:py-6 py-5 translate-x-[-50%] h-max max-w-[95%] w-[650px] 2xl:w-[850px] bg-white rounded-[14px] @max-3xl:max-h-[80%] max-h-[90%]"
           >
             <div className="w-full mb-2 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -310,13 +331,13 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                 <p className="text-black font-medium text-sm 2xl:text-xl">
                   {order?.order_type}
                 </p>
-                {order?.delivery_address && (
+                {order?.order_type === OrderType.Delivery && (
                   <>
                     <p className="text-xs 2xl:text-base font-normal text-[#667085]">
                       Address
                     </p>
                     <p className="text-[#667085] font-medium text-[13px] 2xl:text-lg">
-                      {order.delivery_address}
+                      {order?.delivery_address}
                     </p>
                   </>
                 )}
@@ -331,20 +352,34 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                 label="Discount"
                 value={`N${formatNumber(order?.discount_amount || 0)}`}
               />
-              <RenderSummary
-                label="Delivery"
-                value={`N${formatNumber(order?.delivery_charges || 0)}`}
-              />
+              {order?.order_type === OrderType.Delivery && (
+                <RenderSummary
+                  label="Delivery"
+                  value={`N${formatNumber(order?.delivery_charges || 0)}`}
+                />
+              )}
               <div className="w-full border-t border-dashed border-[#D0D5DD] pt-3 2xl:pt-4">
                 <div className="w-full flex justify-between items-center">
                   <p className="text-[#667085] font-medium text-[13px] 2xl:text-lg">
                     Total
                   </p>
                   <p className="text-[#1D2939] font-bold text-[13px] 2xl:text-lg">
-                    N{formatNumber(order?.paid_amount || 0)}
+                    N{formatNumber(order?.total_amount || 0)}
                   </p>
                 </div>
               </div>
+              {!order?.paid_amount && order?.payment_status === "PENDING" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveOrder(order);
+                    openModal(ModalTypeEnum.MakePayment);
+                  }}
+                  className="w-full mt-5 bg-(--primary-green) h-11 text-base 2xl:text-xl hover:opacity-70 duration-200 rounded-[8px] text-white font-normal 2xl:h-[50px]"
+                >
+                  Make Payment
+                </button>
+              )}
             </div>
           </motion.div>
         )}

@@ -8,6 +8,7 @@ import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { CardDetails, useWallet } from "@/contexts/WalletContext";
 import { OrderType } from "@/schema";
+import { useRouter } from "next/navigation";
 
 export type User = {
   first_name: string;
@@ -48,10 +49,11 @@ type DeactivateAccountPayload = {
 };
 
 export const useManageUser = () => {
-  const { setUser, setActiveOrder, setOrders, user } = useUser();
+  const { setUser, setOrders, user } = useUser();
   const { setWallet, setOngoingTransfer } = useWallet();
   const [loading, setLoading] = useState(false);
   const { openModal, closeModal } = useModal();
+  const router = useRouter();
 
   const fetchUser = async (token: string) => {
     try {
@@ -320,9 +322,12 @@ export const useManageUser = () => {
 
       if (response.data?.success) {
         await fetchOrders(token || "");
-        setActiveOrder(response.data?.data?.order);
+        toast.success("Order placed successfully, Proceed to make payment");
         handleSuccess();
-        openModal(ModalTypeEnum.MakePayment);
+        const orderUUID = response.data?.data?.order?.uuid;
+        if (orderUUID) {
+          router.push(`/track-order/${orderUUID}`);
+        }
         return { success: true };
       }
 
@@ -353,6 +358,9 @@ export const useManageUser = () => {
       await fetchWallet(user?.uuid || "");
       await fetchOrders(token || "");
       openModal(ModalTypeEnum.Success);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
 
       if (response.data?.success) {
         toast.success("Payment successful");

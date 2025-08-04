@@ -20,14 +20,12 @@ import {
 import { useIsMobileView } from "@/hooks/useIsMobileView";
 import { useUser } from "@/contexts/UserContext";
 import { Order, OrderStatus } from "@/schema";
-import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function ProfileDropdown() {
   const router = useRouter();
   const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
   const isMobile = useIsMobileView();
-  const { orders, setActiveOrder } = useUser();
-  const { openModal } = useModal();
+  const { orders } = useUser();
   const { totalVendorCarts, setTotalVendorCarts } = useUser();
 
   useEffect(() => {
@@ -127,17 +125,7 @@ export default function ProfileDropdown() {
                         key={item.uuid}
                         onClick={() => {
                           setShowProfileDropdown(false);
-                          if (item.payment_status !== "SUCCESSFUL") {
-                            setActiveOrder(item);
-                            setTimeout(() => {
-                              openModal(ModalTypeEnum.MakePayment);
-                            }, 500);
-                          } else if (
-                            item.payment_status === "SUCCESSFUL" &&
-                            item.paid_amount
-                          ) {
-                            router.push(`/track-order/${item.uuid}`);
-                          }
+                          router.push(`/track-order/${item.uuid}`);
                         }}
                         className="p-2.5 cursor-pointer hover:opacity-70 duration-200 gap-2.5 flex flex-col"
                       >
