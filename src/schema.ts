@@ -93,7 +93,8 @@ export type Order = {
   payment_id: string | null;
   payment_method: string | null;
   payment_status: string;
-  pick_up_no: string | null;
+  pickup_code: string | null;
+  delivery_code: string | null;
   rider_uuid: string | null;
   total_amount: number;
   updated_at: string;
@@ -101,6 +102,10 @@ export type Order = {
   uuid: string;
   vendor_uuid: string;
   order_type: string;
+  vendor: {
+    longitude: number;
+    latitude: number;
+  };
   orderItems: {
     id: number;
     price: number;

@@ -162,15 +162,26 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
   return (
     <div className="w-full h-screen mb-6 relative">
       <RiderLocationMap
-        lng={riderLocation?.longitude || location?.lng}
-        lat={riderLocation?.latitude || location?.lat}
+        rider={{
+          lat: riderLocation?.latitude ?? null,
+          lng: riderLocation?.longitude ?? null,
+        }}
+        from={{
+          lat: order?.vendor?.latitude ?? null,
+          lng: order?.vendor?.longitude ?? null,
+        }}
+        to={{
+          lat: location?.lat ?? null,
+          lng: location?.lng ?? null,
+        }}
       />
+
       <button
         type="button"
         onClick={() => {
           setShowDetails(true);
         }}
-        className="max-w-[95%] custom-shadow-one flex text-[13px] 2xl:text-base gap-2 items-center justify-start text-white w-[650px] 2xl:w-[850px] bg-[#0EAD65] h-11 2xl:h-12 rounded-full px-6 absolute top-[50%] left-[50%] translate-y-[-50%] cursor-pointer translate-x-[-50%]"
+        className="max-w-[95%] custom-shadow-one flex text-[13px] 2xl:text-base gap-2 items-center justify-start text-white w-[650px] 2xl:w-[850px] bg-[#0EAD65] h-11 2xl:h-12 rounded-full px-6 absolute top-[5%] left-[50%] translate-y-[5%] cursor-pointer translate-x-[-50%]"
       >
         View Order Details
         <ChevronDown className="text-white w-5 2xl:w-6" />
@@ -197,7 +208,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                 </Link>
                 <ChevronRight className="w-3.5 2xl:w-4 text-[#D0D5DD]" />
                 <p className="text-[#667085] text-xs 2xl:text-sm">
-                  ID {order?.id}
+                  ID {order?.order_number}
                 </p>
               </div>
               <button
@@ -210,9 +221,13 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                 <ChevronUp className="w-4 2xl:w-5 text-white" />
               </button>
             </div>
-            <h2 className="text-[#344054] font-semibold 2xl:text-[30px] text-[22px]">
-              Order ID: {order?.order_number}
-            </h2>
+            <div className="flex justify-center">
+              <span className="text-[#344054] font-semibold 2xl:text-[30px] text-[22px]">
+                {order?.order_type == "PICKUP"
+                  ? order.pickup_code
+                  : order?.delivery_code}
+              </span>
+            </div>
             <div className="flex @max-3xl:flex-col items-center @max-3xl:gap-3 mt-4 2xl:mt-7 gap-6">
               <div className="flex items-center gap-1.5">
                 <p className="text-xs 2xl:text-sm text-[#667085]">
