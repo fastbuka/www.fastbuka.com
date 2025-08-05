@@ -30,7 +30,7 @@ const initialStages = [
     completed: false,
   },
   {
-    title: "Out For Delivery",
+    title: "Pickup",
     completed: false,
   },
   {
