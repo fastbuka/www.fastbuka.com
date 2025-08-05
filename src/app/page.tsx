@@ -39,25 +39,26 @@ export default async function Home() {
 const whyChooseUs = {
   title: "Why choose Us?",
   description:
-    "Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app",
+    "Smart, secure, and faster food & grocery delivery — powered by Stellar blockchain",
   list: [
     {
       tag: "ORDER",
-      title: "Choose from 500+ vendors ",
-      description: "Place orders in seconds from verified vendors!",
+      title: "Choose from top vendors ",
+      description:
+        "Place orders in seconds from verified vendors within your location!",
       image: "/images/services/order.png",
     },
     {
-      tag: "MAKE PAYMENT",
-      title: "Bank/USSD  or crypto ",
+      tag: "FUND",
+      title: "Bank & Stable",
       description:
-        "Pay securely via bank, USSD, or crypto & instant confirmation!",
+        "Fund securely via Bank, or Stable, with instant confirmation!",
       image: "/images/services/payment.png",
     },
     {
-      tag: "GET FOOD",
+      tag: "TRACK",
       title: "Track & Enjoy ",
-      description: "Live rider tracking & enjoy blockchain-secured delivery!",
+      description: "Live tracking. Tamper-proof orders.",
       image: "/images/services/get-food.png",
     },
   ],
@@ -70,23 +71,23 @@ const stories = {
   list: [
     {
       tag: "Reflex. Money. Repeat!",
-      title: "Uncle Abu’s Suya Spot (Asaba) ",
+      title: "Uncle Abu’s Suya Spot",
       description:
-        "I joined just to try crypto... now 40% of my sales come from blockchain payments!",
+        "I only joined to test it out… but now 40% of my revenue comes from fast, secure blockchain payments!",
       image: "/images/suya.png",
     },
     {
       tag: "Keep All Profits!",
-      title: "Glow Organic Store (Enugu)",
+      title: "Annie Market Place",
       description:
-        "Before high fees almost drained my profits, FastBuka’s 0% fee lets my business thrive!",
+        "Before FastBuka, platform fees were eating into my profits. Now, thanks to their low transaction costs, I earn more and grow faster!",
       image: "/images/organic.png",
     },
     {
-      tag: "Own Your Hustle!",
-      title: "Ejiro's Spot, (Warri)",
+      tag: "I dey run my own hustle!",
+      title: "Sodiq, FastBuka Ride",
       description:
-        "Dem no dey charge me like the others, my money dey land straight to my wallet!",
+        "Before FastBuka, work no sure and pay dey slow. But now, I dey deliver, collect my money sharp-sharp, and customers trust me.",
       image: "/images/ejiro.png",
     },
   ],

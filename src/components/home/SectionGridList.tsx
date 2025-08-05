@@ -36,7 +36,7 @@ export default function SectionGridList(props: Props) {
                 alt=""
                 width={331}
                 height={240}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover rounded-[9px]"
               />
             </div>
             <div className="w-full px-3 2xl:px-4 flex flex-col gap-2 2xl:gap-2.5">

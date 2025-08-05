@@ -38,7 +38,7 @@ export default async function Page({
               title={category}
               data={vendorsByCategory}
               url={`/api/v1/vendor/public/approved?q=${category}`}
-              description="Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app"
+              description="Browse every trusted vendor near you — meals, groceries, and more in one place"
             />
           )}
 
@@ -47,7 +47,7 @@ export default async function Page({
               title={`Search result for "${search}"`}
               data={vendorsBySearch}
               url={`/api/v1/vendor/public/approved?q=${search}`}
-              description="Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app"
+              description="Browse every trusted vendor near you — meals, groceries, and more in one place"
             />
           )}
 
@@ -56,7 +56,7 @@ export default async function Page({
               title="Featured"
               data={featuredVendors}
               url="/api/v1/vendor/public/approved?sortField=featured"
-              description="Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app"
+              description="Hot deals and promos from top vendors — fresh picks worth your attention."
             />
           )}
           <NearbyVendors />
@@ -74,8 +74,8 @@ export default async function Page({
               />
             </div>
             <p className=" font-normal  text-[#5D5D5D] mb-7 2xl:mb-[34px] text-sm 2xl:text-base">
-              Skip bank delays & scams, get 3-second secured payments with
-              Africa’s first blockchain-powered food app
+              Browse every trusted vendor near you — meals, groceries, and more
+              in one place
             </p>
             <div className="w-full flex flex-col gap-9 2xl:gap-12">
               {breakfastVendors && (

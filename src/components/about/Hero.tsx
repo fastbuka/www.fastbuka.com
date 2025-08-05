@@ -12,7 +12,7 @@ export default function Hero() {
             Redefining African Food Delivery with Blockchain Trust
           </h1>
           <p className="font-normal @max-4xl:text-base @max-4xl:leading-6 text-sm 2xl:text-base leading-5 2xl:leading-7 text-[#5D5D5D] text-center mb-6">
-            FastBuka connects hungry customers to local vendors through instant,
+            FastBuka connects customers to local vendors through instant,
             fraud-proof payments.
           </p>
         </div>

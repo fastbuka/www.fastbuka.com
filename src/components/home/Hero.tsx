@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import NavBarOne from "../NavBarOne";
+// import Link from "next/link";
 import Image from "next/image";
-import Link from "next/link";
-import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
+import NavBarOne from "../NavBarOne";
 import { useUser } from "@/contexts/UserContext";
+import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function Hero() {
   const { openModal } = useModal();
@@ -15,11 +15,11 @@ export default function Hero() {
       <div className="2xl:mt-[72px] @max-4xl:mt-10 mt-12 w-full max-w-[1250px] px-5 h-max relative @max-4xl:pt-2.5 pt-8 2xl:pt-12 @max-4xl:pb-0 pb-[142px] 2xl:pb-[182px] flex justify-center">
         <div className="w-full max-w-[654px] 2xl:max-w-[714px] flex flex-col items-center">
           <h1 className="font-bold leading-[55px] @max-4xl:text-[38px] @max-4xl:leading-[54px] 2xl:leading-[64px] mb-6 text-[40px] 2xl:text-[48px] text-(--primary-black) text-center">
-            Disrupting Food & Grocery Delivery in Africa
+            Hot Meals. Fresh Market. <br />
+            <span className="text-primary">Pay Local.</span>
           </h1>
           <p className="font-normal @max-4xl:text-base @max-4xl:leading-6 text-sm 2xl:text-base leading-5 2xl:leading-7 text-[#5D5D5D] text-center mb-6">
-            Jollof, egusi, or pizza—get it delivered fast with zero payment
-            scams! Tap below to order now or download app
+            Hungry? Your next meal or grocery run is just a few clicks away.
           </p>
           <div className="w-full @max-4xl:items-center @max-4xl:flex-col @max-3xl:mb-6 mb-[34px] flex gap-2.5">
             <div
@@ -64,7 +64,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-          <div className="w-max @max-4xl:py-1.5 @max-4xl:w-[232px] @max-4xl:flex-col flex gap-2.5">
+          {/* <div className="w-max @max-4xl:py-1.5 @max-4xl:w-[232px] @max-4xl:flex-col flex gap-2.5">
             <Link href="#">
               <Image
                 alt=""
@@ -83,7 +83,7 @@ export default function Hero() {
                 className="2xl:w-[232px] @max-4xl:w-full w-[210px]"
               />
             </Link>
-          </div>
+          </div> */}
         </div>
         <Image
           alt=""
