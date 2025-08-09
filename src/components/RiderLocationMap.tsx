@@ -122,7 +122,7 @@ export default function RiderLocationMap({
           <Marker
             position={rider}
             icon={{
-              url: "/images/rider-moving.png",
+              url: "/images/rider_location.png",
               scaledSize: iconSize,
             }}
           />
@@ -133,7 +133,7 @@ export default function RiderLocationMap({
           <Marker
             position={from}
             icon={{
-              url: "/images/rider-pin.png",
+              url: "/images/vendor_location.png",
               scaledSize: iconSize,
             }}
           />
@@ -144,7 +144,7 @@ export default function RiderLocationMap({
           <Marker
             position={to}
             icon={{
-              url: "/images/destination.svg",
+              url: "/images/user_location.png",
               scaledSize: iconSize,
             }}
           />
