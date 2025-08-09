@@ -40,6 +40,7 @@ export default function RenderMap({
 }) {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: ["places"],
   });
   const [center, setCenter] = useState<google.maps.LatLngLiteral | undefined>();
   const router = useRouter();

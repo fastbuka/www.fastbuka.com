@@ -9,7 +9,8 @@ import React from "react";
 export default function AuthenticatedModals() {
   const { isOpen, modalType, closeModal } = useModal();
   const ModalComponent = modalType ? modalRegistry[modalType] : null;
-  const { ongoingTransfer, setOngoingTransfer } = useWallet();
+  const { ongoingTransfer, setOngoingTransfer, ongoingTopup, setOngoingTopup } =
+    useWallet();
   const { setActiveProduct, activeProduct, activeOrder, setActiveOrder } =
     useUser();
 
@@ -38,6 +39,9 @@ export default function AuthenticatedModals() {
               }
               if (activeOrder) {
                 setActiveOrder(null);
+              }
+              if (ongoingTopup) {
+                setOngoingTopup(null);
               }
             }}
             className="w-full h-full absolute top-0 left-0 bg-transparent"

@@ -41,7 +41,7 @@ export default function ProfileLayout({
               className="2xl:w-44 w-32 mb-5 2xl:mb-6"
             />
             <p className="text-white font-semibold text-center text-base 2xl:text-xl">
-              {`${user?.first_name} ${user?.last_name}`}
+              {user ? `${user?.first_name} ${user?.last_name}` : ""}
             </p>
           </div>
           <TapBar />

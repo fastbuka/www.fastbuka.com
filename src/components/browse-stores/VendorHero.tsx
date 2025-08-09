@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import NavBarTwo from "@/components/NavBarTwo";
 import Image from "next/image";
 import GoBack from "../GoBack";
-import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+// import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { cn } from "@/lib/utils";
 import { Product, Vendor } from "@/schema";
 import { useRouter } from "next/navigation";
@@ -83,7 +83,7 @@ export default function VendorHero({
               </p>
             </div>
           </div>
-          <Tabs defaultValue="delivery" className="w-[497px] max-w-full">
+          {/* <Tabs defaultValue="delivery" className="w-[497px] max-w-full">
             <TabsList className="w-[497px] max-w-full bg-[#DAFEEC]">
               <TabsTrigger
                 disabled
@@ -99,7 +99,7 @@ export default function VendorHero({
                 Delivery
               </TabsTrigger>
             </TabsList>
-          </Tabs>
+          </Tabs> */}
         </div>
         <div className="w-full border-b border-[#E7E7E7] pb-6 overflow-x-auto scroll-hidden">
           <div className="w-max flex gap-7 2xl:gap-8">

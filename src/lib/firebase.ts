@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, Messaging } from "firebase/messaging";
+import { toast } from "sonner";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,9 +17,11 @@ let messaging: Messaging | null = null;
 export const getDeviceToken = async (): Promise<string | null> => {
   try {
     if (typeof window === "undefined") return null;
-
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
+      toast.warning(
+        "Enable notification permission to receive notifications from FastBuka"
+      );
       return null;
     }
 
@@ -33,7 +36,6 @@ export const getDeviceToken = async (): Promise<string | null> => {
 
     return currentToken || null;
   } catch (error) {
-    console.error("Error retrieving device token:", error);
     console.log(error);
     return null;
   }

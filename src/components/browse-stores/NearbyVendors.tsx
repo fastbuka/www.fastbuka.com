@@ -40,7 +40,7 @@ export default function NearbyVendors() {
     <VendorsHorizontalList
       data={vendorsResponse}
       title="Handpicked for you"
-      description="Skip bank delays & scams, get 3-second secured payments with Africa’s first blockchain-powered food app"
+      description="Smart picks based on your cravings and favorites — made to save your time."
       url={`/api/v1/vendor/public/approved?latitude=${location.lat}&longitude=${location.lng}`}
     />
   );

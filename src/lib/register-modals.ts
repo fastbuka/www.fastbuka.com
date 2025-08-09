@@ -18,6 +18,8 @@ import SearchVendor from "@/components/modals/Search";
 import ViewProduct from "@/components/modals/ViewProduct";
 import SelectLocation from "@/components/modals/SelectLocation";
 import MakePayment from "@/components/modals/MakePayment";
+import CardOTP from "@/components/modals/CardOTP";
+import CardAddress from "@/components/modals/CardAddress";
 
 export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.WalletActivation]: ActivateWallet,
@@ -38,4 +40,6 @@ export const modalRegistry: Record<ModalTypeEnum, React.FC> = {
   [ModalTypeEnum.Search]: SearchVendor,
   [ModalTypeEnum.ViewProduct]: ViewProduct,
   [ModalTypeEnum.FindLocation]: SelectLocation,
+  [ModalTypeEnum.CardOTP]: CardOTP,
+  [ModalTypeEnum.CardAddress]: CardAddress,
 };

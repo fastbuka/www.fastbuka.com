@@ -1,4 +1,5 @@
 import { Asset } from "@/contexts/WalletContext";
+import { OrderStatus } from "@/schema";
 import cookie from "js-cookie";
 
 export const checkIsListedAsset = (asset: Asset) => {
@@ -163,4 +164,23 @@ export function getFirstVendorWithProducts() {
   }
 
   return null;
+}
+
+export function getOrderStatus(status: OrderStatus) {
+  switch (status) {
+    case OrderStatus.PendingVendor:
+    case OrderStatus.PendingRider:
+      return "Pending";
+    case OrderStatus.PendingCustomer:
+    case OrderStatus.AcceptedRider:
+      return "Awaiting Pickup";
+    case OrderStatus.Cancelled:
+      return "Cancelled";
+    case OrderStatus.Rejected:
+      return "Rejected";
+    case OrderStatus.AcceptedVendor:
+      return "Accepted";
+    case OrderStatus.Delivered:
+      return "Delivered";
+  }
 }

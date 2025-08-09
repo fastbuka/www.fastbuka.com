@@ -19,8 +19,8 @@ export default async function Page() {
               Meet the Team
             </h2>
             <p className="text-center font-normal text-[#5D5D5D] text-sm 2xl:text-base mb-8">
-              Skip bank delays & scams, get 3-second secured payments with
-              Africa’s first blockchain-powered food app
+              We believe every hustle matters. That’s why we’re building a
+              platform where
             </p>
             <div className="w-full @max-6xl:grid-cols-2 @max-2xl:grid-cols-1 max-w-[1218px] grid grid-cols-3 gap-x-6 gap-y-9 2xl:gap-y-[42px]">
               {team?.map((member, index) => {
@@ -39,24 +39,21 @@ export default async function Page() {
 const ourMission = {
   title: "Our Mission",
   description:
-    "We use blockchain to make food delivery better for everyone, no scams, no delays, no stress!",
+    "To empower local food vendors, riders, and everyday customers with fast, secure, and affordable delivery through blockchain-powered payments.",
   list: [
     {
-      title: "Empower Customers",
-      description:
-        "Order with familiar payments (bank/USSD), while our system auto-converts to blockchain for security.",
+      title: "Food and grocery moves faster",
+      description: "",
       image: "/images/about/empower-customers.png",
     },
     {
-      title: "Protect Transactions",
-      description:
-        "Stellar blockchain locks funds until you confirm delivery—zero fraud, zero stress.",
+      title: "Payments are instant and tamper-proof",
+      description: "",
       image: "/images/about/protect-transactions.png",
     },
     {
-      title: " Liberate Vendors",
-      description:
-        "Instant payouts in their preferred currency (₦aira or crypto), with 0% fees.",
+      title: "Trust is earned with every delivery",
+      description: "",
       image: "/images/about/liberate-vendors.png",
     },
   ],

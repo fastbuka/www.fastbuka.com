@@ -6,7 +6,9 @@ import cookie from "js-cookie";
 import { toast } from "sonner";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
-import { useWallet } from "@/contexts/WalletContext";
+import { CardDetails, useWallet } from "@/contexts/WalletContext";
+import { OrderType } from "@/schema";
+import { useRouter } from "next/navigation";
 
 export type User = {
   first_name: string;
@@ -30,9 +32,12 @@ type PlaceOrderPayload = {
   delivery_email: string;
   delivery_contact: string;
   delivery_address: string;
+  order_type: OrderType;
   latitude: number;
   longitude: number;
   newOrder: boolean;
+  vendor_instructions?: string;
+  delivery_instruction?: string;
   cartItems: {
     product_uuid: string;
     quantity: number;
@@ -44,10 +49,11 @@ type DeactivateAccountPayload = {
 };
 
 export const useManageUser = () => {
-  const { setUser, setActiveOrder, setOrders, user } = useUser();
+  const { setUser, setOrders, user } = useUser();
   const { setWallet, setOngoingTransfer } = useWallet();
   const [loading, setLoading] = useState(false);
   const { openModal, closeModal } = useModal();
+  const router = useRouter();
 
   const fetchUser = async (token: string) => {
     try {
@@ -95,6 +101,29 @@ export const useManageUser = () => {
         response?: { data?: { error?: string; message?: string } };
       };
       toast.error(err?.response?.data?.message || "Failed to fetch orders");
+      return { success: false };
+    }
+  };
+
+  const fetchOrder = async (uuid: string) => {
+    const token = cookie.get("TOKEN");
+    try {
+      const response = await api.get(`/api/v1/order/show_details/${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data?.success) {
+        return { success: true, data: response.data.data };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      toast.error(err?.response?.data?.message || "Failed to fetch order");
       return { success: false };
     }
   };
@@ -147,6 +176,36 @@ export const useManageUser = () => {
       };
       toast.error(err?.response?.data?.message || "Failed to activate wallet");
       closeModal();
+      return { success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cardTopup = async (payload: CardDetails) => {
+    const token = cookie.get("TOKEN");
+    try {
+      setLoading(true);
+      const response = await api.post(
+        "/api/v1/payment/fw/deposit/card",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data?.success) {
+        return { success: true, data: response.data?.data };
+      }
+
+      return { success: false };
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: string; message?: string } };
+      };
+      toast.error(err?.response?.data?.message || "Failed to topup account.");
       return { success: false };
     } finally {
       setLoading(false);
@@ -262,9 +321,13 @@ export const useManageUser = () => {
       });
 
       if (response.data?.success) {
-        setActiveOrder(response.data?.data?.order);
+        await fetchOrders(token || "");
+        toast.success("Order placed successfully, Proceed to make payment");
         handleSuccess();
-        openModal(ModalTypeEnum.MakePayment);
+        const orderUUID = response.data?.data?.order?.uuid;
+        if (orderUUID) {
+          router.push(`/track-order/${orderUUID}`);
+        }
         return { success: true };
       }
 
@@ -293,11 +356,13 @@ export const useManageUser = () => {
         },
       });
       await fetchWallet(user?.uuid || "");
-
+      await fetchOrders(token || "");
       openModal(ModalTypeEnum.Success);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
 
       if (response.data?.success) {
-        console.log(response);
         toast.success("Payment successful");
         return { success: true };
       }
@@ -326,5 +391,7 @@ export const useManageUser = () => {
     makePayment,
     fetchOrders,
     generateAccountForTransfer,
+    cardTopup,
+    fetchOrder,
   };
 };

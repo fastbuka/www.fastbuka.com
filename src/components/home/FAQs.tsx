@@ -36,14 +36,44 @@ export default function FAQs() {
 const faqs = [
   {
     value: "item-1",
-    question: "How do payments work?",
+    question: "1. What is FastBuka?",
     answer:
-      "Pay via bank transfer, USSD, or crypto. Funds are secured on Stellar blockchain until delivery confirmation.",
+      "FastBuka is a food and grocery delivery app that lets you order from local vendors and pay using crypto or local currency — all in one tap.",
   },
   {
     value: "item-2",
-    question: "How do payments work?",
+    question: "2. How do I pay for my order?",
     answer:
-      "Pay via bank transfer, USSD, or crypto. Funds are secured on Stellar blockchain until delivery confirmation.",
+      "You can pay with your local currency or with crypto like USDC, XLM, or NGNC directly through your FastBuka wallet.",
+  },
+  {
+    value: "item-3",
+    question: "3. Is FastBuka available in my city?",
+    answer:
+      "We’re expanding fast! Check the app or website to see if we currently deliver in your area.",
+  },
+  {
+    value: "item-4",
+    question: "4. How secure is my payment?",
+    answer:
+      "Very secure. FastBuka uses Stellar blockchain to process payments instantly and safely.",
+  },
+  {
+    value: "item-5",
+    question: "5. What if my order is wrong or delayed?",
+    answer:
+      "You can easily report issues in-app. Our support team will resolve it quickly or issue a refund if needed.",
+  },
+  {
+    value: "item-6",
+    question: "6. Can I swap currencies inside the app?",
+    answer:
+      "Yes! Use the FastBuka wallet to convert supported digital currencies to the vendor’s accepted currency before checkout",
+  },
+  {
+    value: "item-7",
+    question: "7. How do I become a vendor or rider?",
+    answer:
+      "Simply register via the app and submit your verification details. We’ll review and onboard you shortly.",
   },
 ];
