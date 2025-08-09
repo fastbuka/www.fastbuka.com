@@ -159,6 +159,8 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
     }
   }, [order]);
 
+  console.log(order);
+
   return (
     <div className="w-full h-screen mb-6 relative">
       <RiderLocationMap
@@ -171,8 +173,8 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
           lng: order?.vendor?.longitude ?? null,
         }}
         to={{
-          lat: location?.lat ?? null,
-          lng: location?.lng ?? null,
+          lat: order?.latitude ?? null,
+          lng: order?.longitude ?? null,
         }}
       />
 
