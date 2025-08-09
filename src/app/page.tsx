@@ -81,14 +81,14 @@ const stories = {
       title: "Annie Market Place",
       description:
         "Before FastBuka, platform fees were eating into my profits. Now, thanks to their low transaction costs, I earn more and grow faster!",
-      image: "/images/organic.png",
+      image: "/images/organic.jpg",
     },
     {
       tag: "I dey run my own hustle!",
       title: "Sodiq, FastBuka Ride",
       description:
         "Before FastBuka, work no sure and pay dey slow. But now, I dey deliver, collect my money sharp-sharp, and customers trust me.",
-      image: "/images/ejiro.png",
+      image: "/images/ejiro.jpg",
     },
   ],
 };
