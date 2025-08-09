@@ -40,7 +40,7 @@ export default function NavBarTwo() {
 
   return (
     <nav className="w-full max-w-[1250px] border-b border-[#DAFEEC] pb-6 2xl:pb-[30px] @max-4xl:border-b-0 @max-4xl:pb-0 px-5 h-max flex justify-between items-center @max-4xl:gap-5">
-      <Link href="/" className="min-w-max w-max">
+      <Link href="/browse-stores" className="min-w-max w-max">
         <Image
           className="2xl:w-[115px] w-[95px] @max-4xl:w-16"
           src="/images/logo.svg"

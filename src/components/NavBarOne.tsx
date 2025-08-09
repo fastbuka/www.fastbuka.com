@@ -36,7 +36,7 @@ export default function NavBarOne() {
 
   return (
     <nav className="w-full max-w-[1250px] px-5 h-max flex justify-between items-center">
-      <Link href="/">
+      <Link href="/browse-stores">
         <Image
           className="2xl:w-[115px] w-[95px] @max-4xl:w-16"
           src="/images/logo.svg"

@@ -201,10 +201,10 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
             <div className="w-full mb-2 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Link
-                  href="/"
+                  href="/browse-stores"
                   className="text-[#667085] text-xs 2xl:text-sm font-normal"
                 >
-                  Home
+                  Stores
                 </Link>
                 <ChevronRight className="w-3.5 2xl:w-4 text-[#D0D5DD]" />
                 <p className="text-[#667085] text-xs 2xl:text-sm">
