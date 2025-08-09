@@ -56,8 +56,8 @@ export default function VendorHero({
           <div className="2xl:w-[129px] @max-3xl:w-[63px] @max-3xl:h-[63px]  w-[94px] h-[94px] 2xl:h-[129px] rounded-full bg-white border-[6px] border-white absolute @max-3xl:left-2 left-8 bottom-0 overflow-hidden">
             <Image
               src={
-                bucketEnv && vendor?.cover?.startsWith(bucketEnv)
-                  ? `${bucketURL}/${vendor.cover}`
+                bucketEnv && vendor?.profile?.startsWith(bucketEnv)
+                  ? `${bucketURL}/${vendor.profile}`
                   : "/images/vendor-profile.png"
               }
               alt=""

@@ -159,8 +159,6 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
     }
   }, [order]);
 
-  console.log(order);
-
   return (
     <div className="w-full h-screen mb-6 relative">
       <RiderLocationMap
