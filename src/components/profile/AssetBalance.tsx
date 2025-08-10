@@ -5,7 +5,6 @@ import { useWallet } from "@/contexts/WalletContext";
 import { MoveRight } from "lucide-react";
 import { Currency, useCurrency } from "@/contexts/CurrencyContext";
 import { formatNumber } from "@/lib/shared-utils";
-import Link from "next/link";
 
 export default function AssetBalance() {
   const { wallet } = useWallet();
@@ -26,9 +25,9 @@ export default function AssetBalance() {
         <p className="2xl:text-sm text-xs font-normal text-[#D1D1D1]">
           Available Balance
         </p>
-        <Link href="/account">
+        <a href="/account">
           <MoveRight className="w-4 text-[#F6F6F6]" />
-        </Link>
+        </a>
       </div>
       <div className="w-full flex justify-between items-center">
         <h1 className="text-[28px] 2xl:text-[32px] font-medium text-[#F6F6F6]">
