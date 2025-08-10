@@ -14,13 +14,6 @@ import { useUser } from "@/contexts/UserContext";
 import { AuthModalTypeEnum, useAuthModal } from "@/contexts/AuthModalContext";
 import { useManageUser } from "@/hooks/useManageUser";
 import Spinner from "../auth/Spinner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 type Order = {
   name: string;
@@ -231,29 +224,22 @@ export default function Products(props: Props) {
                 })}
               </>
             )}
-            <Select
-              onValueChange={(v) => setOrderType(v as OrderType)}
-              value={orderType}
-            >
-              <SelectTrigger className="w-full mb-2 border-[#E7E7E7] text-sm 2xl:text-base h-max shadow-none py-3 px-6 rounded-lg">
-                <SelectValue placeholder="Select option" />
-              </SelectTrigger>
-              <SelectContent className="shadow-none w-full bg-[#F6FFFB] border border-[--primary-green] rounded-[12px]">
-                <div className="w-full p-2.5 flex flex-col">
-                  {[OrderType.PickUp, OrderType.Delivery].map((item, index) => (
-                    <SelectItem
-                      className={cn(
-                        "p-2.5 rounded-none focus:bg-transparent hover:opacity-70"
-                      )}
-                      key={index}
-                      value={item}
-                    >
-                      {item}
-                    </SelectItem>
-                  ))}
-                </div>
-              </SelectContent>
-            </Select>
+            <div className="flex rounded-lg overflow-hidden bg-green-50 w-full">
+              {[OrderType.PickUp, OrderType.Delivery].map((item) => (
+                <button
+                  key={item}
+                  onClick={() => setOrderType(item)}
+                  className={cn(
+                    "flex-1 px-6 py-3 text-sm 2xl:text-base font-medium transition-all duration-200",
+                    orderType === item
+                      ? "bg-green-500 text-white"
+                      : "bg-green-50 text-gray-500"
+                  )}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </motion.div>
           <div className="w-full flex flex-col py-2 2xl:py-2.5 mb-5 gap-2.5">
             {/* <RenderActionMenu
