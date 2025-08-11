@@ -358,9 +358,9 @@ export const useManageUser = () => {
       await fetchWallet(user?.uuid || "");
       await fetchOrders(token || "");
       // openModal(ModalTypeEnum.Success);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // setTimeout(() => {
+      window.location.reload();
+      // }, 1000);
 
       if (response.data?.success) {
         toast.success("Payment successful");
