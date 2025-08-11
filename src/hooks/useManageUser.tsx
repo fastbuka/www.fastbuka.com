@@ -357,7 +357,7 @@ export const useManageUser = () => {
       });
       await fetchWallet(user?.uuid || "");
       await fetchOrders(token || "");
-      openModal(ModalTypeEnum.Success);
+      // openModal(ModalTypeEnum.Success);
       setTimeout(() => {
         window.location.reload();
       }, 1000);
