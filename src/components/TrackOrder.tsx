@@ -204,7 +204,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                   href="/browse-stores"
                   className="text-[#667085] text-xs 2xl:text-sm font-normal"
                 >
-                  Stores
+                  Browse stores
                 </Link>
                 <ChevronRight className="w-3.5 2xl:w-4 text-[#D0D5DD]" />
                 <p className="text-[#667085] text-xs 2xl:text-sm">

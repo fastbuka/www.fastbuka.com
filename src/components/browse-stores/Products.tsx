@@ -353,7 +353,7 @@ export default function Products(props: Props) {
             >
               Clear Orders
             </button>
-            <button className="w-full bg-transparent h-11 text-sm flex items-center gap-2.5 justify-center 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-(--primary-green) font-normal 2xl:h-[50px]">
+            {/* <button className="w-full bg-transparent h-11 text-sm flex items-center gap-2.5 justify-center 2xl:text-base hover:opacity-70 duration-200 rounded-[8px] text-(--primary-green) font-normal 2xl:h-[50px]">
               <Image
                 src="/images/bookmark.svg"
                 alt=""
@@ -362,7 +362,7 @@ export default function Products(props: Props) {
                 className="w-5 2xl:w-6"
               />{" "}
               Save for later
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
