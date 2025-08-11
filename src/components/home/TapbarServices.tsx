@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function TapbarServices() {
   const RenderTabSection = ({
@@ -44,6 +44,8 @@ export default function TapbarServices() {
             onClick={() => {
               if (type === "vendor") {
                 window.open("https://vendor.fastbuka.com", "_blank");
+              } else {
+                window.location.href = "/register";
               }
             }}
             className="bg-(--primary-green) w-max hover:opacity-80 duration-200 text-[#F6F6F6] text-lg font-normal py-3 px-6 mt-6 rounded-[12px]"
