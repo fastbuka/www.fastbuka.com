@@ -2,9 +2,9 @@
 import React, { useMemo } from "react";
 import ChangeCurrency from "./ChangeCurrency";
 import { useWallet } from "@/contexts/WalletContext";
-import { MoveRight } from "lucide-react";
 import { Currency, useCurrency } from "@/contexts/CurrencyContext";
 import { formatNumber } from "@/lib/shared-utils";
+import { MoveRight } from "lucide-react";
 
 export default function AssetBalance() {
   const { wallet } = useWallet();

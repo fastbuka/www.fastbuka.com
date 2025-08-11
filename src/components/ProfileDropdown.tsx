@@ -161,24 +161,27 @@ export default function ProfileDropdown() {
                 </SheetContent>
               </Sheet>
 
-              <div
-                onClick={() => {
-                  router.push("/profile");
-                  setShowProfileDropdown((prev) => !prev);
-                }}
-                className="w-full cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5"
-              >
-                <Image
-                  src="/images/user.svg"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="w-5 2xl:w-6"
-                />
-                <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
-                  My Profile
-                </p>
-              </div>
+              {accountItems.map((item) => (
+                <div
+                  key={item.path}
+                  onClick={() => {
+                    router.push(item.path);
+                    setShowProfileDropdown((prev) => !prev);
+                  }}
+                  className="w-full cursor-pointer hover:opacity-70 duration-200 h-12 p-2.5 flex items-center gap-2.5"
+                >
+                  <Image
+                    src="/images/user.svg"
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="w-5 2xl:w-6"
+                  />
+                  <p className="font-normal text-(--primary-black) text-sm 2xl:text-base">
+                    {item.title}
+                  </p>
+                </div>
+              ))}
               <div
                 onClick={() => {
                   setShowProfileDropdown((prev) => !prev);
@@ -204,3 +207,18 @@ export default function ProfileDropdown() {
     </div>
   );
 }
+
+const accountItems = [
+  {
+    path: "/profile",
+    title: "My Profile",
+  },
+  {
+    path: "/account",
+    title: "Account",
+  },
+  {
+    path: "/security ",
+    title: "Security",
+  },
+];

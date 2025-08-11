@@ -4,6 +4,8 @@ import React from "react";
 import AssetBalance from "../profile/AssetBalance";
 import { useManageUser } from "@/hooks/useManageUser";
 import Spinner from "../auth/Spinner";
+import TopUp from "../profile/TopUp";
+import Swap from "../profile/Swap";
 
 export default function MakePayment() {
   const { activeOrder } = useUser();
@@ -26,6 +28,10 @@ export default function MakePayment() {
         Pay with your wallet balance
       </p>
       <AssetBalance />
+      <div className="flex justify-between w-full p-3">
+        <TopUp />
+        <Swap />
+      </div>
       <button
         type="button"
         onClick={handleMakePayment}
