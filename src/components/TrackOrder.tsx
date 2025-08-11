@@ -364,6 +364,10 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                 Order Summary
               </p>
               <RenderSummary
+                label="Order total"
+                value={`N${formatNumber(order?.order_charges || 0)}`}
+              />
+              <RenderSummary
                 label="Discount"
                 value={`N${formatNumber(order?.discount_amount || 0)}`}
               />
@@ -373,6 +377,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
                   value={`N${formatNumber(order?.delivery_charges || 0)}`}
                 />
               )}
+
               <div className="w-full border-t border-dashed border-[#D0D5DD] pt-3 2xl:pt-4">
                 <div className="w-full flex justify-between items-center">
                   <p className="text-[#667085] font-medium text-[13px] 2xl:text-lg">

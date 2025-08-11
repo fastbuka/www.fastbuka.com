@@ -317,9 +317,9 @@ export default function Products(props: Props) {
               label={`Sub total (${cart.length} items)`}
               value={`NGN${formatNumber(totalPrice)}`}
             />
-            {orderType === OrderType.Delivery && (
+            {/* {orderType === OrderType.Delivery && (
               <RenderOrderDetail label="Delivery fee" value="NGN0.00" />
-            )}
+            )} */}
             <RenderOrderDetail label="Service fee" value="NGN0.00" />
             <div className="w-full flex justify-between items-center">
               <p className="text-sm 2xl:text-base text-(--primary-black) font-medium">

@@ -83,6 +83,7 @@ export type Order = {
   delivery_email: string;
   delivery_name: string;
   discount_amount: number;
+  order_charges: number;
   id: number;
   latitude: number | null;
   location: string | null;
