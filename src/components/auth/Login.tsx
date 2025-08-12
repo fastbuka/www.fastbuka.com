@@ -47,7 +47,7 @@ export default function Login(props: Props) {
       } else {
         const contact =
           parsePhoneNumber(phone.number, phone.countryCode as CountryCode)
-            ?.number || "";
+            ?.number || phone.number;
         await phoneLogin({ phone: contact }, asPage, false, () => {
           setSelectedLoginMethod("email");
         });
