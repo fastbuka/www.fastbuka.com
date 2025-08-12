@@ -33,7 +33,7 @@ export default function SignUp(props: Props) {
     event.preventDefault();
     const contact =
       parsePhoneNumber(phone.number, phone.countryCode as CountryCode)
-        ?.number || "";
+        ?.number || phone.number;
     localStorage.setItem("ACCOUNT_REGISTRATION_NUMBER", contact);
     try {
       await register(
