@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Customer",
+    "path": "/browse-stores"
+  },
+  {
+    "name": "Vendor",
+    "path": "https://vendor.fastbuka.com"
+  }
+]

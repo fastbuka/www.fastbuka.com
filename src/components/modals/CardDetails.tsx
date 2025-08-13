@@ -128,7 +128,7 @@ export default function CardDetailsModal() {
           value={currency}
           setValue={setCurrency}
           type="select"
-          options={["NGN", "USDC"]}
+          options={["NGN"]}
         />
         <InputGroup
           label="Amount"

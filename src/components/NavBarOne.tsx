@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import apps from "@/resources/app-links.json";
 import links from "@/resources/menu-links.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -14,6 +15,7 @@ import ProfileDropdown from "./ProfileDropdown";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 
 export default function NavBarOne() {
+  const [showAppsDropdown, setShowAppsDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -73,14 +75,34 @@ export default function NavBarOne() {
       </button>
       <div className="w-max @max-4xl:hidden flex items-center gap-6">
         <div
-          className={`w-max ${
+          className={`w-max relative ${
             pathname === "/" ? "text-(--primary-green)" : "text-[#3D3D3D]"
           } flex items-center gap-1.5 2xl:gap-2.5 cursor-pointer`}
+          onClick={() => setShowAppsDropdown(!showAppsDropdown)}
         >
           <p className="text-inherit duration-200 font-normal text-sm 2xl:text-xl">
             Customer
           </p>
           <ChevronDown className="2xl:w-6 w-4 text-inherit" />
+          {showAppsDropdown && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="grid gap-3 w-[178px] z-50 top-[calc(100%+10px)] p-2.5 absolute left-0 h-max border border-(--primary-green) rounded-[12px] bg-[#F6F6F6]"
+            >
+              {apps.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.path}
+                  className={`hover:text-(--primary-green) duration-200 primary-link-hover font-normal text-sm 2xl:text-xl text-[#3D3D3D]"
+                }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </motion.div>
+          )}
         </div>
         {links.map((item, index) => {
           const isActive = pathname === item.path;
