@@ -95,8 +95,7 @@ export default function NavBarOne() {
                 <Link
                   key={index}
                   href={item.path}
-                  className={`hover:text-(--primary-green) duration-200 primary-link-hover font-normal text-sm 2xl:text-xl text-[#3D3D3D]"
-                }`}
+                  className={`hover:text-(--primary-green) duration-200 font-normal text-sm 2xl:text-xl text-[#3D3D3D]`}
                 >
                   {item.name}
                 </Link>
