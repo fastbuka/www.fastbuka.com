@@ -151,14 +151,33 @@ export default function NavBarOne() {
             className="fixed gap-1 top-0 left-0 z-40 bg-[#03301E] w-full h-screen py-[75px] px-6 flex flex-col overflow-y-auto"
           >
             <div
-              className={`w-max ${
+              className={`w-max relative ${
                 pathname === "/" ? "text-(--primary-green)" : "text-[#F6F6F6]"
               } flex items-center py-2.5 gap-2.5 cursor-pointer`}
+              onClick={() => setShowAppsDropdown(!showAppsDropdown)}
             >
               <p className="text-inherit duration-200 font-normal text-lg">
                 Customer
               </p>
               <ChevronDown className="text-inherit w-5" />
+              {showAppsDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="grid gap-3 w-[178px] z-50 top-[calc(100%+10px)] p-2.5 absolute left-0 h-max border border-(--primary-green) rounded-[12px] bg-[#F6F6F6]"
+                >
+                  {apps.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={item.path}
+                      className={`hover:text-(--primary-green) duration-200 font-normal text-sm 2xl:text-xl text-[#3D3D3D]`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
             </div>
             {links.map((item, index) => {
               const isActive = item.path === pathname;
