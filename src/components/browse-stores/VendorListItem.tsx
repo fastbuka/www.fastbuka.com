@@ -25,7 +25,7 @@ export default function VendorListItem(props: Props) {
       <div className="w-full h-[215px] overflow-hidden rounded-[7px] mb-3.5">
         <Image
           src={
-            bucketEnv && vendor?.cover?.startsWith(bucketEnv)
+            bucketEnv && vendor?.cover?.includes(bucketEnv)
               ? `${bucketURL}/${vendor.cover}`
               : "/images/dummy-vendor.svg"
           }

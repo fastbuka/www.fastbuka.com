@@ -44,7 +44,7 @@ export default function VendorHero({
         <div className="w-full rounded-t-lg overflow-hidden mt-6 2xl:mt-8 mb-9 2xl:mb-11 @max-3xl:h-[111px] h-42 2xl:h-56 relative">
           <Image
             src={
-              bucketEnv && vendor?.cover?.startsWith(bucketEnv)
+              bucketEnv && vendor?.cover?.includes(bucketEnv)
                 ? `${bucketURL}/${vendor.cover}`
                 : "/images/fries-with-chicken.svg"
             }
@@ -56,7 +56,7 @@ export default function VendorHero({
           <div className="2xl:w-[129px] @max-3xl:w-[63px] @max-3xl:h-[63px]  w-[94px] h-[94px] 2xl:h-[129px] rounded-full bg-white border-[6px] border-white absolute @max-3xl:left-2 left-8 bottom-0 overflow-hidden">
             <Image
               src={
-                bucketEnv && vendor?.profile?.startsWith(bucketEnv)
+                bucketEnv && vendor?.cover?.includes(bucketEnv)
                   ? `${bucketURL}/${vendor.profile}`
                   : "/images/vendor-profile.png"
               }
