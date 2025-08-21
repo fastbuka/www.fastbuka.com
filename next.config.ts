@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL || "";
-const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV || "";
 
 const parsedURL = new URL(bucketURL);
 const hostname = parsedURL.hostname;
@@ -12,12 +11,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: hostname,
-        pathname: `/**/${bucketEnv}/**`,
+        pathname: `/**`,
       },
       {
         protocol: "https",
         hostname: hostname,
-        pathname: `/**/${bucketEnv}/**`,
+        pathname: `/**`,
       },
     ],
   },
