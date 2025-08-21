@@ -12,12 +12,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "http",
         hostname: hostname,
-        pathname: `/${bucketEnv}/**`,
+        pathname: `/buckets/${bucketEnv}/**`,
       },
       {
         protocol: "https",
         hostname: hostname,
-        pathname: `/${bucketEnv}/**`,
+        pathname: `/buckets/${bucketEnv}/**`,
       },
     ],
   },
