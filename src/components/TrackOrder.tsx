@@ -26,7 +26,7 @@ const initialStages = [
     completed: true,
   },
   {
-    title: "Preparing Order",
+    title: "Preparing",
     completed: false,
   },
   {
