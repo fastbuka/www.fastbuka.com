@@ -195,7 +195,7 @@ export default function Products(props: Props) {
             )}
           </div>
         </div>
-        <div className="col-span-2 @max-5xl:col-span-1 @max-2xl:px-2 p-6 flex flex-col">
+        <div id="cart" className="col-span-2 @max-5xl:col-span-1 @max-2xl:px-2 p-6 flex flex-col">
           <div className="w-full @max-2xl:flex-col @max-2xl:gap-6 mb-7 2xl:mb-8 pb-4 border-b border-[#E7E7E7] flex justify-between items-start gap-8">
             <p className="text-sm w-full 2xl:text-base text-[#5D5D5D] font-normal">
               {vendor?.name} - {vendor?.city}

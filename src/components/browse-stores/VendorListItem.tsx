@@ -37,7 +37,9 @@ export default function VendorListItem(props: Props) {
       </div>
       <p className="text-[#19CE7C] font-normal text-sm mb-2">Fastbuka Vendor</p>
       <h3 className="font-semibold text-(--primary-black) text-base mb-2">
-        {vendor.name}
+        {vendor.name.length > 20
+          ? vendor.name.slice(0, 20) + "..."
+          : vendor.name}
       </h3>
       {vendor?.opening_time && (
         <div className="flex items-center gap-2.5">

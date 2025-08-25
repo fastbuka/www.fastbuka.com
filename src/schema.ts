@@ -104,6 +104,8 @@ export type Order = {
   vendor_uuid: string;
   order_type: string;
   vendor: {
+    name: string;
+    slug: string;
     longitude: number;
     latitude: number;
   };
@@ -130,7 +132,8 @@ export enum OrderStatus {
   AcceptedVendor = "ACCEPTED_VENDOR",
   PendingVendor = "PENDING_VENDOR",
   PendingCustomer = "PENDING_CUSTOMER",
-  PendingRider = "PENDING_Rider",
+  PendingRider = "PENDING_RIDER",
+  PickedUpRider = "PICKEDUP_RIDER",
   AcceptedRider = "ACCEPTED_RIDER",
   Delivered = "DELIVERED",
   Cancelled = "CANCELLED",

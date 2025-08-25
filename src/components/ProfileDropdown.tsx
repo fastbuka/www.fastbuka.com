@@ -38,7 +38,7 @@ export default function ProfileDropdown() {
       <button
         onClick={() => {
           if (totalVendorCarts > 0) {
-            router.push(`/browse-stores/${getFirstVendorWithProducts()}`);
+            router.push(`/browse-stores/${getFirstVendorWithProducts()}/#cart`);
           } else {
             router.push("/browse-stores");
           }

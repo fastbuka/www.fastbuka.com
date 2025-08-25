@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import RiderLocationMap from "./RiderLocationMap";
+// import RiderLocationMap from "./RiderLocationMap";
 import Link from "next/link";
 import { ChevronDown, ChevronRight, ChevronUp } from "lucide-react";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import cookie from "js-cookie";
 import { Order, OrderStatus, OrderType } from "@/schema";
 import { formatNumber } from "@/lib/shared-utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSocket } from "@/hooks/useSocket";
+// import { useSocket } from "@/hooks/useSocket";
 import { useUser } from "@/contexts/UserContext";
 import { ModalTypeEnum, useModal } from "@/contexts/ModalContext";
 import { useWallet } from "@/contexts/WalletContext";
@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 
 const bucketURL = process.env.NEXT_PUBLIC_BUCKET_URL;
 const bucketEnv = process.env.NEXT_PUBLIC_STORAGE_ENV;
-const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+// const endpoint = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
 const initialStages = [
   {
@@ -30,7 +30,11 @@ const initialStages = [
     completed: false,
   },
   {
-    title: "Pickup",
+    title: "Pending Pickup",
+    completed: false,
+  },
+  {
+    title: "Order Pickedup",
     completed: false,
   },
   {
@@ -44,11 +48,11 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
   const { fetchOrder, fetchUser, fetchWallet } = useManageUser();
   const [showDetails, setShowDetails] = useState(true);
   const [stages, setStages] = useState(initialStages);
-  const socketRef = useSocket(endpoint);
-  const [riderLocation, setRiderLocation] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
+  // const socketRef = useSocket(endpoint);
+  // const [riderLocation, setRiderLocation] = useState<{
+  //   latitude: number;
+  //   longitude: number;
+  // } | null>(null);
   const { location, setLocation, setActiveOrder, user } = useUser();
   const { wallet } = useWallet();
   const { openModal } = useModal();
@@ -99,24 +103,24 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!order) return;
-    const socket = socketRef.current;
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!order) return;
+  //   const socket = socketRef.current;
+  //   if (!socket) return;
 
-    socket.on(`rider.location.${order?.rider_uuid}`, async (data) => {
-      if (data) {
-        setRiderLocation({
-          ...data,
-          latitude: parseInt(data?.latitude),
-          longitude: parseInt(data?.longitude),
-        });
-      }
-    });
-    return () => {
-      socket.off(`rider.location.${order?.rider_uuid}`);
-    };
-  }, [order]);
+  //   socket.on(`rider.location.${order?.rider_uuid}`, async (data) => {
+  //     if (data) {
+  //       setRiderLocation({
+  //         ...data,
+  //         latitude: parseInt(data?.latitude),
+  //         longitude: parseInt(data?.longitude),
+  //       });
+  //     }
+  //   });
+  //   return () => {
+  //     socket.off(`rider.location.${order?.rider_uuid}`);
+  //   };
+  // }, [order]);
 
   useEffect(() => {
     if (order) {
@@ -129,6 +133,18 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
           );
 
           break;
+        case OrderStatus.PickedUpRider:
+          setStages((p) =>
+            p.map((s, i) => {
+              if (i <= 3) {
+                return { ...s, completed: true };
+              }
+              return { ...s, completed: false };
+            })
+          );
+
+          break;
+        case OrderStatus.PendingRider:
         case OrderStatus.AcceptedRider:
         case OrderStatus.PendingCustomer:
           setStages((p) =>
@@ -161,7 +177,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
 
   return (
     <div className="w-full h-screen mb-6 relative">
-      <RiderLocationMap
+      {/* <RiderLocationMap
         rider={{
           lat: riderLocation?.latitude ?? null,
           lng: riderLocation?.longitude ?? null,
@@ -174,7 +190,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
           lat: order?.latitude ?? null,
           lng: order?.longitude ?? null,
         }}
-      />
+      /> */}
 
       <button
         type="button"
@@ -196,7 +212,7 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
               opacity: 1,
             }}
             exit={{ opacity: 0 }}
-            className="absolute overflow-y-auto scroll-hidden top-[50%] left-[50%] translate-y-[-50%] 2xl:px-[30px] px-7 2xl:py-6 py-5 translate-x-[-50%] h-max max-w-[95%] w-[650px] 2xl:w-[850px] bg-white rounded-[14px] @max-3xl:max-h-[80%] max-h-[90%]"
+            className="absolute overflow-y-auto scroll-hidden top-[45%] md:top-[50%] left-[50%] translate-y-[-50%] 2xl:px-[30px] px-7 2xl:py-6 py-5 translate-x-[-50%] h-max max-w-[95%] w-[650px] 2xl:w-[850px] bg-white rounded-[14px] @max-3xl:max-h-[80%] max-h-[90%]"
           >
             <div className="w-full mb-2 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -220,6 +236,14 @@ export default function TrackOrder({ uuid }: { uuid: string }) {
               >
                 <ChevronUp className="w-4 2xl:w-5 text-white" />
               </button>
+            </div>
+            <div className="flex justify-center">
+              <Link
+                href={`/browse-stores/${order?.vendor?.slug}`}
+                className="text-[#667085] text-xs 2xl:text-sm font-normal"
+              >
+                {order?.vendor?.name}
+              </Link>
             </div>
             <div className="flex justify-center">
               <span className="text-[#344054] font-semibold 2xl:text-[30px] text-[22px]">

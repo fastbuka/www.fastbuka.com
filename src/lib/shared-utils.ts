@@ -174,6 +174,8 @@ export function getOrderStatus(status: OrderStatus) {
     case OrderStatus.PendingCustomer:
     case OrderStatus.AcceptedRider:
       return "Awaiting Pickup";
+    case OrderStatus.PickedUpRider:
+      return "Picked Up";
     case OrderStatus.Cancelled:
       return "Cancelled";
     case OrderStatus.Rejected:
