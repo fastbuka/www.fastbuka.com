@@ -132,7 +132,9 @@ export default function ProfileDropdown() {
                         <div className="flex justify-between items-start">
                           <div className="flex max-w-[50%] items-start flex-col gap-2.5">
                             <p className="font-medium max-w-full text-[#111111] truncate text-base 2xl:text-xl">
-                              {item?.orderItems?.[0]?.product.name}
+                              {item.vendor.name.length > 20
+                                ? item.vendor.name.slice(0, 20) + "..."
+                                : item.vendor.name}
                             </p>
                             <p className="text-xs text-start 2xl:text-base font-normal text-[#5D5D5D]">
                               {new Date(item.created_at).toDateString()}
