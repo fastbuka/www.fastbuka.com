@@ -73,7 +73,7 @@ export default function VendorHero({
             <p className="text-[#19CE7C] font-normal text-base 2xl:text-[19px] mb-4 2xl:mb-[19px]">
               FASTBUKA VENDOR
             </p>
-            <h1 className="font-semibold text-(--primary-black) text-[28px] 2xl:text-[38px] mb-4 2xl:mb-[19px] break-words max-w-5/6 md:max-w-full">
+            <h1 className="font-semibold text-(--primary-black) text-[28px] 2xl:text-[38px] mb-4 2xl:mb-[19px] break-words max-w-3/4 md:max-w-full">
               {vendor?.name}
             </h1>
             <div className="flex items-center gap-2.5">
